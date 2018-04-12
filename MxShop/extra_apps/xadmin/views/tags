@@ -1,0 +1,416 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ALL_VAR	list.py	/^ALL_VAR = 'all'$/;"	v
+AddFormWidget	dashboard.py	/^class AddFormWidget(ModelBaseWidget, PartialBaseWidget):$/;"	c
+BaseAdminObject	base.py	/^class BaseAdminObject(object):$/;"	c
+BaseAdminPlugin	base.py	/^class BaseAdminPlugin(BaseAdminObject):$/;"	c
+BaseAdminView	base.py	/^class BaseAdminView(BaseAdminObject, View):$/;"	c
+BaseWidget	dashboard.py	/^class BaseWidget(forms.Form):$/;"	c
+COL_LIST_VAR	list.py	/^COL_LIST_VAR = '_cols'$/;"	v
+CommAdminView	base.py	/^class CommAdminView(BaseAdminView):$/;"	c
+CreateAdminView	edit.py	/^class CreateAdminView(ModelFormAdminView):$/;"	c
+DOT	list.py	/^DOT = '.'$/;"	v
+Dashboard	dashboard.py	/^class Dashboard(CommAdminView):$/;"	c
+DeleteAdminView	delete.py	/^class DeleteAdminView(ModelAdminView):$/;"	c
+DetailAdminUtil	detail.py	/^class DetailAdminUtil(DetailAdminView):$/;"	c
+DetailAdminView	detail.py	/^class DetailAdminView(ModelAdminView):$/;"	c
+EMPTY_CHANGELIST_VALUE	detail.py	/^EMPTY_CHANGELIST_VALUE = _('Null')$/;"	v
+EMPTY_CHANGELIST_VALUE	list.py	/^EMPTY_CHANGELIST_VALUE = _('Null')$/;"	v
+ERROR_FLAG	list.py	/^ERROR_FLAG = 'e'$/;"	v
+FORMFIELD_FOR_DBFIELD_DEFAULTS	edit.py	/^FORMFIELD_FOR_DBFIELD_DEFAULTS = {$/;"	v
+FakeMethodField	list.py	/^class FakeMethodField(object):$/;"	c
+FormAdminView	form.py	/^class FormAdminView(CommAdminView):$/;"	c
+HtmlWidget	dashboard.py	/^class HtmlWidget(BaseWidget):$/;"	c
+IncorrectPluginArg	base.py	/^class IncorrectPluginArg(Exception):$/;"	c
+IndexView	website.py	/^class IndexView(Dashboard):$/;"	c
+JSONEncoder	base.py	/^class JSONEncoder(DjangoJSONEncoder):$/;"	c
+ListAdminView	list.py	/^class ListAdminView(ModelAdminView):$/;"	c
+ListWidget	dashboard.py	/^class ListWidget(ModelBaseWidget, PartialBaseWidget):$/;"	c
+LoginView	website.py	/^class LoginView(BaseAdminView):$/;"	c
+LogoutView	website.py	/^class LogoutView(BaseAdminView):$/;"	c
+ModelAdminView	base.py	/^class ModelAdminView(CommAdminView):$/;"	c
+ModelBaseWidget	dashboard.py	/^class ModelBaseWidget(BaseWidget):$/;"	c
+ModelChoiceField	dashboard.py	/^class ModelChoiceField(forms.ChoiceField):$/;"	c
+ModelChoiceIterator	dashboard.py	/^class ModelChoiceIterator(object):$/;"	c
+ModelDashboard	dashboard.py	/^class ModelDashboard(Dashboard, ModelAdminView):$/;"	c
+ModelFormAdminUtil	edit.py	/^class ModelFormAdminUtil(ModelFormAdminView):$/;"	c
+ModelFormAdminView	edit.py	/^class ModelFormAdminView(ModelAdminView):$/;"	c
+ORDER_VAR	list.py	/^ORDER_VAR = 'o'$/;"	v
+PAGE_VAR	list.py	/^PAGE_VAR = 'p'$/;"	v
+PartialBaseWidget	dashboard.py	/^class PartialBaseWidget(BaseWidget):$/;"	c
+QuickBtnWidget	dashboard.py	/^class QuickBtnWidget(BaseWidget):$/;"	c
+ReadOnlyField	edit.py	/^class ReadOnlyField(Field):$/;"	c
+ResultField	detail.py	/^class ResultField(object):$/;"	c
+ResultHeader	list.py	/^class ResultHeader(ResultItem):$/;"	c
+ResultItem	list.py	/^class ResultItem(object):$/;"	c
+ResultRow	list.py	/^class ResultRow(dict):$/;"	c
+ShowField	detail.py	/^class ShowField(Field):$/;"	c
+TO_FIELD_VAR	list.py	/^TO_FIELD_VAR = 't'$/;"	v
+UpdateAdminView	edit.py	/^class UpdateAdminView(ModelFormAdminView):$/;"	c
+UserSettingView	website.py	/^class UserSettingView(BaseAdminView):$/;"	c
+UserWidgetAdmin	dashboard.py	/^class UserWidgetAdmin(object):$/;"	c
+WidgetDataError	dashboard.py	/^class WidgetDataError(Exception):$/;"	c
+WidgetManager	dashboard.py	/^class WidgetManager(object):$/;"	c
+WidgetTypeSelect	dashboard.py	/^class WidgetTypeSelect(forms.Widget):$/;"	c
+__all__	__init__.py	/^__all__ = ($/;"	v
+__deepcopy__	dashboard.py	/^    def __deepcopy__(self, memo):$/;"	m	class:ModelChoiceField	file:
+__init__	base.py	/^    def __init__(self, admin_view):$/;"	m	class:BaseAdminPlugin
+__init__	base.py	/^    def __init__(self, request, *args, **kwargs):$/;"	m	class:BaseAdminView
+__init__	base.py	/^    def __init__(self, request, *args, **kwargs):$/;"	m	class:ModelAdminView
+__init__	dashboard.py	/^    def __init__(self):$/;"	m	class:WidgetManager
+__init__	dashboard.py	/^    def __init__(self, dashboard, data):$/;"	m	class:BaseWidget
+__init__	dashboard.py	/^    def __init__(self, dashboard, data):$/;"	m	class:ModelBaseWidget
+__init__	dashboard.py	/^    def __init__(self, field):$/;"	m	class:ModelChoiceIterator
+__init__	dashboard.py	/^    def __init__(self, required=True, widget=None, label=None, initial=None,$/;"	m	class:ModelChoiceField
+__init__	dashboard.py	/^    def __init__(self, widget, errors):$/;"	m	class:WidgetDataError
+__init__	dashboard.py	/^    def __init__(self, widgets, attrs=None):$/;"	m	class:WidgetTypeSelect
+__init__	detail.py	/^    def __init__(self, callback, *args, **kwargs):$/;"	m	class:ShowField
+__init__	detail.py	/^    def __init__(self, obj, field_name, admin_view=None):$/;"	m	class:ResultField
+__init__	edit.py	/^    def __init__(self, *args, **kwargs):$/;"	m	class:ReadOnlyField
+__init__	edit.py	/^    def __init__(self, request, *args, **kwargs):$/;"	m	class:ModelFormAdminView
+__init__	list.py	/^    def __init__(self, field_name, row):$/;"	m	class:ResultHeader
+__init__	list.py	/^    def __init__(self, field_name, row):$/;"	m	class:ResultItem
+__init__	list.py	/^    def __init__(self, name, verbose_name):$/;"	m	class:FakeMethodField
+__iter__	dashboard.py	/^    def __iter__(self):$/;"	m	class:ModelChoiceIterator	file:
+_get_choices	dashboard.py	/^    def _get_choices(self):$/;"	m	class:ModelChoiceField
+_get_default_ordering	list.py	/^    def _get_default_ordering(self):$/;"	m	class:ListAdminView
+_inner_method	base.py	/^        def _inner_method():$/;"	f	function:filter_chain
+_inner_method	base.py	/^        def _inner_method():$/;"	f	function:filter_hook.method
+_widgets	dashboard.py	/^    _widgets = None$/;"	v	class:WidgetManager
+add_form_template	edit.py	/^    add_form_template = None$/;"	v	class:ModelFormAdminView
+app_label	dashboard.py	/^    app_label = None$/;"	v	class:ModelBaseWidget
+apps_icons	base.py	/^    apps_icons = {}$/;"	v	class:CommAdminView
+apps_label_title	base.py	/^    apps_label_title = {}$/;"	v	class:CommAdminView
+as_view	base.py	/^    def as_view(cls):$/;"	m	class:BaseAdminView
+base_template	base.py	/^    base_template = 'xadmin\/base.html'$/;"	v	class:BaseAdminView
+base_template	base.py	/^    base_template = 'xadmin\/base_site.html'$/;"	v	class:CommAdminView
+base_title	dashboard.py	/^    base_title = None$/;"	v	class:BaseWidget
+base_title	dashboard.py	/^    base_title = _(u"Quick Buttons")$/;"	v	class:QuickBtnWidget
+block_pagination	list.py	/^    def block_pagination(self, context, nodes, page_type='normal'):$/;"	m	class:ListAdminView
+change_form_template	edit.py	/^    change_form_template = None$/;"	v	class:ModelFormAdminView
+change_message	edit.py	/^    def change_message(self):$/;"	m	class:ModelFormAdminView
+check_menu_permission	base.py	/^            def check_menu_permission(item):$/;"	f	function:CommAdminView.get_context
+check_selected	base.py	/^        def check_selected(menu, path):$/;"	f	function:CommAdminView.get_context
+choices	dashboard.py	/^    choices = property(_get_choices, forms.ChoiceField._set_choices)$/;"	v	class:ModelChoiceField
+content	dashboard.py	/^    content = forms.CharField(label=_($/;"	v	class:HtmlWidget
+context	dashboard.py	/^                def context(self, context):$/;"	m	class:Dashboard.get_widget.widget_with_perm
+context	dashboard.py	/^    def context(self, context):$/;"	m	class:AddFormWidget
+context	dashboard.py	/^    def context(self, context):$/;"	m	class:BaseWidget
+context	dashboard.py	/^    def context(self, context):$/;"	m	class:HtmlWidget
+context	dashboard.py	/^    def context(self, context):$/;"	m	class:ListWidget
+context	dashboard.py	/^    def context(self, context):$/;"	m	class:QuickBtnWidget
+convert	dashboard.py	/^    def convert(self, data):$/;"	m	class:BaseWidget
+convert	dashboard.py	/^    def convert(self, data):$/;"	m	class:ListWidget
+convert	dashboard.py	/^    def convert(self, data):$/;"	m	class:QuickBtnWidget
+convert_widget_params	dashboard.py	/^    def convert_widget_params(self, wizard, cleaned_data, form):$/;"	m	class:UserWidgetAdmin
+csrf_protect_m	base.py	/^csrf_protect_m = method_decorator(csrf_protect)$/;"	v
+default	base.py	/^    def default(self, o):$/;"	m	class:JSONEncoder
+default_model_icon	base.py	/^    default_model_icon = None$/;"	v	class:CommAdminView
+delete_confirmation_template	delete.py	/^    delete_confirmation_template = None$/;"	v	class:DeleteAdminView
+delete_model	dashboard.py	/^    def delete_model(self):$/;"	m	class:UserWidgetAdmin
+delete_model	delete.py	/^    def delete_model(self):$/;"	m	class:DeleteAdminView
+delete_models	dashboard.py	/^    def delete_models(self, queryset):$/;"	m	class:UserWidgetAdmin
+description	dashboard.py	/^    description = 'Base Widget, don\\'t use it.'$/;"	v	class:BaseWidget
+description	dashboard.py	/^    description = _($/;"	v	class:HtmlWidget
+description	dashboard.py	/^    description = _(u'Add any model object Widget.')$/;"	v	class:AddFormWidget
+description	dashboard.py	/^    description = _(u'Any Objects list Widget.')$/;"	v	class:ListWidget
+description	dashboard.py	/^    description = _(u'Quick button Widget, quickly open any page.')$/;"	v	class:QuickBtnWidget
+detail_layout	detail.py	/^    detail_layout = None$/;"	v	class:DetailAdminView
+detail_show_all	detail.py	/^    detail_show_all = True$/;"	v	class:DetailAdminView
+detail_template	detail.py	/^    detail_template = None$/;"	v	class:DetailAdminView
+exclude	base.py	/^    exclude = None$/;"	v	class:ModelAdminView
+exclude	edit.py	/^    exclude = None$/;"	v	class:ModelFormAdminView
+fields	base.py	/^    fields = None$/;"	v	class:ModelAdminView
+filte_choices_model	dashboard.py	/^    def filte_choices_model(self, model, modeladmin):$/;"	m	class:ModelBaseWidget
+filter_chain	base.py	/^def filter_chain(filters, token, func, *args, **kwargs):$/;"	f
+filter_hook	base.py	/^def filter_hook(func):$/;"	f
+filter_item	base.py	/^            def filter_item(item):$/;"	f	function:CommAdminView.get_context
+form	detail.py	/^    form = forms.ModelForm$/;"	v	class:DetailAdminView
+form	edit.py	/^    form = forms.ModelForm$/;"	v	class:ModelFormAdminView
+form	form.py	/^    form = forms.ModelForm$/;"	v	class:FormAdminView
+form_layout	detail.py	/^    form_layout = None$/;"	v	class:DetailAdminView
+form_layout	edit.py	/^    form_layout = None$/;"	v	class:ModelFormAdminView
+form_layout	form.py	/^    form_layout = None$/;"	v	class:FormAdminView
+form_template	form.py	/^    form_template = 'xadmin\/views\/form.html'$/;"	v	class:FormAdminView
+formfield_for_dbfield	dashboard.py	/^    def formfield_for_dbfield(self, db_field, **kwargs):$/;"	m	class:UserWidgetAdmin
+formfield_for_dbfield	edit.py	/^    def formfield_for_dbfield(self, db_field, **kwargs):$/;"	m	class:ModelFormAdminView
+formfield_overrides	edit.py	/^    formfield_overrides = {}$/;"	v	class:ModelFormAdminView
+get	dashboard.py	/^    def get(self, name):$/;"	m	class:WidgetManager
+get	dashboard.py	/^    def get(self, request, *args, **kwargs):$/;"	m	class:Dashboard
+get	dashboard.py	/^    def get(self, request, *args, **kwargs):$/;"	m	class:ModelDashboard
+get	delete.py	/^    def get(self, request, object_id):$/;"	m	class:DeleteAdminView
+get	detail.py	/^    def get(self, request, *args, **kwargs):$/;"	m	class:DetailAdminView
+get	edit.py	/^    def get(self, request, *args, **kwargs):$/;"	m	class:ModelFormAdminView
+get	form.py	/^    def get(self, request, *args, **kwargs):$/;"	m	class:FormAdminView
+get	list.py	/^    def get(self, request, *args, **kwargs):$/;"	m	class:ListAdminView
+get	website.py	/^    def get(self, request, *args, **kwargs):$/;"	m	class:LoginView
+get	website.py	/^    def get(self, request, *args, **kwargs):$/;"	m	class:LogoutView
+get_admin_url	base.py	/^    def get_admin_url(self, name, *args, **kwargs):$/;"	m	class:BaseAdminObject
+get_breadcrumb	base.py	/^    def get_breadcrumb(self):$/;"	m	class:CommAdminView
+get_breadcrumb	base.py	/^    def get_breadcrumb(self):$/;"	m	class:ModelAdminView
+get_breadcrumb	delete.py	/^    def get_breadcrumb(self):$/;"	m	class:DeleteAdminView
+get_breadcrumb	detail.py	/^    def get_breadcrumb(self):$/;"	m	class:DetailAdminView
+get_breadcrumb	edit.py	/^    def get_breadcrumb(self):$/;"	m	class:CreateAdminView
+get_breadcrumb	edit.py	/^    def get_breadcrumb(self):$/;"	m	class:UpdateAdminView
+get_breadcrumb	form.py	/^    def get_breadcrumb(self):$/;"	m	class:FormAdminView
+get_check_field_url	list.py	/^    def get_check_field_url(self, f):$/;"	m	class:ListAdminView
+get_content_type_for_model	base.py	/^def get_content_type_for_model(obj):$/;"	f
+get_context	base.py	/^    def get_context(self):$/;"	m	class:BaseAdminView
+get_context	base.py	/^    def get_context(self):$/;"	m	class:CommAdminView
+get_context	base.py	/^    def get_context(self):$/;"	m	class:ModelAdminView
+get_context	dashboard.py	/^    def get_context(self):$/;"	m	class:Dashboard
+get_context	dashboard.py	/^    def get_context(self):$/;"	m	class:ModelDashboard
+get_context	delete.py	/^    def get_context(self):$/;"	m	class:DeleteAdminView
+get_context	detail.py	/^    def get_context(self):$/;"	m	class:DetailAdminView
+get_context	edit.py	/^    def get_context(self):$/;"	m	class:CreateAdminView
+get_context	edit.py	/^    def get_context(self):$/;"	m	class:ModelFormAdminView
+get_context	edit.py	/^    def get_context(self):$/;"	m	class:UpdateAdminView
+get_context	form.py	/^    def get_context(self):$/;"	m	class:FormAdminView
+get_context	list.py	/^    def get_context(self):$/;"	m	class:ListAdminView
+get_error_list	edit.py	/^    def get_error_list(self):$/;"	m	class:ModelFormAdminView
+get_factory	dashboard.py	/^    def get_factory(self):$/;"	m	class:PartialBaseWidget
+get_field_attrs	edit.py	/^    def get_field_attrs(self, db_field, **kwargs):$/;"	m	class:ModelFormAdminView
+get_field_result	detail.py	/^    def get_field_result(self, field_name):$/;"	m	class:DetailAdminView
+get_field_style	edit.py	/^    def get_field_style(self, db_field, style, **kwargs):$/;"	m	class:ModelFormAdminView
+get_form_datas	edit.py	/^    def get_form_datas(self):$/;"	m	class:CreateAdminView
+get_form_datas	edit.py	/^    def get_form_datas(self):$/;"	m	class:ModelFormAdminUtil
+get_form_datas	edit.py	/^    def get_form_datas(self):$/;"	m	class:UpdateAdminView
+get_form_datas	form.py	/^    def get_form_datas(self):$/;"	m	class:FormAdminView
+get_form_helper	detail.py	/^    def get_form_helper(self):$/;"	m	class:DetailAdminView
+get_form_helper	edit.py	/^    def get_form_helper(self):$/;"	m	class:ModelFormAdminView
+get_form_helper	form.py	/^    def get_form_helper(self):$/;"	m	class:FormAdminView
+get_form_layout	detail.py	/^    def get_form_layout(self):$/;"	m	class:DetailAdminView
+get_form_layout	edit.py	/^    def get_form_layout(self):$/;"	m	class:ModelFormAdminView
+get_form_layout	form.py	/^    def get_form_layout(self):$/;"	m	class:FormAdminView
+get_form_params	base.py	/^    def get_form_params(self, new_params=None, remove=None):$/;"	m	class:BaseAdminObject
+get_init_widget	dashboard.py	/^    def get_init_widget(self):$/;"	m	class:Dashboard
+get_initial_data	form.py	/^    def get_initial_data(self):$/;"	m	class:FormAdminView
+get_list_display	dashboard.py	/^    def get_list_display(self):$/;"	m	class:UserWidgetAdmin
+get_list_display	list.py	/^    def get_list_display(self):$/;"	m	class:ListAdminView
+get_list_display_links	list.py	/^    def get_list_display_links(self):$/;"	m	class:ListAdminView
+get_list_queryset	list.py	/^    def get_list_queryset(self):$/;"	m	class:ListAdminView
+get_media	base.py	/^    def get_media(self):$/;"	m	class:BaseAdminView
+get_media	dashboard.py	/^    def get_media(self):$/;"	m	class:Dashboard
+get_media	detail.py	/^    def get_media(self):$/;"	m	class:DetailAdminView
+get_media	edit.py	/^    def get_media(self):$/;"	m	class:ModelFormAdminView
+get_media	form.py	/^    def get_media(self):$/;"	m	class:FormAdminView
+get_media	list.py	/^    def get_media(self):$/;"	m	class:ListAdminView
+get_model	dashboard.py	/^    def get_model(self, model_or_label):$/;"	m	class:QuickBtnWidget
+get_model_form	detail.py	/^    def get_model_form(self, **kwargs):$/;"	m	class:DetailAdminView
+get_model_form	edit.py	/^    def get_model_form(self, **kwargs):$/;"	m	class:ModelFormAdminView
+get_model_icon	base.py	/^    def get_model_icon(self, model):$/;"	m	class:CommAdminView
+get_model_method_fields	list.py	/^    def get_model_method_fields(self):$/;"	m	class:ListAdminView
+get_model_perm	base.py	/^    def get_model_perm(self, model, name):$/;"	m	class:BaseAdminObject
+get_model_perms	base.py	/^    def get_model_perms(self):$/;"	m	class:ModelAdminView
+get_model_url	base.py	/^    def get_model_url(self, model, name, *args, **kwargs):$/;"	m	class:BaseAdminObject
+get_model_view	base.py	/^    def get_model_view(self, view_class, model, *args, **kwargs):$/;"	m	class:BaseAdminObject
+get_nav_menu	base.py	/^    def get_nav_menu(self):$/;"	m	class:CommAdminView
+get_object	base.py	/^    def get_object(self, object_id):$/;"	m	class:ModelAdminView
+get_object_url	base.py	/^    def get_object_url(self, obj):$/;"	m	class:ModelAdminView
+get_ordering	base.py	/^    def get_ordering(self):$/;"	m	class:ModelAdminView
+get_ordering	list.py	/^    def get_ordering(self):$/;"	m	class:ListAdminView
+get_ordering_field	list.py	/^    def get_ordering_field(self, field_name):$/;"	m	class:ListAdminView
+get_ordering_field_columns	list.py	/^    def get_ordering_field_columns(self):$/;"	m	class:ListAdminView
+get_page_id	dashboard.py	/^    def get_page_id(self):$/;"	m	class:Dashboard
+get_page_id	dashboard.py	/^    def get_page_id(self):$/;"	m	class:ModelDashboard
+get_page_id	website.py	/^    def get_page_id(self):$/;"	m	class:IndexView
+get_page_number	list.py	/^    def get_page_number(self, i):$/;"	m	class:ListAdminView
+get_paginator	list.py	/^    def get_paginator(self):$/;"	m	class:ListAdminView
+get_portal_key	dashboard.py	/^    def get_portal_key(self):$/;"	m	class:Dashboard
+get_query_string	base.py	/^    def get_query_string(self, new_params=None, remove=None):$/;"	m	class:BaseAdminObject
+get_readonly_fields	edit.py	/^    def get_readonly_fields(self):$/;"	m	class:ModelFormAdminView
+get_redirect_url	form.py	/^    def get_redirect_url(self):$/;"	m	class:FormAdminView
+get_response	detail.py	/^    def get_response(self, *args, **kwargs):$/;"	m	class:DetailAdminView
+get_response	edit.py	/^    def get_response(self):$/;"	m	class:CreateAdminView
+get_response	edit.py	/^    def get_response(self, *args, **kwargs):$/;"	m	class:UpdateAdminView
+get_response	form.py	/^    def get_response(self):$/;"	m	class:FormAdminView
+get_response	list.py	/^    def get_response(self, context, *args, **kwargs):$/;"	m	class:ListAdminView
+get_result_list	list.py	/^    def get_result_list(self):$/;"	m	class:ListAdminView
+get_site_menu	base.py	/^    def get_site_menu(self):$/;"	m	class:CommAdminView
+get_template_list	base.py	/^    def get_template_list(self, template_name):$/;"	m	class:ModelAdminView
+get_title	dashboard.py	/^    def get_title(self):$/;"	m	class:Dashboard
+get_title	dashboard.py	/^    def get_title(self):$/;"	m	class:ModelDashboard
+get_url	base.py	/^        def get_url(menu, had_urls):$/;"	f	function:CommAdminView.get_nav_menu
+get_view	base.py	/^    def get_view(self, view_class, option_class=None, *args, **kwargs):$/;"	m	class:BaseAdminObject
+get_view_class	dashboard.py	/^    def get_view_class(self, view_class, model=None, **opts):$/;"	m	class:PartialBaseWidget
+get_widget	dashboard.py	/^    def get_widget(self, widget_or_id, data=None):$/;"	m	class:Dashboard
+get_widget_params_form	dashboard.py	/^    def get_widget_params_form(self, wizard):$/;"	m	class:UserWidgetAdmin
+get_widgets	dashboard.py	/^    def get_widgets(self):$/;"	m	class:Dashboard
+get_widgets	dashboard.py	/^    def get_widgets(self, page_id):$/;"	m	class:WidgetManager
+global_models_icon	base.py	/^    global_models_icon = {}$/;"	v	class:CommAdminView
+has_add_permission	base.py	/^    def has_add_permission(self):$/;"	m	class:ModelAdminView
+has_change_permission	base.py	/^    def has_change_permission(self, obj=None):$/;"	m	class:ModelAdminView
+has_delete_permission	base.py	/^    def has_delete_permission(self, obj=None):$/;"	m	class:ModelAdminView
+has_model_perm	base.py	/^    def has_model_perm(self, model, name, user=None):$/;"	m	class:BaseAdminObject
+has_perm	dashboard.py	/^    def has_perm(self):$/;"	m	class:BaseWidget
+has_perm	dashboard.py	/^    def has_perm(self):$/;"	m	class:HtmlWidget
+has_perm	dashboard.py	/^    def has_perm(self):$/;"	m	class:ModelBaseWidget
+has_perm	dashboard.py	/^    def has_perm(self):$/;"	m	class:QuickBtnWidget
+has_view_permission	base.py	/^    def has_view_permission(self, obj=None):$/;"	m	class:ModelAdminView
+hidden_menu	dashboard.py	/^    hidden_menu = True$/;"	v	class:UserWidgetAdmin
+icon	dashboard.py	/^    icon = None$/;"	v	class:Dashboard
+icon	website.py	/^    icon = "fa fa-dashboard"$/;"	v	class:IndexView
+id	dashboard.py	/^    id = forms.IntegerField(label=_('Widget ID'), widget=forms.HiddenInput)$/;"	v	class:BaseWidget
+inclusion_tag	base.py	/^def inclusion_tag(file_name, context_class=Context, takes_context=False):$/;"	f
+init	detail.py	/^    def init(self):$/;"	m	class:ResultField
+init_plugin	base.py	/^    def init_plugin(self, *args, **kwargs):$/;"	m	class:BaseAdminView
+init_request	base.py	/^    def init_request(self, *args, **kwargs):$/;"	m	class:BaseAdminPlugin
+init_request	base.py	/^    def init_request(self, *args, **kwargs):$/;"	m	class:BaseAdminView
+init_request	dashboard.py	/^    def init_request(self, object_id, *args, **kwargs):$/;"	m	class:ModelDashboard
+init_request	delete.py	/^    def init_request(self, object_id, *args, **kwargs):$/;"	m	class:DeleteAdminView
+init_request	detail.py	/^    def init_request(self, obj):$/;"	m	class:DetailAdminUtil
+init_request	detail.py	/^    def init_request(self, object_id, *args, **kwargs):$/;"	m	class:DetailAdminView
+init_request	edit.py	/^    def init_request(self, *args, **kwargs):$/;"	m	class:CreateAdminView
+init_request	edit.py	/^    def init_request(self, obj=None):$/;"	m	class:ModelFormAdminUtil
+init_request	edit.py	/^    def init_request(self, object_id, *args, **kwargs):$/;"	m	class:UpdateAdminView
+init_request	form.py	/^    def init_request(self, *args, **kwargs):$/;"	m	class:FormAdminView
+init_request	list.py	/^    def init_request(self, *args, **kwargs):$/;"	m	class:ListAdminView
+instance_forms	edit.py	/^    def instance_forms(self):$/;"	m	class:ModelFormAdminView
+instance_forms	form.py	/^    def instance_forms(self):$/;"	m	class:FormAdminView
+label	list.py	/^    def label(self):$/;"	m	class:ResultItem
+list_display	dashboard.py	/^    list_display = ('widget_type', 'page_id', 'user')$/;"	v	class:UserWidgetAdmin
+list_display	list.py	/^    list_display = ('__str__',)$/;"	v	class:ListAdminView
+list_display_links	dashboard.py	/^    list_display_links = ('widget_type',)$/;"	v	class:UserWidgetAdmin
+list_display_links	list.py	/^    list_display_links = ()$/;"	v	class:ListAdminView
+list_display_links_details	list.py	/^    list_display_links_details = False$/;"	v	class:ListAdminView
+list_exclude	list.py	/^    list_exclude = ()$/;"	v	class:ListAdminView
+list_filter	dashboard.py	/^    list_filter = ['user', 'widget_type', 'page_id']$/;"	v	class:UserWidgetAdmin
+list_max_show_all	list.py	/^    list_max_show_all = 200$/;"	v	class:ListAdminView
+list_per_page	list.py	/^    list_per_page = 50$/;"	v	class:ListAdminView
+list_select_related	list.py	/^    list_select_related = None$/;"	v	class:ListAdminView
+log	base.py	/^    def log(self, flag, message, obj=None):$/;"	m	class:BaseAdminObject
+login_form	website.py	/^    login_form = None$/;"	v	class:LoginView
+login_template	website.py	/^    login_template = None$/;"	v	class:LoginView
+logout_template	website.py	/^    logout_template = None$/;"	v	class:LogoutView
+make_get_request	dashboard.py	/^    def make_get_request(self, path, data={}, **extra):$/;"	m	class:PartialBaseWidget
+make_post_request	dashboard.py	/^    def make_post_request(self, path, data={}, **extra):$/;"	m	class:PartialBaseWidget
+make_result_list	list.py	/^    def make_result_list(self):$/;"	m	class:ListAdminView
+media	base.py	/^    def media(self):$/;"	m	class:BaseAdminView
+media	dashboard.py	/^    def media(self):$/;"	m	class:AddFormWidget
+media	dashboard.py	/^    def media(self):$/;"	m	class:BaseWidget
+menu_template	base.py	/^    menu_template = 'xadmin\/includes\/sitemenu_default.html'$/;"	v	class:CommAdminView
+message_user	base.py	/^    def message_user(self, message, level='info'):$/;"	m	class:BaseAdminObject
+method	base.py	/^        def method(self, context, nodes, *arg, **kwargs):$/;"	f	function:inclusion_tag.wrap
+method	base.py	/^    def method(self, *args, **kwargs):$/;"	f	function:filter_hook
+model	base.py	/^    model = None$/;"	v	class:ModelAdminView
+model	dashboard.py	/^    model = ModelChoiceField(label=_(u'Target Model'), widget=exwidgets.AdminSelectWidget)$/;"	v	class:ModelBaseWidget
+model_admin_url	base.py	/^    def model_admin_url(self, name, *args, **kwargs):$/;"	m	class:ModelAdminView
+model_admin_url	dashboard.py	/^    def model_admin_url(self, name, *args, **kwargs):$/;"	m	class:ModelBaseWidget
+model_icon	dashboard.py	/^    model_icon = 'fa fa-dashboard'$/;"	v	class:UserWidgetAdmin
+model_name	dashboard.py	/^    model_name = None$/;"	v	class:ModelBaseWidget
+model_perm	dashboard.py	/^    model_perm = 'add'$/;"	v	class:AddFormWidget
+model_perm	dashboard.py	/^    model_perm = 'change'$/;"	v	class:ModelBaseWidget
+model_perm	dashboard.py	/^    model_perm = 'view'$/;"	v	class:ListWidget
+need_site_permission	base.py	/^    need_site_permission = True$/;"	v	class:BaseAdminView
+need_site_permission	website.py	/^    need_site_permission = False$/;"	v	class:LogoutView
+object_list_template	list.py	/^    object_list_template = None$/;"	v	class:ListAdminView
+ordering	base.py	/^    ordering = None$/;"	v	class:ModelAdminView
+ordering	list.py	/^    ordering = None$/;"	v	class:ListAdminView
+paginator_class	list.py	/^    paginator_class = Paginator$/;"	v	class:ListAdminView
+post	dashboard.py	/^    def post(self, request, *args, **kwargs):$/;"	m	class:Dashboard
+post	delete.py	/^    def post(self, request, object_id):$/;"	m	class:DeleteAdminView
+post	edit.py	/^    def post(self, request, *args, **kwargs):$/;"	m	class:ModelFormAdminView
+post	edit.py	/^    def post(self, request, *args, **kwargs):$/;"	m	class:UpdateAdminView
+post	form.py	/^    def post(self, request, *args, **kwargs):$/;"	m	class:FormAdminView
+post	list.py	/^    def post(self, request, *args, **kwargs):$/;"	m	class:ListAdminView
+post	website.py	/^    def post(self, request):$/;"	m	class:UserSettingView
+post	website.py	/^    def post(self, request, *args, **kwargs):$/;"	m	class:LoginView
+post	website.py	/^    def post(self, request, *args, **kwargs):$/;"	m	class:LogoutView
+post_response	delete.py	/^    def post_response(self):$/;"	m	class:DeleteAdminView
+post_response	edit.py	/^    def post_response(self):$/;"	m	class:CreateAdminView
+post_response	edit.py	/^    def post_response(self):$/;"	m	class:UpdateAdminView
+post_response	form.py	/^    def post_response(self):$/;"	m	class:FormAdminView
+post_response	list.py	/^    def post_response(self, *args, **kwargs):$/;"	m	class:ListAdminView
+post_result_list	list.py	/^    def post_result_list(self):$/;"	m	class:ListAdminView
+prepare_form	edit.py	/^    def prepare_form(self):$/;"	m	class:ModelFormAdminView
+prepare_form	form.py	/^    def prepare_form(self):$/;"	m	class:FormAdminView
+prepare_value	dashboard.py	/^    def prepare_value(self, value):$/;"	m	class:ModelChoiceField
+queryset	base.py	/^    def queryset(self):$/;"	m	class:ModelAdminView
+queryset	dashboard.py	/^    def queryset(self):$/;"	m	class:UserWidgetAdmin
+readonly_fields	edit.py	/^    readonly_fields = ()$/;"	v	class:ModelFormAdminView
+readonly_fields	form.py	/^    readonly_fields = ()$/;"	v	class:FormAdminView
+register	dashboard.py	/^    def register(self, widget_class):$/;"	m	class:WidgetManager
+register_builtin_views	__init__.py	/^def register_builtin_views(site):$/;"	f
+relfield_style	edit.py	/^    relfield_style = None$/;"	v	class:ModelFormAdminView
+remove_permissions	base.py	/^    remove_permissions = []$/;"	v	class:ModelAdminView
+render	dashboard.py	/^    def render(self, name, value, attrs=None):$/;"	m	class:WidgetTypeSelect
+render	detail.py	/^    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, extra_context=None, **kwargs):$/;"	m	class:ShowField
+render	edit.py	/^    def render(self, form, form_style, context, template_pack=TEMPLATE_PACK, **kwargs):$/;"	m	class:ReadOnlyField
+render_option	dashboard.py	/^    def render_option(self, selected_choice, widget, id):$/;"	m	class:WidgetTypeSelect
+render_options	dashboard.py	/^    def render_options(self, selected_choice, id):$/;"	m	class:WidgetTypeSelect
+render_response	base.py	/^    def render_response(self, content, response_type='json'):$/;"	m	class:BaseAdminObject
+replace_field_to_value	detail.py	/^def replace_field_to_value(layout, cb):$/;"	f
+result_header	list.py	/^    def result_header(self, field_name, row):$/;"	m	class:ListAdminView
+result_headers	list.py	/^    def result_headers(self):$/;"	m	class:ListAdminView
+result_item	list.py	/^    def result_item(self, obj, field_name, row):$/;"	m	class:ListAdminView
+result_row	list.py	/^    def result_row(self, obj):$/;"	m	class:ListAdminView
+results	list.py	/^    def results(self):$/;"	m	class:ListAdminView
+save	dashboard.py	/^    def save(self):$/;"	m	class:BaseWidget
+save_as	edit.py	/^    save_as = False$/;"	v	class:ModelFormAdminView
+save_forms	edit.py	/^    def save_forms(self):$/;"	m	class:ModelFormAdminView
+save_forms	form.py	/^    def save_forms(self):$/;"	m	class:FormAdminView
+save_models	edit.py	/^    def save_models(self):$/;"	m	class:ModelFormAdminView
+save_on_top	edit.py	/^    save_on_top = False$/;"	v	class:ModelFormAdminView
+save_related	edit.py	/^    def save_related(self):$/;"	m	class:ModelFormAdminView
+search_fields	list.py	/^    search_fields = ()$/;"	v	class:ListAdminView
+setup	dashboard.py	/^    def setup(self):$/;"	m	class:AddFormWidget
+setup	dashboard.py	/^    def setup(self):$/;"	m	class:BaseWidget
+setup	dashboard.py	/^    def setup(self):$/;"	m	class:ListWidget
+setup	dashboard.py	/^    def setup(self):$/;"	m	class:ModelBaseWidget
+setup_forms	edit.py	/^    def setup_forms(self):$/;"	m	class:ModelFormAdminView
+setup_forms	form.py	/^    def setup_forms(self):$/;"	m	class:FormAdminView
+setup_request	dashboard.py	/^    def setup_request(self, request):$/;"	m	class:PartialBaseWidget
+site_footer	base.py	/^    site_footer = getattr(settings,"XADMIN_FOOTER_TITLE",_(u"my-company.inc"))$/;"	v	class:CommAdminView
+site_title	base.py	/^    site_title = getattr(settings,"XADMIN_TITLE",_(u"Django Xadmin"))$/;"	v	class:CommAdminView
+static	base.py	/^    def static(self, path):$/;"	m	class:BaseAdminObject
+static	dashboard.py	/^    def static(self, path):$/;"	m	class:BaseWidget
+style_fields	edit.py	/^    style_fields = {}$/;"	v	class:ModelFormAdminView
+tagattrs	list.py	/^    def tagattrs(self):$/;"	m	class:ResultItem
+template	dashboard.py	/^    template = "xadmin\/widgets\/addform.html"$/;"	v	class:AddFormWidget
+template	dashboard.py	/^    template = "xadmin\/widgets\/list.html"$/;"	v	class:ListWidget
+template	dashboard.py	/^    template = "xadmin\/widgets\/qbutton.html"$/;"	v	class:QuickBtnWidget
+template	dashboard.py	/^    template = 'xadmin\/widgets\/base.html'$/;"	v	class:BaseWidget
+template	detail.py	/^    template = "xadmin\/layout\/field_value.html"$/;"	v	class:ShowField
+template	edit.py	/^    template = "xadmin\/layout\/field_value.html"$/;"	v	class:ReadOnlyField
+template_response	base.py	/^    def template_response(self, template, context):$/;"	m	class:BaseAdminObject
+title	dashboard.py	/^    title = _(u"%s Dashboard")$/;"	v	class:ModelDashboard
+title	dashboard.py	/^    title = _(u"Dashboard")$/;"	v	class:Dashboard
+title	dashboard.py	/^    title = forms.CharField(label=_('Widget Title'), required=False, widget=exwidgets.AdminTextInputWidget)$/;"	v	class:BaseWidget
+title	form.py	/^    title = None$/;"	v	class:FormAdminView
+title	website.py	/^    title = _("Main Dashboard")$/;"	v	class:IndexView
+title	website.py	/^    title = _("Please Login")$/;"	v	class:LoginView
+to_python	dashboard.py	/^    def to_python(self, value):$/;"	m	class:ModelChoiceField
+update_dashboard	dashboard.py	/^    def update_dashboard(self, obj):$/;"	m	class:UserWidgetAdmin
+update_params	website.py	/^    def update_params(self, defaults):$/;"	m	class:LoginView
+update_params	website.py	/^    def update_params(self, defaults):$/;"	m	class:LogoutView
+url_for_result	list.py	/^    def url_for_result(self, result):$/;"	m	class:ListAdminView
+user_fields	dashboard.py	/^    user_fields = ['user']$/;"	v	class:UserWidgetAdmin
+val	detail.py	/^    def val(self):$/;"	m	class:ResultField
+valid_forms	edit.py	/^    def valid_forms(self):$/;"	m	class:ModelFormAdminView
+valid_forms	form.py	/^    def valid_forms(self):$/;"	m	class:FormAdminView
+valid_value	dashboard.py	/^    def valid_value(self, value):$/;"	m	class:ModelChoiceField
+vendor	base.py	/^    def vendor(self, *tags):$/;"	m	class:BaseAdminObject
+vendor	dashboard.py	/^    def vendor(self, *tags):$/;"	m	class:BaseWidget
+view	base.py	/^        def view(request, *args, **kwargs):$/;"	f	function:BaseAdminView.as_view
+widget	dashboard.py	/^    def widget(self):$/;"	m	class:BaseWidget
+widget_customiz	dashboard.py	/^    widget_customiz = True$/;"	v	class:Dashboard
+widget_icon	dashboard.py	/^    widget_icon = 'fa fa-align-justify'$/;"	v	class:ListWidget
+widget_icon	dashboard.py	/^    widget_icon = 'fa fa-caret-square-o-right'$/;"	v	class:QuickBtnWidget
+widget_icon	dashboard.py	/^    widget_icon = 'fa fa-file-o'$/;"	v	class:HtmlWidget
+widget_icon	dashboard.py	/^    widget_icon = 'fa fa-plus'$/;"	v	class:AddFormWidget
+widget_icon	dashboard.py	/^    widget_icon = 'fa fa-plus-square'$/;"	v	class:BaseWidget
+widget_manager	dashboard.py	/^widget_manager = WidgetManager()$/;"	v
+widget_title	dashboard.py	/^    widget_title = None$/;"	v	class:BaseWidget
+widget_type	dashboard.py	/^    widget_type = 'addform'$/;"	v	class:AddFormWidget
+widget_type	dashboard.py	/^    widget_type = 'base'$/;"	v	class:BaseWidget
+widget_type	dashboard.py	/^    widget_type = 'html'$/;"	v	class:HtmlWidget
+widget_type	dashboard.py	/^    widget_type = 'list'$/;"	v	class:ListWidget
+widget_type	dashboard.py	/^    widget_type = 'qbutton'$/;"	v	class:QuickBtnWidget
+widget_with_perm	dashboard.py	/^            class widget_with_perm(wid):$/;"	c	function:Dashboard.get_widget
+widgets	dashboard.py	/^    widgets = []$/;"	v	class:Dashboard
+wizard_form_list	dashboard.py	/^    wizard_form_list = ($/;"	v	class:UserWidgetAdmin
+wrap	base.py	/^    def wrap(func):$/;"	f	function:inclusion_tag

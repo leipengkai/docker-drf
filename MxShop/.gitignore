@@ -1,0 +1,6 @@
+*.pyc
+*.swp
+.idea/*
+./apps/utils/profile_data/*
+./apps/utils/unitTest/reports/example_suite/*
+./profiles/*
