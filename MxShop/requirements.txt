@@ -36,3 +36,8 @@ html-testRunner
 django-debug-toolbar
 pyinstrument
 django-extensions
+
+#单元测试
+pytest
+
+uwsgi

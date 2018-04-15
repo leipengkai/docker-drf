@@ -194,6 +194,7 @@ DATABASES = {
         'OPTION': {'init_command': 'SET storage_engine=INNODB;'},
                    # 'charset': 'utf8'},
         'TEST': {
+            'ENGINE': 'django.db.backends.sqlite3',
             'NAME': 'test2',
             'CHARSET': 'utf8',
             # 'OPTION': {'init_command': 'SET storage_engine=INNODB;',
@@ -201,6 +202,9 @@ DATABASES = {
 }
     }
 }
+
+if 'test' in sys.argv:
+        DATABASES['default'] = {'ENGINE': 'django.db.backends.sqlite3',}
 
 
 # Password validation
@@ -254,10 +258,13 @@ AUTHENTICATION_BACKENDS = (
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
-)
-# STATIC_ROOT='/var/www/static/'  # 配置部署时使用
+# STATICFILES_DIRS = (
+    # os.path.join(BASE_DIR, "static"),
+# )
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")  # 使用nginx静态资源 配置,docker部署时使用
+
+# STATIC_ROOT='/var/www/static/'  # 
 # nginx.conf
 # location /static {
 # alias /var/www/static/;

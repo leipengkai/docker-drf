@@ -126,3 +126,37 @@ python3 manage.py runprofileserver --use-cprofile --prof-path=./apps/utils/profi
 # 之后的对应的请求都会有一个.prof的文件生成
 pyprof2calltree -i xx.prof -k
 ```
+
+
+单元测试使用
+```bash
+# from unittest import TestCase
+# unittest模块:将在当前工作目录下任何使用模式test*.py命名的文件都会的测试(django.test也是一样)
+# 通过Pycharm自动生成unittest测试:
+open any file | right mouse |Go To |Test |Create New Test | select test method 
+(只能对方法进行测试,然后直接在Pycharm运行就OK)
+
+
+# from django.test import TestCase(可对Model进行测试)
+vim apps/goods/tests.py
+# 通过Pycharm自动对test*.py文件进行测试:
+select dir | rigth mouse |Profile 'Test xxdir'
+# 但一直有错误RuntimeError:Model class xx doesn't declare an explicit app_label and isn't in an application in INSTALLED_APPS.
+solve : Edit configurations |Custom settins --> project/settings.py  || Options-->--keepdb
+同时导入 from goods.models import Goods, GoodsCategory
+
+# 也可以使用使用命令(相当于是指定Target)
+python3 manage.py test --keepdb  users.tests  # 执行user项目下的tests包(test*.py文件)或者tests.py(文件)
+python3 manage.py test --keepdb  users.tests.UsersTestCase # 单独执行某个test case
+python3 manage.py test --keepdb  users.tests.UsersTestCase.test_app_user_login_success # 单独执行某个测试方法
+python3 manage.py test --keepdb --settings=MxShop.settings tests
+
+```
+[pytest](https:pytest-django.readthedocs.io/en/latest/)
+```bash
+# Pycharm 默认是unittest，所以需要改下
+Please go to File | Settings | Tools | Python Integrated Tools and change the default test runner to py.test
+
+pip install pytest
+py.test --version
+```

@@ -5,25 +5,30 @@ from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from django.contrib.auth import login
 
-from .models import UserProfile,VerifyCode
+from users.models import UserProfile
 
 User = get_user_model()
-#
-# class TestcaseUserBackend(object):
-#     def authenticate(self, testcase_user=None):
-#         return testcase_user
-#
-#     def get_user(self, username):
-#         return User.objects.get(username=username)
-
 
 
 class UsersTestCase(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
+        '''
+        测试运行开始时调用一次 用来创建不会在任何测试方法中修改或更改的对象
+        '''
+        print("setUpTestData: Run once to set up non-modified data for all class methods.")
 
-        self.data= {'name':'femn','password':'111111','email':'femn@gmail.com'}
-        self.user = User.objects.create(**self.data)
+        cls.data= {'name':'femn','password':'111111','email':'femn@gmail.com'}
+        cls.user = User.objects.create(**cls.data)
+    def setUp(self):
+        '''
+        在每个测试函数之前被调 用来设置任何可能被测试修改的对象
+        '''
+
+        print("setUp: Run once for every test method to setup clean data.")
+
+        # 遇到用户登陆的坑
         # login(user=self.user)
 
 
@@ -37,7 +42,6 @@ class UsersTestCase(TestCase):
         # response = self.client.login(username='femn',password='111111')
         # response = self.client.login(self.user)
 
-
         # self.assertEquals(response,True)
 
 
@@ -46,6 +50,8 @@ class UsersTestCase(TestCase):
         users = UserProfile.objects.get(name='femn')
         max_length = users._meta.get_field('name').max_length
         self.assertEquals(max_length,30)
+        # name = users._meta.get_field('name').verbose_name 
+        # self.assertEquals(name,'姓名')
 
 
 
@@ -62,18 +68,13 @@ class UsersTestCase(TestCase):
         self.assertEquals(response.status_code,
                     status.HTTP_200_OK,
                     '登录接口返回状态码错误: 错误信息: {}'.format(str(response.content,encoding='utf-8')))
-        # auth = client.Client.login(password='111111',username='femn')
-        # self.assertEquals(auth,True)
-        # self.assertTrue(response.context['user'].is_authenticated)
-
-        print(response)
 
 
 
-class UserPermisson(TestCase):
+class UserPermissonTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create(username="lolwutboi")
-        self.user.set_password("whatisthepassword")
+        self.user = User.objects.create(name="femn") # username也可以
+        self.user.set_password("111111")
         self.user.save()
         self.client.force_login(self.user)
 
@@ -83,4 +84,4 @@ class UserPermisson(TestCase):
         response = self.client.get(path)
         self.assertEquals(response.status_code,
                     status.HTTP_200_OK,
-                    '登录接口返回状态码错误: 错误信息: {}'.format(str(response.content,encoding='utf-8')))
+                    '/shopcarts/: 错误信息: {}'.format(str(response.content,encoding='utf-8')))

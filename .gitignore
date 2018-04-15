@@ -1,2 +1,4 @@
-./Dockerfiles/database/*
 Dockerfiles/database
+Dockerfiles/nginx/log
+MxShop/static
+.idea

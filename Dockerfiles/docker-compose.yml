@@ -1,111 +1,95 @@
-mysql:
-    #image: mysql
-    image: mysql:5.7
-    #build: mysql
-    restart: always
-    environment:
-        - MYSQL_ROOT_PASSWORD=123456
-        - MYSQL_DATABASE=mxshop1
-        - MYSQL_USER=root
-        - MYSQL_PASSWORD=123456
-        - MYSQL_HOST=0.0.0.0
-        - MYSQL_PORT=3306  # cannot change this port to other number
-        - MYSQL_ROOT_HOST=%
+version: '2'
 
-    ports:
-        - '3306:3306'
-    volumes:
-        - '/home/femn/Documents/docker-django/Dockerfiles/database/mysql:/var/lib/mysql'
+services:
+    mysql:
+        #image: mysql
+        image: mysql:5.7
+        #build: mysql
+        restart: always
+        environment:
+            - MYSQL_ROOT_PASSWORD=123456
+            - MYSQL_DATABASE=mxshop1
+            - MYSQL_USER=root
+            - MYSQL_PASSWORD=123456
+            - MYSQL_HOST=0.0.0.0
+            - MYSQL_PORT=3306  # cannot change this port to other number
+            - MYSQL_ROOT_HOST=%
 
-redis:
-    image: 'bitnami/redis:latest'
-    environment:
-        - ALLOW_EMPTY_PASSWORD=yes
-    ports:
-        - '6379:6379'
-    volumes:
-        - ./database/redis:/bitnami
-    restart: always
+        ports:
+            - '3306:3306'
+        volumes:
+            - './database/mysql:/var/lib/mysql'
 
-web:
-    #restart: always
-    build: ../MxShop
+    redis:
+        image: 'bitnami/redis:latest'
+        environment:
+            - ALLOW_EMPTY_PASSWORD=yes
+        ports:
+            - '6379:6379'
+            # (HOST:CONTAINER)
+        volumes:
+            - ./database/redis:/bitnami
+        restart: always
 
-    #expose:
-    ports:
-        - "8000:8000"
-    links:
-        - mysql
-        - redis
-    volumes:
-        - '/home/femn/Documents/docker-django/MxShop:/code'
-        #- /usr/src/app/static
-    environment:
-        - DEBUG= 'true'
-    command: bash -c "python3 manage.py makemigrations &&
-            python3 manage.py migrate &&
-            python3 init_admin.py &&
-            python3 manage.py runserver 0.0.0.0:8000"
-            #/usr/local/bin/gunicorn --bind 0.0.0.0:8000 MxShop.wsgi:application -w 2"
-    #command: bash -c "python3 manage.py runserver 0.0.0.0:8000"
+    web:
+        #restart: always
+        build: ../MxShop
 
-#nginx:
-    #restart: always
-    #build: nginx
-    #ports:
-        #- "80:80"
-    #volumes:
-        #- /www/static
-    #volumes_from:
-        #- web
-    #links:
-        #- web:web
+        #expose:
+        ports:
+            - "8000:8000"
+            # (HOST:CONTAINER(nginx)
+        links:
+            - mysql
+            - redis
+        volumes:
+            - '../MxShop:/code'
+            # (HOST:CONTAINER)
+            #- /usr/src/app/static
+        environment:
+            - DEBUG= 'true'
+        command: uwsgi --ini uwsgi.ini 
+        #command: bash -c "python3 manage.py makemigrations &&
+                #python3 manage.py migrate &&
+                #python3 init_admin.py &&
+                #python3 manage.py runserver 0.0.0.0:8000"
+                #
+                #/usr/local/bin/gunicorn --bind 0.0.0.0:8000 MxShop.wsgi:application -w 2"
 
 
-#mysql:
-    #build: mysql
-    #ports:
-        #- '3306:3306'
-    #volumes:
-        #- './database/mysql:/var/lib/mysql/'
-    #environment:
-        #MYSQL_USER: "root"
-        #MYSQL_ROOT_PASSWORD: "123456"
-        #MYSQL_PASSWORD: "123456"
-        #MYSQL_DATABASE: "mxshop1"
-    #restart: always
-#redis:
-     #image: 'bitnami/redis:latest'
-    #build: redis
-    #environment:
-         #ALLOW_EMPTY_PASSWORD is recommended only for development.
-        #- ALLOW_EMPTY_PASSWORD=yes
-        #- REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
-    #ports:
-        #- '6379:6379'
-    #volumes:
-        #- './database/redis:/var/lib/redis'
-        #- './database/redis:/data'
-    #restart: always
-    #
+    nginx:
+        restart: always
+         #image: nginx:alpine
+        build: nginx
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            #- ./nginx/conf.d:/etc/nginx/conf.d
+            - ./nginx/sites-enabled:/etc/nginx/sites-enabled
+            - ./nginx/log:/var/log/nginx
+            - ./nginx/www:/usr/share/nginx/html
+        volumes_from:
+            - web
+        links:
+            - web:drf_web
+        #docker run --name mysql1 -p 80:80 -v /home/femn/Documents/docker-django/Dockerfiles/nginx/www:/usr/share/nginx/html:ro  -d nginx
+        
+    #nginx-proxy:
+        #image: jwilder/nginx-proxy
+        #ports:
+            #- "80:80"
+        #volumes:
+            #- /var/run/docker.sock:/tmp/docker.sock:ro
+            #- ./nginx/conf.d:/etc/nginx/conf.d
+            #- ./nginx/log:/var/log/nginx
+            #- ./nginx/www:/usr/share/nginx/html
+        #volumes_from:
+            #- web
+        #links:
+            #- web:drf_web
+            #docker run --name mysql1  -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro -d jwilder/nginx-proxy
+            #docker run --name mysql1  -p 80:80 -v /home/femn/Documents/docker-django/Dockerfiles/nginx/www:/usr/share/nginx/html:ro -d jwilder/nginx-proxy
 
-#db:
-#    image: mysql
-#    expose:
-#        - “3306”
-#    volumes:
-#        - ./db:/var/lib/mysql
-#    environment:
-#        - MYSQL_DATABASE=mysitedb
-#        - MYSQL_ROOT_PASSWORD=888888
-#
-#web:
-#    build: .
-#    command: python ./DjangoWeb/manage.py runserver 0.0.0.0:8000
-#    volumes:
-#        - .:/code
-#    ports:
-#        - “8000:8000”
-#    links:
-#        - db
+
 
