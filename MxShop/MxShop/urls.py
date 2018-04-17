@@ -26,9 +26,9 @@ from rest_framework_jwt.views import obtain_jwt_token
 import debug_toolbar
 
 from goods.views import GoodsListViewSet, CategoryViewset, HotSearchsViewset, BannerViewset, GoodsSimpleListViewSet
-from goods.views import IndexCategoryViewset, GoodsSimpleListview
+from goods.views import IndexCategoryViewset, GoodsSimpleListview, GoodsCommentListViewSet
 from users.views import SmsCodeViewset, UserViewset
-from user_operation.views import UserFavViewset, LeavingMessageViewset, AddressViewset
+from user_operation.views import UserFavViewset, LeavingMessageViewset, AddressViewset, CheckInViewSet
 from trade.views import ShoppingCartViewset, OrderViewset
 from goods.views_base import GoodsListView
 
@@ -69,6 +69,11 @@ router.register(r'banners', BannerViewset, base_name="banners")
 # 首页商品系列数据
 router.register(r'indexgoods', IndexCategoryViewset, base_name="indexgoods")
 
+# 商品评论
+router.register(r'goodsComment', GoodsCommentListViewSet, base_name='goodsComment')
+
+# 用户签到
+router.register(r'checkin', CheckInViewSet, base_name='checkin')
 
 # goods_list = GoodsListViewSet.as_view({
 # 'get': 'list',

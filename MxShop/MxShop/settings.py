@@ -187,8 +187,8 @@ DATABASES = {
         'NAME': "mxshop1",
         'USER': 'root',
         'PASSWORD': "123456",
-        # 'HOST': "0.0.0.0",
-        'HOST': "mysql",  # docker-compose.yml mysql的服务名
+        'HOST': "0.0.0.0",
+        # 'HOST': "mysql",  # docker-compose.yml mysql的服务名
         'PORT': "3306",
         'default-character-set': 'utf8',
         'OPTION': {'init_command': 'SET storage_engine=INNODB;'},
@@ -322,8 +322,8 @@ ali_pub_key_path = os.path.join(
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        # "LOCATION": "redis://127.0.0.1:6379",
-        "LOCATION": "redis://redis:6379", # docker-compose.yml 服务名
+        "LOCATION": "redis://127.0.0.1:6379",
+        # "LOCATION": "redis://redis:6379", # docker-compose.yml 服务名
         # "LOCATION": "redis://:password@127.0.0.1:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",

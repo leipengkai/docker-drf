@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from datetime import datetime
 
 # Create your views here.
 from django.contrib.auth.backends import ModelBackend
@@ -82,6 +83,7 @@ class SmsCodeViewset(CreateModelMixin, viewsets.GenericViewSet):
 
 class UserViewset(
         CreateModelMixin,
+        mixins.ListModelMixin,
         mixins.UpdateModelMixin,
         mixins.RetrieveModelMixin,
         viewsets.GenericViewSet):
@@ -105,6 +107,8 @@ class UserViewset(
     def get_permissions(self):
         if self.action == "retrieve":
             return [permissions.IsAuthenticated()]
+        elif self.action == "list":
+            return [permissions.IsAdminUser()]
         elif self.action == "create":
             return []
         return []
@@ -130,3 +134,43 @@ class UserViewset(
 
     def perform_create(self, serializer):
         return serializer.save()
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        # 当用户没有第一次签到时,是没有会员资料的
+        if hasattr(instance,'membershipInfo'):
+            userMembershipInfo = instance.membershipInfo
+            last_time = userMembershipInfo.last_check_in_time  
+            now = datetime.now()
+            tom = datetime(last_time.year,last_time.month,last_time.day+1)
+            if now.day - last_time.day >=1 or now > tom:
+                userMembershipInfo.check_in_status = False
+                # 表示未签到
+            else:
+                userMembershipInfo.check_in_status = True
+
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        for instance in queryset:
+            if hasattr(instance,'membershipInfo'):
+                userMembershipInfo = instance.membershipInfo
+                last_time = userMembershipInfo.last_check_in_time  
+                now = datetime.now()
+                tom = datetime(last_time.year,last_time.month,last_time.day+1)
+                if now.day - last_time.day >=1 or now > tom:
+                    userMembershipInfo.check_in_status = False
+                else:
+                    userMembershipInfo.check_in_status = True
+
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

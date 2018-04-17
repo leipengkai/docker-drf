@@ -3,10 +3,12 @@ from rest_framework import mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.authentication import SessionAuthentication
+from django.forms.models import model_to_dict
 
-from .models import UserFav, UserLeavingMessage, UserAddress
+
+from .models import UserFav, UserLeavingMessage, UserAddress, UserMembershipInfo
 from utils.permissions import IsOwnerOrReadOnly
-from .serializers import UserFavSerializer, UserFavDetailSerializer, AddressSerializer, LeavingMessageSerializer
+from .serializers import UserFavSerializer, UserFavDetailSerializer, AddressSerializer, LeavingMessageSerializer,  CheckInSerializer
 
 
 class UserFavViewset(
@@ -32,11 +34,11 @@ class UserFavViewset(
     def get_queryset(self):
         return UserFav.objects.filter(user=self.request.user)
 
-    # def perform_create(self, serializer):
-    #     instance = serializer.save()
-    #     goods = instance.goods
-    #     goods.fav_num += 1
-    #     goods.save()
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        goods = instance.goods
+        goods.fav_num += 1
+        goods.save()
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -91,3 +93,19 @@ class AddressViewset(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return UserAddress.objects.filter(user=self.request.user)
+
+class CheckInViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,viewsets.GenericViewSet):
+    '''
+    用户签到
+    create:
+        每日签到
+    '''
+
+    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
+    authentication_classes = (
+        JSONWebTokenAuthentication,
+        SessionAuthentication)
+    serializer_class =  CheckInSerializer
+
+    def get_queryset(self):
+        return UserMembershipInfo.objects.filter(user=self.request.user)

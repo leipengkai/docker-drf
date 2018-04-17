@@ -7,15 +7,16 @@ from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.throttling import UserRateThrottle
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
 
-from .models import Goods, GoodsCategory, HotSearchWords, Banner
-from .filters import GoodsFilter
+from .models import Goods, GoodsCategory, HotSearchWords, Banner, GoodsComment
+from .filters import GoodsFilter, GoodsCommentFilter
 from .serializers import GoodsSerializer, CategorySerializer, HotWordsSerializer, BannerSerializer
-from .serializers import IndexCategorySerializer, GoodsSimpleSerializer
+from .serializers import IndexCategorySerializer, GoodsSimpleSerializer, GoodsCommentSerializer
 # Create your views here.
 
 
@@ -94,6 +95,28 @@ class IndexCategoryViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         is_tab=True, name__in=["生鲜食品", "酒水饮料"])
     serializer_class = IndexCategorySerializer
 
+class GoodsCommentListViewSet(mixins.ListModelMixin,mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    '''
+    商品评论
+    '''
+    throttle_classes = (UserRateThrottle, AnonRateThrottle)
+    serializer_class =  GoodsCommentSerializer
+    queryset =  GoodsComment.objects.all()
+    pagination_class = GoodsPagination
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    filter_class = GoodsCommentFilter
+    search_fields = ('goods_id',)
+    ordering_fields = ('id',)
+
+    # 如果在这里创建的话 ,就需要权限
+    # def get_permissions(self):
+        # if self.action == "retrieve":
+            # return []
+        # elif self.action == "list":
+            # return []
+        # elif self.action == "create":
+            # return [IsAuthenticated()]
+        # return []
 
 ###########################################################################
 # class GoodsSimpleListview(APIView):
@@ -176,25 +199,36 @@ class GoodsSimpleListViewSet(viewsets.ReadOnlyModelViewSet):
     # return queryset
 
     # def get_object(self):
-    # request = self.request
-    # pk= request.query_params.get('pk','')
-    # return  OrderInfo.objects.filter(id = pk)[0]
+        # request = self.request
+        # pk= request.query_params.get('pk','')
+        # return  OrderInfo.objects.filter(id = pk)[0]
 
     # def get_serializer_class(self):
-    # if self.action == 'retrieve':
-    # return OrderDetailSerializer
-    # elif self.action == 'list': # GET()
-    # return OrderListSerializer
-    # return OrderSerializer
+        # if self.action == 'retrieve':
+            # return OrderDetailSerializer
+        # elif self.action == 'list': # GET()
+            # return OrderListSerializer
+        # return OrderSerializer
 
     # def get_permissions(self):
-    # if self.action == "retrieve":
-    # return [permissions.IsAuthenticated()]
-    # elif self.action == "create":
-    # return []
-    # return []
+        # if self.action == "retrieve":
+            # return [permissions.IsAuthenticated()]
+        # elif self.action == "list":
+            # return [permissions.IsAdminUser()]
+        # elif self.action == "create":
+            # return []
+        # return []
 
-# def perform_create(self, serializer):
+# def perform_create(self, serializer): # 改变保存这个serializer之后,要处理的逻辑,也可以用signals来处理,数据库的数据已经保存
     # serializer._validated_data 得到传递的参数
+    #instance = serializer.save() 
+    #goods = instance.goods
+    #goods.fav_num += 1
+    #goods.save()
+
 # def create(self, request, *args, **kwargs): # 应该是自定义返回给前端的内容
     # return Response(re_dict, status=status.HTTP_201_CREATED, headers=headers)
+
+# def retrieve(self, request, *args, **kwargs): # 处理展示的状态
+    # instance = self.get_object() 
+    # userMembershipInfo = instance.membershipInfo

@@ -19,6 +19,8 @@ services:
             - '3306:3306'
         volumes:
             - './database/mysql:/var/lib/mysql'
+        #   - xx:/var/lib/mysql  
+        #   会自动在/var/lib/docker/volumes下,创建dockerfiles_xx目录
 
     redis:
         image: 'bitnami/redis:latest'
@@ -48,7 +50,9 @@ services:
             #- /usr/src/app/static
         environment:
             - DEBUG= 'true'
-        command: uwsgi --ini uwsgi.ini 
+        command: python3 manage.py runserver 0.0.0.0:8000
+#        command: uwsgi --ini uwsgi.ini
+        
         #command: bash -c "python3 manage.py makemigrations &&
                 #python3 manage.py migrate &&
                 #python3 init_admin.py &&
@@ -57,22 +61,22 @@ services:
                 #/usr/local/bin/gunicorn --bind 0.0.0.0:8000 MxShop.wsgi:application -w 2"
 
 
-    nginx:
-        restart: always
-         #image: nginx:alpine
-        build: nginx
-        ports:
-            - "80:80"
-            - "443:443"
-        volumes:
-            #- ./nginx/conf.d:/etc/nginx/conf.d
-            - ./nginx/sites-enabled:/etc/nginx/sites-enabled
-            - ./nginx/log:/var/log/nginx
-            - ./nginx/www:/usr/share/nginx/html
-        volumes_from:
-            - web
-        links:
-            - web:drf_web
+    #nginx:
+        #restart: always
+        #build: nginx
+        #container_name: nginx-container
+        #ports:
+            #- "80:80"
+            #- "443:443"
+        #volumes:
+        ##           - ./nginx/conf.d:/etc/nginx/conf.d
+            #- ./nginx/sites-enabled:/etc/nginx/sites-enabled
+            #- ./nginx/log:/var/log/nginx
+            #- ./nginx/www:/usr/share/nginx/html
+        #volumes_from:
+            #- web
+        #links:
+            #- web:drf_web
         #docker run --name mysql1 -p 80:80 -v /home/femn/Documents/docker-django/Dockerfiles/nginx/www:/usr/share/nginx/html:ro  -d nginx
         
     #nginx-proxy:

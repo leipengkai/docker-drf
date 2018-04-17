@@ -2,8 +2,8 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import VerifyCode, Member, UserProfile
-
+from .models import VerifyCode, UserProfile
+from user_operation.models import UserMembershipInfo
 
 class BaseSetting(admin.ModelAdmin):
     enable_themes = True
@@ -19,23 +19,23 @@ class GlobalSettings(admin.ModelAdmin):
 class VerifyCodeAdmin(admin.ModelAdmin):
     list_display = ['code', 'mobile', "add_time"]
 
-class MemberAdmin(admin.ModelAdmin):
-    '''
-    会员等级
-    '''
-    list_display = ['level', 'integral', "owned_sum", "sign_sum", "share_sum"]
 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ['name','birthday','gender', 'mobile','email','level', 'integral', "owned_sum", "sign_sum", "share_sum"]
+    list_display = ['name','birthday','gender', 'mobile','email','membershipInfo','is_superuser','date_joined','username']
 
-    list_filter = ["level", "integral", "name"]
+    list_filter = ["name"]
     search_fields = ['name', ]
     list_per_page = 30
-    list_editable = ["integral"]
 
+    # class UserMembershipInfoInline(admin.StackedInline):
+        # model =  UserMembershipInfo
+        # exclude = ["bonus",'owned_sum','shared_sum','check_in_sum']
+        # extra = 3
+        # style = 'tab'
+
+    # inlines = [UserMembershipInfoInline]
 
 admin.site.register(VerifyCode, VerifyCodeAdmin)
-admin.site.register(Member, MemberAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
 # admin.site.register(views.BaseAdminView, BaseSetting)
 # admin.site.register(views.CommAdminView, GlobalSettings)

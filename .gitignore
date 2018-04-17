@@ -2,3 +2,8 @@ Dockerfiles/database
 Dockerfiles/nginx/log
 MxShop/static
 .idea
+MxShop/apps/users/migrations/*
+MxShop/apps/goods/migrations/*
+MxShop/apps/trade/migrations/*
+MxShop/apps/user_operation/migrations/*
+

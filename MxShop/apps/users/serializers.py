@@ -8,6 +8,7 @@ from datetime import timedelta
 from rest_framework.validators import UniqueValidator
 
 from .models import VerifyCode
+from user_operation.models import UserMembershipInfo, Membership
 
 from MxShop.settings import REGEX_MOBILE
 
@@ -41,14 +42,38 @@ class SmsSerializer(serializers.Serializer):
 
         return mobile
 
+class MembershipSerializer(serializers.ModelSerializer):
+    '''
+    会员等级
+    '''
+    class Meta:
+        model = Membership
+        fields = ['tier_name']
+
+class MembershipInfoSerializer(serializers.ModelSerializer):
+    '''
+    会员资料
+    '''
+    membership = MembershipSerializer(read_only=True)
+
+    # 不在这里做字段的改变
+    # check_in_status = serializers.BooleanField(read_only=True)
+
+    # def validate_check_in_status(self,check_in_status):
+        # return True
+
+    class Meta:
+        model =  UserMembershipInfo
+        fields = '__all__'
 
 class UserDetailSerializer(serializers.ModelSerializer):
     """
     用户详情序列化类
     """
+    membershipInfo = MembershipInfoSerializer(read_only=True)
     class Meta:
         model = User
-        fields = ("name", "gender", "birthday", "email", "mobile")
+        fields = ("name", "gender", "birthday", "email", "mobile","id","membershipInfo")
 
 
 class UserRegSerializer(serializers.ModelSerializer):

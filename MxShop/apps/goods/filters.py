@@ -4,7 +4,7 @@ __author__ = 'bobby'
 import django_filters
 from django.db.models import Q
 
-from .models import Goods
+from .models import Goods,GoodsComment
 
 
 class GoodsFilter(django_filters.rest_framework.FilterSet):
@@ -20,7 +20,7 @@ class GoodsFilter(django_filters.rest_framework.FilterSet):
     name = django_filters.CharFilter(
         name='name',
         lookup_expr='icontains',
-        help_text="全局模糊搜索")
+        help_text="商品名称(全局模糊搜索)")
 
     top_category = django_filters.NumberFilter(
         name='category',
@@ -34,3 +34,11 @@ class GoodsFilter(django_filters.rest_framework.FilterSet):
     class Meta:
         model = Goods
         fields = ['pricemin', 'pricemax', 'is_hot', 'is_new', 'name']
+
+
+class GoodsCommentFilter(django_filters.rest_framework.FilterSet):
+    goods_id = django_filters.NumberFilter(name='goods_id', help_text='所属商品')
+    class Meta:
+        model = GoodsComment
+        fields = ['goods_id']
+

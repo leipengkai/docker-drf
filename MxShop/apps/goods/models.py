@@ -2,6 +2,8 @@ from datetime import datetime
 
 from django.db import models
 from DjangoUeditor.models import UEditorField
+
+from users.models import UserProfile
 # Create your models here.
 
 
@@ -122,8 +124,8 @@ class Goods(models.Model):
         null=True,
         blank=True,
         verbose_name="封面图")
-    is_new = models.BooleanField(default=False, verbose_name="是否新品")
-    is_hot = models.BooleanField(default=False, verbose_name="是否热销")
+    is_new = models.BooleanField(default=False, verbose_name="是否新品",help_text='是否新品:True or False')
+    is_hot = models.BooleanField(default=False, verbose_name="是否热销",help_text='是否热销:True or False')
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
     class Meta:
@@ -214,3 +216,34 @@ class HotSearchWords(models.Model):
 
     def __str__(self):
         return self.keywords
+
+class GoodsComment(models.Model):
+    '''
+    商品评论
+    '''
+    goods = models.ForeignKey(Goods,related_name='comment',default='',verbose_name='商品',on_delete=models.CASCADE)
+    users = models.ForeignKey(UserProfile,related_name='comment_goods',default='',verbose_name='用户',on_delete=models.CASCADE)
+    comment = models.TextField(max_length=500,verbose_name='评论内容')
+    add_time = models.DateTimeField(default=datetime.now,verbose_name='添加时间')
+
+    class Meta:
+        verbose_name = '评论'
+        verbose_name_plural = verbose_name 
+
+    def __str__(self):
+        return self.goods.name
+
+class GoodsCommentIamge(models.Model):
+    '''
+    商品评论图片
+    '''
+    comment = models.ForeignKey(GoodsComment,related_name='images',default='',verbose_name='评论',on_delete=models.CASCADE)
+    add_time = models.DateTimeField(default=datetime.now,verbose_name='添加时间')
+    image = models.ImageField(upload_to='goods/comment',verbose_name='图片')
+
+    class Meta:
+        verbose_name = '评论图片'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.comment.comment

@@ -5,7 +5,8 @@ from rest_framework import serializers
 from django.db.models import Q
 
 from goods.models import Goods, GoodsCategory, HotSearchWords, GoodsImage, Banner
-from goods.models import GoodsCategoryBrand, IndexAd
+from goods.models import GoodsCategoryBrand, IndexAd,GoodsComment,GoodsCommentIamge
+from users.models import UserProfile
 
 
 class CategorySerializer3(serializers.ModelSerializer):
@@ -107,10 +108,38 @@ class IndexCategorySerializer(serializers.ModelSerializer):
         model = GoodsCategory
         fields = "__all__"
 
+class GoodsCommentIamgeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GoodsCommentIamge
+        fields = ('image')
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ('name','mobile','image')
+
+class GoodsCommentSerializer(serializers.ModelSerializer):
+    comment =  GoodsCommentIamgeSerializer(many=True,read_only=True)
+    users =  UserProfileSerializer()
+    goods = GoodsSerializer()
+    # goods = serializers.PrimaryKeyRelatedField(required=True, queryset=Goods.objects.all())
+    class Meta:
+        model = GoodsComment
+        fields = '__all__'
+
+    # 要验证此用户已经购买此商品
+    # def create(self, validated_data):
+        # # 已经序列化的好的数据: validated_data
+        # user = self.context["request"].user
+        # nums = validated_data["nums"]
+        # existed = ShoppingCart.objects.filter(user=user, goods=goods)
+        # return existed
 
 ###########################################################################
 class GoodsSimpleSerializer(serializers.ModelSerializer):
-    # 验证字段并提供错误提示,序列化并对数据库进行增删改查,可以提供帮助文档的字段
+    # 验证字段并提供错误提示,并限制post传递的字段,get展示的字段
+    # 按MODEL序列化并对数据库进行增删改查,
+    # 可以提供帮助文档的字段
 
     # Serializer
     # 需要显示的指明与Model中对应的字段  才能显示字段内容(get), 相当于说是跟Model没有关系了
@@ -149,7 +178,7 @@ class GoodsSimpleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Goods  # 指定映射的Model
-        fields = "__all__"  # 注意自定义的字段一定要写进来,这里用__all__表示所有字段都包括了,同时是定义字段的优先级高于此
+        fields = "__all__"  # 注意自定义的字段一定要写进来,这里用__all__表示所有字段都包括了,否则需要写明
 
 # 先会去验证Model字段是否合法,然后才到ModelSerializer这边来进行其它的验证
 # 包括 serializer字段 (UniqueValidator)--> validate_字段()-->  validate() -->create()
