@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'users.apps.UsersConfig',
+    # 'users.apps.UsersConfig',
+    'users',
+    # 相当于加了'users' app .users/__init__.py加上 default_app_config= 'users.apps.UsersConfig' 并且后台还显示中文
     'DjangoUeditor',
     'goods.apps.GoodsConfig',
     'trade.apps.TradeConfig',
@@ -55,7 +57,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',  # 解决跨域
     'rest_framework.authtoken',
-    'social_django',
+    # 'social_django',
     'jet.dashboard',
     'jet',
 
@@ -187,16 +189,16 @@ DATABASES = {
         'NAME': "mxshop1",
         'USER': 'root',
         'PASSWORD': "123456",
-        'HOST': "0.0.0.0",
-        # 'HOST': "mysql",  # docker-compose.yml mysql的服务名
+        # 'HOST': "0.0.0.0",
+        'HOST': "mysql",  # docker-compose.yml mysql的服务名
         'PORT': "3306",
         'default-character-set': 'utf8',
         'OPTION': {'init_command': 'SET storage_engine=INNODB;'},
                    # 'charset': 'utf8'},
-        'TEST': {
+        'TEST': { # 单元测试的临时数据库
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': 'test2',
-            'CHARSET': 'utf8',
+            'CHARSET': 'utf8', # 一定要设置为utf8
             # 'OPTION': {'init_command': 'SET storage_engine=INNODB;',
             #            'charset': 'utf8'},
 }
@@ -258,16 +260,18 @@ AUTHENTICATION_BACKENDS = (
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+# 测试环境下使用
 # STATICFILES_DIRS = (
     # os.path.join(BASE_DIR, "static"),
 # )
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")  # 使用nginx静态资源 配置,docker部署时使用
+# python3 manage.py collectstatic 会在此项目下生成一个static目录,并将静态文件收集在此目录下
 
-# STATIC_ROOT='/var/www/static/'  # 
+# STATIC_ROOT='/var/www/static/'  #
 # nginx.conf
 # location /static {
-# alias /var/www/static/;
+# alias /code/static/;
 # }
 
 
@@ -279,7 +283,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        # 'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication', # 这两个认证不要设置成全局
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     # 'DEFAULT_THROTTLE_CLASSES': (
     # 'rest_framework.throttling.AnonRateThrottle',
@@ -322,8 +327,8 @@ ali_pub_key_path = os.path.join(
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379",
-        # "LOCATION": "redis://redis:6379", # docker-compose.yml 服务名
+        # "LOCATION": "redis://127.0.0.1:6379",
+        "LOCATION": "redis://redis:6379", # docker-compose.yml 服务名
         # "LOCATION": "redis://:password@127.0.0.1:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
@@ -331,12 +336,14 @@ CACHES = {
     }
 }
 
-SOCIAL_AUTH_WEIBO_KEY = 'foobar'
-SOCIAL_AUTH_WEIBO_SECRET = 'bazqux'
+SOCIAL_AUTH_WEIBO_KEY = '762446969'
+SOCIAL_AUTH_WEIBO_SECRET = '3d1f9fe14d390e3067dd5df2009cbd57'
 
+SOCIAL_AUTH_QQ_KEY = 'foobar'
+SOCIAL_AUTH_QQ_SECRET = 'bazqux'
 #  http://127.0.0.1:8000/complete/weibo/
 # 先退出微博
 # 再访问 127.0.0.1:8000/login/weibo/
 
 # 第三方登陆成功之后 跳转到此页面
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/index/'
+# SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/index/'

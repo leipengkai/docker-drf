@@ -1,3 +1,4 @@
+### 安装运行环境(如使用docker则不需要)
 python版本(ubuntu16.04版本)
 ```bash
 sudo add-apt-repository ppa:deadsnakes/ppa
@@ -95,6 +96,7 @@ python3 manage.py changepassword
 
 ```
 
+### 第三方工具的使用
 性能分析工具:
 ```bash
 # 单个方法的性能分析
@@ -142,8 +144,8 @@ vim apps/goods/tests.py
 # 通过Pycharm自动对test*.py文件进行测试:
 select dir | rigth mouse |Profile 'Test xxdir'
 # 但一直有错误RuntimeError:Model class xx doesn't declare an explicit app_label and isn't in an application in INSTALLED_APPS.
-solve : Edit configurations |Custom settins --> project/settings.py  || Options-->--keepdb
-同时导入 from goods.models import Goods, GoodsCategory
+solve : Edit configurations |Custom settins --> project_path/settings.py  || Options-->--keepdb
+同时导入 from goods.models import Goods, GoodsCategory   ,不用.models
 
 # 也可以使用使用命令(相当于是指定Target)
 python3 manage.py test --keepdb  users.tests  # 执行user项目下的tests包(test*.py文件)或者tests.py(文件)
@@ -160,3 +162,16 @@ Please go to File | Settings | Tools | Python Integrated Tools and change the de
 pip install pytest
 py.test --version
 ```
+
+[微博开放平台](http:open.weibo.com/) 认证一些基本信息就可以了
+```bash
+我的应用 | 应用信息 |高级信息|授权回调页| http://0.0.0.0:8008/complete/weibo/|其它的填空
+再设置下 APP_KEY SECRET 
+```
+[第三方登陆](http:python-social-auth.readthedocs.io/en/latest/configuration/django.html)
+```bash
+# gitlab:social-app-django
+pip3 install social-auth-app-django
+访问: http://0.0.0.0:8008/index/weibo/
+```
+

@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework import mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import SessionAuthentication,TokenAuthentication
 from django.forms.models import model_to_dict
 
 
@@ -28,13 +28,14 @@ class UserFavViewset(
     permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
     authentication_classes = (
         JSONWebTokenAuthentication,
+        TokenAuthentication,
         SessionAuthentication)
     lookup_field = "goods_id"
 
     def get_queryset(self):
         return UserFav.objects.filter(user=self.request.user)
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer):  # 可由信号量去做
         instance = serializer.save()
         goods = instance.goods
         goods.fav_num += 1
@@ -66,6 +67,7 @@ class LeavingMessageViewset(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
     authentication_classes = (
         JSONWebTokenAuthentication,
+        TokenAuthentication,
         SessionAuthentication)
     serializer_class = LeavingMessageSerializer
 
@@ -88,6 +90,7 @@ class AddressViewset(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
     authentication_classes = (
         JSONWebTokenAuthentication,
+        TokenAuthentication,
         SessionAuthentication)
     serializer_class = AddressSerializer
 
@@ -104,6 +107,7 @@ class CheckInViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,viewsets.Gen
     permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
     authentication_classes = (
         JSONWebTokenAuthentication,
+        TokenAuthentication,
         SessionAuthentication)
     serializer_class =  CheckInSerializer
 

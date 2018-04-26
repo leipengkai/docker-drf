@@ -136,38 +136,55 @@ class GoodsCommentSerializer(serializers.ModelSerializer):
         # return existed
 
 ###########################################################################
-class GoodsSimpleSerializer(serializers.ModelSerializer):
-    # 验证字段并提供错误提示,并限制post传递的字段,get展示的字段
-    # 按MODEL序列化并对数据库进行增删改查,
+class GoodsSimpleSerializer(serializers.ModelSerializer): # 在数据保存之前进行操作
+    # 验证字段并提供错误提示,并限制post传递的字段,get展示的字段,或者post和get的字段不同,则定义不同的serializer来满足需求
+    # 按MODEL序列化并对数据库进行增删改查
     # 可以提供帮助文档的字段
+    # 关联的ForeignKey,OTO表需要先有一条数据,再向admin注册(进行能内容的查看,管理)
 
     # Serializer
     # 需要显示的指明与Model中对应的字段  才能显示字段内容(get), 相当于说是跟Model没有关系了
     # 灵活性比较高(灵活的操作数据库,并可以不用去验证Model字段的正确性)
     # validated_data是已经序列化好的数据了:Goods 如果是没有序列化好的的数据的话,就是goods_id
 
-    # goods = serializers.PrimaryKeyRelatedField(required=True, queryset=Goods.objects.all())
-    # 必须要指定queryset,增加商品购物车,不重新创建一条新记录,而是更新
-
     # name = serializers.CharField(required=True,max_length=100)
     # 同时如果需要在 Serializer中保存或更新数据库的话,还要重写create() update()
 
-    # username = serializers.CharField(label="用户名", help_text="用户名", required=True, allow_blank=False,# validators=[UniqueValidator(queryset=User.objects.all(), message="用户已经存在")])
-    # password = serializers.CharField( # style={'input_type': 'password'},help_text="密码", label="密码", write_only=True, # )
-    # def validate_username(self, username):
+    # username = serializers.CharField(label="用户名", help_text="用户名", required=True, allow_blank=False, validators=[UniqueValidator(queryset=User.objects.all(), message="用户已经存在")])
+    # password = serializers.CharField( style={'input_type': 'password'},help_text="密码", label="密码", write_only=True,)
+
+    # def validate_name(self, name:可以自己定义默认的,一般是由用户输入
         # raise serializers.ValidationError("验证码错误")
+
     # def validate(self, attrs):
         # del attrs["code"]
         # return attrs
+
     # def create(self, validated_data):
         # # 已经序列化的好的数据: validated_data
         # user = self.context["request"].user
-        # nums = validated_data["nums"]
-        # existed = ShoppingCart.objects.filter(user=user, goods=goods)
-        # return existed
+        # existed = UserAddress.objects.filter(user=user)
+        # if not existed:
+            # validated_data['default_address'] = '1'
+        # return  UserAddress.objects.create(**validated_data)
 
     # def update(self, instance, validated_data):
-        # instance.nums = validated_data["nums"]
+        # user = self.context["request"].user
+        # default_address = validated_data["default_address"]
+        # existed = UserAddress.objects.filter(user=user).filter(default_address='1')
+        # if existed and default_address == '1':
+            # for i in existed:
+                # i.default_address = '0'
+                # i.save()
+
+        # # instance.default_address = default_address 下面是源码
+        # info = get_field_info(instance)
+        # for attr, value in validated_data.items():
+            # if attr in info.relations and info.relations[attr].to_many:
+                # field = getattr(instance, attr)
+                # field.set(value)
+            # else:
+                # setattr(instance, attr, value)
         # instance.save()
         # return instance
 
@@ -178,6 +195,13 @@ class GoodsSimpleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Goods  # 指定映射的Model
+        # validators = [  # UserFav  
+            # UniqueTogetherValidator(
+                # queryset=UserFav.objects.all(),
+                # fields=('user', 'goods'),
+                # message="已经收藏"
+            # )
+        # ]
         fields = "__all__"  # 注意自定义的字段一定要写进来,这里用__all__表示所有字段都包括了,否则需要写明
 
 # 先会去验证Model字段是否合法,然后才到ModelSerializer这边来进行其它的验证
@@ -186,3 +210,13 @@ class GoodsSimpleSerializer(serializers.ModelSerializer):
 # 其中write_only=True的话,则表示在序列化给前端时(serializer.data)就不会序列化这个字段了.
 
 # 通过Serializer验证过后的 return 返回到 request.data中了？
+    
+    # serializer_related  购物车
+    # goods = serializers.PrimaryKeyRelatedField(required=True, queryset=Goods.objects.filter( goods_num__gte=1))
+    # 必须要指定queryset,post时让其选一个,get时只是一些基本的信息,这里只是个goods_id_list
+    # 当然也可以指定其它参数read_only,default
+    
+    # 但可以在get的serializer_classs中定义一个ModelSerializer定义 来得到具体想要的格式内容
+    # goods = GoodsSerializer(many=False, read_only=True)
+
+

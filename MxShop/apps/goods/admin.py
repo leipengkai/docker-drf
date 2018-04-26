@@ -37,7 +37,7 @@ class GoodsAdmin(admin.ModelAdmin):
     search_fields = ['name', ]
     list_per_page = 8
 
-    list_editable = ["is_hot", "is_new"]
+    list_editable = ["is_hot", "is_new","goods_num"]
     # fieldsets = [
     # ('basic',{'fields': ['name']}),
     # ('more', {'fields': ['add_time']}),

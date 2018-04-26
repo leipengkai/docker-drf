@@ -14,6 +14,7 @@ from random import choice
 from rest_framework import permissions
 from rest_framework import authentication
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from rest_framework.authentication import SessionAuthentication,TokenAuthentication
 
 from rest_framework_jwt.serializers import jwt_encode_handler, jwt_payload_handler
 
@@ -93,7 +94,8 @@ class UserViewset(
     queryset = User.objects.all()
     authentication_classes = (
         JSONWebTokenAuthentication,
-        authentication.SessionAuthentication)
+        TokenAuthentication,
+        SessionAuthentication)
 
     # serializer_class = UserRegSerializer
     def get_serializer_class(self):
@@ -165,7 +167,6 @@ class UserViewset(
                     userMembershipInfo.check_in_status = False
                 else:
                     userMembershipInfo.check_in_status = True
-
 
         page = self.paginate_queryset(queryset)
         if page is not None:

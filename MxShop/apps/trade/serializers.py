@@ -18,7 +18,7 @@ class ShopCartDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ShoppingCart
-        fields = ("goods", "nums")
+        fields = ("goods", "nums","id")
 
 
 class ShopCartSerializer(serializers.Serializer):
@@ -55,7 +55,11 @@ class ShopCartSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         # 修改商品数量
-        instance.nums = validated_data["nums"]
+        goods_sum = validated_data['goods'].goods_num
+        num = validated_data["nums"]
+        if goods_sum < num:
+            raise serializers.ValidationError("库存数量不足")
+        instance.nums = num
         instance.save()
         return instance
 

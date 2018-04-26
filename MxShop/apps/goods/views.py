@@ -1,3 +1,5 @@
+import re
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import mixins
@@ -6,12 +8,16 @@ from rest_framework import filters
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.template import loader, RequestContext
+from django.shortcuts import render_to_response
+from django.http import HttpResponse
 
 from rest_framework_extensions.cache.mixins import CacheResponseMixin
+from django.shortcuts import render
+
 
 from .models import Goods, GoodsCategory, HotSearchWords, Banner, GoodsComment
 from .filters import GoodsFilter, GoodsCommentFilter
@@ -92,7 +98,9 @@ class IndexCategoryViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
     首页商品分类数据
     """
     queryset = GoodsCategory.objects.filter(
-        is_tab=True, name__in=["生鲜食品", "酒水饮料"])
+        is_tab=True,
+        # name__in=["生鲜食品", "酒水饮料"]
+    )
     serializer_class = IndexCategorySerializer
 
 class GoodsCommentListViewSet(mixins.ListModelMixin,mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -117,6 +125,28 @@ class GoodsCommentListViewSet(mixins.ListModelMixin,mixins.RetrieveModelMixin, v
         # elif self.action == "create":
             # return [IsAuthenticated()]
         # return []
+
+# class GoodsDetailViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+# class GoodsDetailViewSet(mixins.RetrieveModelMixin, generics.GenericAPIView):
+
+class GoodsDetailViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+
+    # def ip_address_processor(request):
+            # return {'ip_address': request.META['REMOTE_ADDR']}
+    def detail(request,pk):
+        queryset = Goods.objects.filter(id=pk)[0]
+        images = queryset.images.model.objects.filter(goods=queryset)
+        goods_desc = queryset.goods_desc 
+        goods_desc = re.sub('(src=".*?")',r'\1 class="img-responsive"',goods_desc)
+
+
+        return render(request,'detail.html',{'goods':queryset,'images':images,'goods_desc':goods_desc})
+
+
+        # t = loader.get_template('detail.html')
+        # context =  RequestContext(request,{'goods':queryset,'images':images})
+        # return  HttpResponse(t.render({'goods':queryset,'images':images}))
+
 
 ###########################################################################
 # class GoodsSimpleListview(APIView):

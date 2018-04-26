@@ -108,10 +108,10 @@ class UserRegSerializer(serializers.ModelSerializer):
     )
 
     # def create(self,validated_data): # 由信号量去做
-    # user = super(UserRegSerializer,self).create(validated_data=validated_data)
-    # user.set_password(validated_data['password'])
-    # user.save()
-    # return user
+        # user = super(UserRegSerializer,self).create(validated_data=validated_data)
+        # user.set_password(validated_data['password'])
+        # user.save()
+        # return user
 
     def validate_code(self, code):
         # try:

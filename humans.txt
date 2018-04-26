@@ -1,0 +1,46 @@
+
+
+/* TEAM */
+
+
+Your title: leipengkai.
+
+
+Site: leipengkai@gmail.com, www.femn.me.
+
+
+Twitter: leipengkai.
+
+
+Location: GuangZhong, China.
+
+
+
+                        [...]
+
+
+
+/* THANKS */
+
+
+Name: https://github.com/twtrubiks/docker-django-nginx-uwsgi-postgres-tutorial
+
+
+
+                        [...]
+
+
+
+/* SITE */
+
+
+Last update: YYYY/MM/DD
+
+
+Standards: HTML5, CSS3,..
+
+
+Components: Docker, Django-rest-framework, Django, MYSQL,REDIS.
+
+
+Software: Software used for the development

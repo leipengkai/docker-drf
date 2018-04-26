@@ -4,7 +4,6 @@ from django.contrib import admin
 
 from .models import UserFav, UserLeavingMessage, UserAddress,Membership,UserMembershipInfo
 
-
 class UserFavAdmin(admin.ModelAdmin):
     list_display = ['user', 'goods', "add_time"]
 

@@ -3,11 +3,10 @@ from datetime import datetime
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.authentication import SessionAuthentication,TokenAuthentication
 from rest_framework import mixins
 from django.shortcuts import redirect
 from django.http import QueryDict
-from rest_framework.authentication import TokenAuthentication
 
 
 
@@ -112,17 +111,11 @@ class ShoppingCartViewset(viewsets.ModelViewSet):
 
 # 删除的第二种方式
     # get_object()二选一
-    def get_object(self):
-        request = self.request
-        pk = request.query_params.get('pk', '')
-        return ShoppingCart.objects.filter(id=pk)[0]
+    # def get_object(self):
+        # request = self.request
+        # pk = request.query_params.get('pk', '')
+        # return ShoppingCart.objects.filter(id=pk)[0]
 
-    def perform_destroy(self, instance):
-        if instance:
-            # goods = instance.goods
-            # goods.goods_num += instance.nums
-            # goods.save()
-            instance.delete()
 
     # def get_object(self):
         # queryset = self.filter_queryset(self.get_queryset())
@@ -136,8 +129,8 @@ class ShoppingCartViewset(viewsets.ModelViewSet):
         # self.check_object_permissions(self.request, obj)
         # return obj
 
-    def perform_update(self, serializer):
-        saved_record = serializer.save()
+    # def perform_update(self, serializer):
+        # saved_record = serializer.save()
         # existed_record = ShoppingCart.objects.get(id=serializer.instance.id)
         # existed_num = existed_record.nums
         # nums = saved_record.nums - existed_num
@@ -164,6 +157,7 @@ class OrderViewset(
     permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
     authentication_classes = (
         JSONWebTokenAuthentication,
+        TokenAuthentication,
         SessionAuthentication)
     # 可有可无:
     # serializer_class = OrderSerializer
