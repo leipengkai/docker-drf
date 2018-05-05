@@ -262,7 +262,7 @@ AUTHENTICATION_BACKENDS = (
 STATIC_URL = '/static/'
 # 测试环境下使用
 # STATICFILES_DIRS = (
-    # os.path.join(BASE_DIR, "static"),
+#     os.path.join(BASE_DIR, "static"),
 # )
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")  # 使用nginx静态资源 配置,docker部署时使用
@@ -347,3 +347,10 @@ SOCIAL_AUTH_QQ_SECRET = 'bazqux'
 
 # 第三方登陆成功之后 跳转到此页面
 # SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/index/'
+
+
+# 签到一次所给积分
+CHECK_BONUS_POINT = 2
+# 分享一次所给给分
+SHARE_BONUS_POINT = 1
+

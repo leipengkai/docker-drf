@@ -198,15 +198,15 @@ class UserMembershipInfo(models.Model):
         help_text='会员等级',
         on_delete=models.CASCADE)
 
-    bonus = models.IntegerField(default=0, verbose_name="积分", help_text="积分")
+    bonus_point = models.IntegerField(default=0, verbose_name="总积分", help_text="总积分")
     owned_sum = models.IntegerField(
         default=0,
         verbose_name="商品拥有数",
         help_text="商品拥有数")
     shared_sum = models.IntegerField(
-        default=0, verbose_name="分享数", help_text="分享数")
+        default=0, verbose_name="分享次数", help_text="分享次数")
     check_in_sum = models.IntegerField(
-        default=0, verbose_name="签到数", help_text="签到数")
+        default=0, verbose_name="签到次数", help_text="签到次数")
 
     check_in_status = models.BooleanField(default=False,verbose_name='每日签到状态',help_text='每日签到状态')
     last_check_in_time = models.DateTimeField(default=datetime.now,verbose_name='最后签到时间',help_text='最后签到时间')

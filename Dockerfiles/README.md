@@ -55,9 +55,38 @@ docker run -d --name mysql3 -p 3308:3306 --volumes-from mysql mysql:5.7
 
 3.建立mysql,redis,web这三个必须的容器,并设置容器相关属性
 
-4.启动容器
-
+##### 启动容器
 ```bash
-docker-compose up # 启动容器
+cd Dockerfiles
+docker-compose up
+```
+
+###### 进入mysql容器,第一次启动时,需要设置uft8字符集
+```bash
+# 在docker-compose.yml不知道怎样设置
+docker exec -it dockerfiles_mysql_1 bash
+
+# 进入mysql
+$ mysql -uroot -p123456
+# 设置uft8字符集
+mysql> alter database mxshop1 default character set utf8;
+
+```
+
+###### 进入web容器,初始化数据库
+```bash
+docker exec -it dockerfiles_web_1 bash
+
+$ python3 manage.py makemigrations
+$ python3 manage.py migrate
+
+# 创建管理员
+$ python3 init_admin.py
+
+# 如果不能登陆,则改下密码
+$ python3 manage.py changepassword admin
+
+# 收集静态文件
+$ python3 manage.py collectstatic
 ```
 

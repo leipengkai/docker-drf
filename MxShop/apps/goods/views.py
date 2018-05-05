@@ -250,7 +250,8 @@ class GoodsSimpleListViewSet(viewsets.ReadOnlyModelViewSet):
         # return []
 
 # def perform_create(self, serializer): # 改变保存这个serializer之后,要处理的逻辑,也可以用signals来处理,数据库的数据已经保存
-    # serializer._validated_data 得到传递的参数
+    # data = serializer._validated_data 得到传递的参数
+    # nums = data.get('nums')
     #instance = serializer.save() 
     #goods = instance.goods
     #goods.fav_num += 1

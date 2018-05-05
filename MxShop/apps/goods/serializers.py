@@ -189,7 +189,7 @@ class GoodsSimpleSerializer(serializers.ModelSerializer): # 在数据保存之�
         # return instance
 
     # ModelSerializer
-    # 通过Model字段被映射到相应的序列化程序字段中了,包括字段,create,update()
+    # 默认情况下,通过Model字段被映射到相应的序列化程序字段中了,包括字段,create,update()
     # 也可以自己定义Model中没有的字段 ,或者覆盖掉Model中的字段(category在Model中是个外键,覆盖后是个serializer
     category = CategorySerializer()
 

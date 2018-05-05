@@ -8,6 +8,7 @@ from rest_framework.utils.model_meta import get_field_info
 from .models import UserFav
 from .models import UserLeavingMessage, UserAddress,UserMembershipInfo,Membership
 from goods.serializers import GoodsSerializer
+from MxShop.settings import CHECK_BONUS_POINT,SHARE_BONUS_POINT
 
 
 class UserFavDetailSerializer(serializers.ModelSerializer):
@@ -103,7 +104,7 @@ class AddressSerializer(serializers.ModelSerializer):
                 i.default_address = '0'
                 i.save()
 
-        # instance.default_address = default_address 
+        # instance.default_address = default_address
         info = get_field_info(instance)
         for attr, value in validated_data.items():
             if attr in info.relations and info.relations[attr].to_many:
@@ -123,6 +124,7 @@ class CheckInSerializer(serializers.Serializer):
     # owned_sum = serializers.IntegerField(read_only=True)
     # shared_sum = serializers.IntegerField(read_only=True)
     check_in_sum = serializers.IntegerField(read_only=True)
+    bonus_point = serializers.IntegerField(read_only=True)
     # membership = serializers.PrimaryKeyRelatedField(read_only=True,default=Membership.objects.filter(id=1)[0])
 
     last_check_in_time = serializers.DateTimeField(read_only=True,default=datetime.now())
@@ -137,7 +139,7 @@ class CheckInSerializer(serializers.Serializer):
             # # raise serializers.ValidationError("用户不存在")
             # return now
 
-        # last_time = userMembershipInfo[0].last_check_in_time  
+        # last_time = userMembershipInfo[0].last_check_in_time
         # tom = datetime(last_time.year,last_time.month,last_time.day+1)
         # if now.day - last_time.day >=1 or now > tom:
             # return now
@@ -153,12 +155,14 @@ class CheckInSerializer(serializers.Serializer):
 
         if existed:
             existed = existed[0]
-            existed.check_in_sum += 2
+            existed.check_in_sum += 1
+            existed.bonus_point = existed.bonus_point + CHECK_BONUS_POINT
             existed.last_check_in_time = datetime.now()
             # existed.check_in_status = True
             existed.save()
         else:
-            validated_data['check_in_sum'] = 2
+            validated_data['check_in_sum'] = 1
+            validated_data["bonus_point"] = CHECK_BONUS_POINT
             validated_data['membership'] = Membership.objects.filter(id=1)[0]
             # validated_data['check_in_status'] = True
             existed = UserMembershipInfo.objects.create(**validated_data)

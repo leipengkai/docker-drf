@@ -32,7 +32,7 @@ class MembershipAdmin(admin.ModelAdmin):
 
 
 class UserMembershipInfoAdmin(admin.ModelAdmin):
-    list_display = ['user','membership','bonus','owned_sum','shared_sum','check_in_sum']
+    list_display = ['user','membership','bonus_point','owned_sum','shared_sum','check_in_sum']
     # list_editable = ["bonus"]
     list_per_page = 30
 

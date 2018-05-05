@@ -19,8 +19,16 @@ services:
             - '3306:3306'
         volumes:
             - './database/mysql:/var/lib/mysql'
+            - './femn.conf:/etc/mysql/mysql.conf.d/femn.cnf'
+#            - './femn.conf:/etc/mysql/conf.d/qhh.cnf'
+#            - './femn.cnf:/etc/mysql/my.cnf'  # 不能覆盖镜像文件(mysql:5.7中启动文件)
+
+#        command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
+
         #   - xx:/var/lib/mysql  
-        #   会自动在/var/lib/docker/volumes下,创建dockerfiles_xx目录
+        #   会自动在/var/lib/docker/volumes下,创建dockerfiles_xx目录,所以必须要有 ./
+
+        # - ./database/mysql:var/lib/mysql # 当database目录没有mysql目录时,也会自动创建
 
     redis:
         image: 'bitnami/redis:latest'

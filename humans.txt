@@ -44,3 +44,14 @@ Components: Docker, Django-rest-framework, Django, MYSQL,REDIS.
 
 
 Software: Software used for the development
+
+
+
+/* TARGET */
+
+蜗牛的爬行之旅
+记录生活(购物健身,管理者,家人,或者朋友) 技能(所有人)
+vue+bootstrap(响应式图片:ps)+mysql(有版本管理)+redis+tonado+nginx+docker(一键部署)+分布式
+scrapy(amazon,jd,taobao,ebay)
+
+web实例学习:https:github.com/jangdelong/vue-blog-demo

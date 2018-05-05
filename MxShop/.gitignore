@@ -4,3 +4,4 @@
 ./apps/utils/profile_data/*
 ./apps/utils/unitTest/reports/example_suite/*
 ./profiles/*
+*.orig

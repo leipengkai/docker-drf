@@ -14,7 +14,6 @@
 		<link rel="stylesheet" href="/static/js/owlcarousel/assets/owl.theme.green.min.css">
 
 
-		
 		<style type="text/css">
 			.row{
 				background: pink;
@@ -39,17 +38,17 @@
 					{% endautoescape %}
 				<!--</picture>-->
 			</div>
-			
+
 			<h3>商品图片</h3>
 			<div class="owl-carousel owl-theme">
 				{% for i in images %}
-					<img src="/media/{{ i.image }}"/ class="img-responsive" alt="Responsive image" >
+					<img src="/media/{{ i.image }}/" class="img-responsive" alt="Responsive image" >
 				{% endfor %}
 			</div>
 			<!--<ul>-->
 				<!--{% for i in images %}-->
 				<!--<p>{{ MEDIA_URL }}</p>-->
-				<!--<li> <img src="/media/{{ i.image }}"/ class="img-responsive" alt="Responsive image" ></li>-->
+				<!--<li> <img src="/media/{{ i.image }}/" class="img-responsive" alt="Responsive image" ></li>-->
 				<!--{% endfor %}-->
 			<!--</ul>-->
 
