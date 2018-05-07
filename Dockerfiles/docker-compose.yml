@@ -75,6 +75,9 @@ services:
         container_name: nginx-container
         ports:
             - "80:80"
+            - "81:81"
+            - "82:82"
+            - "83:83"
             - "443:443"
         volumes:
             - ./nginx/sites-enabled:/etc/nginx/sites-enabled

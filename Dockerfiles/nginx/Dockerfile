@@ -1,11 +1,10 @@
 FROM nginx:latest
 
 COPY nginx.conf /etc/nginx/nginx.conf
-#COPY hello.conf /etc/nginx/sites-available/  # http server
+COPY default.conf /etc/nginx/conf.d/default.conf
 COPY uwsgi.conf /etc/nginx/sites-available/
 
 RUN mkdir -p /etc/nginx/sites-enabled/\
-	&& mkdir -p /usr/share/nginx/html \
 	&& ln -s /etc/nginx/sites-available/uwsgi.conf /etc/nginx/sites-enabled/
 COPY index.html /usr/share/nginx/html
 
