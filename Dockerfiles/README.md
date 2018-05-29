@@ -59,6 +59,9 @@ docker run -d --name mysql3 -p 3308:3306 --volumes-from mysql mysql:5.7
 ```bash
 cd Dockerfiles
 docker-compose up
+# 如果启动有错误的话,可以用下面的命令来清除下缓存,再重新启动
+docker-compose ps
+docker-compose rm
 ```
 
 ###### 进入mysql容器,第一次启动时,需要设置uft8字符集

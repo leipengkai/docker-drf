@@ -72,7 +72,7 @@ services:
     nginx:
         restart: always
         build: nginx
-        container_name: nginx-container
+#        container_name: nginx-container
         ports:
             - "80:80"
             - "81:81"

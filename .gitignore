@@ -6,4 +6,4 @@ MxShop/apps/users/migrations/*
 MxShop/apps/goods/migrations/*
 MxShop/apps/trade/migrations/*
 MxShop/apps/user_operation/migrations/*
-
+*/*/*/migrations

@@ -73,7 +73,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
     membershipInfo = MembershipInfoSerializer(read_only=True)
     class Meta:
         model = User
-        fields = ("name", "gender", "birthday", "email", "mobile","id","membershipInfo")
+        fields = ("username", "gender", "birthday", "email", "mobile","id","membershipInfo")
 
 
 class UserRegSerializer(serializers.ModelSerializer):
@@ -136,7 +136,7 @@ class UserRegSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("此用户还没有发验证码")
 
     def validate(self, attrs):
-        attrs["mobile"] = attrs["username"]
+        # attrs["mobile"] = attrs["username"]
         del attrs["code"]
         return attrs
 

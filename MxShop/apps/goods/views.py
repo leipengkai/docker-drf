@@ -197,6 +197,7 @@ class GoodsSimpleListViewSet(viewsets.ReadOnlyModelViewSet):
     # class GoodsSimpleListViewSet(viewsets.ModelViewSet):  #即使有mixins.DestroyModelMixin ,也没有明显的删除按钮
     # class
     # GoodsSimpleListViewSet(viewsets.ModelViewSet,generics.DestroyAPIView):
+    # ViewSet,generics不能一起使用,不然在OPTIONS操作时会报错
 
     queryset = Goods.objects.all()
     serializer_class = GoodsSimpleSerializer
@@ -219,6 +220,7 @@ class GoodsSimpleListViewSet(viewsets.ReadOnlyModelViewSet):
         filters.OrderingFilter)
     filter_class = GoodsFilter
     search_fields = ('name', 'goods_brief', 'goods_desc')
+    # 一个的时候一定要用单数 search_field = ('name')  or  search_fields = ('name',)
     ordering_fields = ('sold_num', 'shop_price')
     # def get_queryset(self):
     # queryset =Goods.objects.all()
@@ -232,6 +234,8 @@ class GoodsSimpleListViewSet(viewsets.ReadOnlyModelViewSet):
         # request = self.request
         # pk= request.query_params.get('pk','')
         # return  OrderInfo.objects.filter(id = pk)[0]
+    # def get_object(self):
+        # return self.request.user
 
     # def get_serializer_class(self):
         # if self.action == 'retrieve':
@@ -250,7 +254,8 @@ class GoodsSimpleListViewSet(viewsets.ReadOnlyModelViewSet):
         # return []
 
 # def perform_create(self, serializer): # 改变保存这个serializer之后,要处理的逻辑,也可以用signals来处理,数据库的数据已经保存
-    # data = serializer._validated_data 得到传递的参数
+    # serializer.data.get("username") # 已经保存的信息
+    # data = serializer._validated_data 得到传递的参数 这个也应该是: self.request.data.get('goodsList')
     # nums = data.get('nums')
     #instance = serializer.save() 
     #goods = instance.goods
@@ -258,6 +263,9 @@ class GoodsSimpleListViewSet(viewsets.ReadOnlyModelViewSet):
     #goods.save()
 
 # def create(self, request, *args, **kwargs): # 应该是自定义返回给前端的内容
+    # self.request.data.get('goodsList')  前端使用表单传递
+    # serializer = self.get_serializer(data=request.data)
+    # re_dict = serializer.data
     # return Response(re_dict, status=status.HTTP_201_CREATED, headers=headers)
 
 # def retrieve(self, request, *args, **kwargs): # 处理展示的状态

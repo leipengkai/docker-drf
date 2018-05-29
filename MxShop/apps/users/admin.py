@@ -21,10 +21,10 @@ class VerifyCodeAdmin(admin.ModelAdmin):
 
 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ['name','birthday','gender', 'mobile','email','membershipInfo','is_superuser','date_joined','username']
+    list_display = ['birthday','gender', 'mobile','email','membershipInfo','is_superuser','date_joined','username']
 
-    list_filter = ["name"]
-    search_fields = ['name', ]
+    list_filter = ["username"]
+    search_fields = ['username', ]
     list_per_page = 30
 
     # class UserMembershipInfoInline(admin.StackedInline):

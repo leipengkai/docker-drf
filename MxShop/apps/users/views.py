@@ -123,7 +123,7 @@ class UserViewset(
         re_dict = serializer.data
         payload = jwt_payload_handler(user)
         re_dict["token"] = jwt_encode_handler(payload)
-        re_dict["name"] = user.name if user.name else user.username
+        re_dict["name"] = user.username
 
         headers = self.get_success_headers(serializer.data)
         return Response(
@@ -142,7 +142,7 @@ class UserViewset(
         # 当用户没有第一次签到时,是没有会员资料的
         if hasattr(instance,'membershipInfo'):
             userMembershipInfo = instance.membershipInfo
-            last_time = userMembershipInfo.last_check_in_time  
+            last_time = userMembershipInfo.last_check_in_time
             now = datetime.now()
             tom = datetime(last_time.year,last_time.month,last_time.day+1)
             if now.day - last_time.day >=1 or now > tom:
@@ -160,7 +160,7 @@ class UserViewset(
         for instance in queryset:
             if hasattr(instance,'membershipInfo'):
                 userMembershipInfo = instance.membershipInfo
-                last_time = userMembershipInfo.last_check_in_time  
+                last_time = userMembershipInfo.last_check_in_time
                 now = datetime.now()
                 tom = datetime(last_time.year,last_time.month,last_time.day+1)
                 if now.day - last_time.day >=1 or now > tom:
