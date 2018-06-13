@@ -48,7 +48,9 @@ services:
         #expose:
         ports:
             - "8000:8000"
-            # (HOST:CONTAINER(nginx)
+            # (HOST:CONTAINER(nginx) 只要把ports这参数注释掉,就可以使用docker-compose scale web=3
+            # (3 这个数量会,会根据电脑的性能去写,如果性能不足,则减少数量)
+            # https://nicolai86.eu/blog/2016/03/docker-compose-load-balancing/
         links:
             - mysql
             - redis
@@ -58,9 +60,9 @@ services:
             #- /usr/src/app/static
         environment:
             - DEBUG= 'true'
-        #command: python3 manage.py runserver 0.0.0.0:8000
-        command: uwsgi --ini uwsgi.ini
-        
+        command: python3 manage.py runserver 0.0.0.0:8000
+#        command: uwsgi --ini uwsgi.ini
+
         #command: bash -c "python3 manage.py makemigrations &&
                 #python3 manage.py migrate &&
                 #python3 init_admin.py &&
@@ -68,10 +70,24 @@ services:
                 #
                 #/usr/local/bin/gunicorn --bind 0.0.0.0:8000 MxShop.wsgi:application -w 2"
 
+    web2:
+        build: ../MxShop
+        ports:
+            - "8001:8000"
+        links:
+            - mysql
+            - redis
+        volumes:
+            - '../MxShop:/code'
+        environment:
+            - DEBUG= 'true'
+#        command: uwsgi --ini uwsgi.ini
+        command: python3 manage.py runserver 0.0.0.0:8000
 
     nginx:
         restart: always
         build: nginx
+#        image: haproxy
 #        container_name: nginx-container
         ports:
             - "80:80"
@@ -85,9 +101,10 @@ services:
             - ./nginx/www:/usr/share/nginx/html
         volumes_from:
             - web
+            - web2
         links:
             - web:drf_web
-
+            - web2:drf_web2
         #docker run --name mysql1 -p 80:80 -v /home/femn/Documents/docker-django/Dockerfiles/nginx/www:/usr/share/nginx/html:ro  -d nginx
         
     #nginx-proxy:
