@@ -41,3 +41,4 @@ django-extensions
 pytest
 
 uwsgi
+gevent

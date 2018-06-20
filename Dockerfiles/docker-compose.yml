@@ -48,6 +48,7 @@ services:
         #expose:
         ports:
             - "8000:8000"
+#            - "9090:9090"
             # (HOST:CONTAINER(nginx) 只要把ports这参数注释掉,就可以使用docker-compose scale web=3
             # (3 这个数量会,会根据电脑的性能去写,如果性能不足,则减少数量)
             # https://nicolai86.eu/blog/2016/03/docker-compose-load-balancing/
@@ -60,8 +61,11 @@ services:
             #- /usr/src/app/static
         environment:
             - DEBUG= 'true'
-        command: python3 manage.py runserver 0.0.0.0:8000
+#        command: python3 manage.py runserver 0.0.0.0:8000
 #        command: uwsgi --ini uwsgi.ini
+#         --gevent 1000 数量太高也会报错
+#        command: uwsgi --gevent 100 --ini uwsgi.ini
+        command: uwsgi --emperor /code/uwsgi/  # --plugin python --enable-threads
 
         #command: bash -c "python3 manage.py makemigrations &&
                 #python3 manage.py migrate &&
@@ -70,19 +74,19 @@ services:
                 #
                 #/usr/local/bin/gunicorn --bind 0.0.0.0:8000 MxShop.wsgi:application -w 2"
 
-    web2:
-        build: ../MxShop
-        ports:
-            - "8001:8000"
-        links:
-            - mysql
-            - redis
-        volumes:
-            - '../MxShop:/code'
-        environment:
-            - DEBUG= 'true'
-#        command: uwsgi --ini uwsgi.ini
-        command: python3 manage.py runserver 0.0.0.0:8000
+#    web2:
+#        build: ../MxShop
+#        ports:
+#            - "8001:8000"
+#        links:
+#            - mysql
+#            - redis
+#        volumes:
+#            - '../MxShop:/code'
+#        environment:
+#            - DEBUG= 'true'
+#        command: uwsgi --ini uwsgi.ini --http :8000
+#        command: python3 manage.py runserver 0.0.0.0:8000
 
     nginx:
         restart: always
@@ -101,10 +105,10 @@ services:
             - ./nginx/www:/usr/share/nginx/html
         volumes_from:
             - web
-            - web2
+#            - web2
         links:
             - web:drf_web
-            - web2:drf_web2
+#            - web2:drf_web2
         #docker run --name mysql1 -p 80:80 -v /home/femn/Documents/docker-django/Dockerfiles/nginx/www:/usr/share/nginx/html:ro  -d nginx
         
     #nginx-proxy:
