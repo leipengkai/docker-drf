@@ -54,10 +54,11 @@ services:
         networks:
           - front-tier
           - back-tier
-        #expose:
+        expose:
+          - "80"
         # scale时,去掉绑定端口
 #        ports:
-#            - "8000:8000"
+#            - "8000:80" # 如果在uwsgi中使用http则容器的端口也要一致
 #            - "9090:9090"
             # (HOST:CONTAINER(nginx) 只要把ports这参数注释掉,就可以使用docker-compose scale web=3
             # (3 这个数量会,会根据电脑的性能去写,如果性能不足,则减少数量)
@@ -97,31 +98,31 @@ services:
 #        command: uwsgi --ini uwsgi.ini --http :8000
 #        command: python3 manage.py runserver 0.0.0.0:8000
 
-    nginx:
-        restart: always
-        build: nginx
-#        image: haproxy
-#        container_name: nginx-container
-        ports:
-            - "80:80"
-            - "81:81"
-            - "82:82"
-            - "83:83"
-            - "443:443"
-        volumes:
-            - ./nginx/sites-enabled:/etc/nginx/sites-enabled
-            - ./nginx/log:/var/log/nginx
-            - ./nginx/www:/usr/share/nginx/html
-        volumes_from:
-            - web
-#            - web2
-        links:
-            - web:drf_web
-#            - web2:drf_web2
-        #docker run --name mysql1 -p 80:80 -v /home/femn/Documents/docker-django/Dockerfiles/nginx/www:/usr/share/nginx/html:ro  -d nginx
-        networks:
-          - front-tier
-          - back-tier
+#    nginx:
+#        restart: always
+#        build: nginx
+##        image: haproxy
+##        container_name: nginx-container
+#        ports:
+#            - "80:80"
+#            - "81:81"
+#            - "82:82"
+#            - "83:83"
+#            - "443:443"
+#        volumes:
+#            - ./nginx/sites-enabled:/etc/nginx/sites-enabled
+#            - ./nginx/log:/var/log/nginx
+#            - ./nginx/www:/usr/share/nginx/html
+#        volumes_from:
+#            - web
+##            - web2
+#        links:
+#            - web:drf_web
+##            - web2:drf_web2
+#        #docker run --name mysql1 -p 80:80 -v /home/femn/Documents/docker-django/Dockerfiles/nginx/www:/usr/share/nginx/html:ro  -d nginx
+#        networks:
+#          - front-tier
+#          - back-tier
     #nginx-proxy:
         #image: jwilder/nginx-proxy
         #ports:
@@ -138,6 +139,29 @@ services:
             #docker run --name mysql1  -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro -d jwilder/nginx-proxy
             #docker run --name mysql1  -p 80:80 -v /home/femn/Documents/docker-django/Dockerfiles/nginx/www:/usr/share/nginx/html:ro -d jwilder/nginx-proxy
 
+    haproxy:
+    # 第一种方式
+#      build: haproxy
+#      links:
+#        - web:drf_web
+
+    # 第二种方式
+      environment:
+        STATS_PORT: '1936'
+        MONITOR_PORT: '80'
+        MONITOR_URI: '/status'
+      image: dockercloud/haproxy
+      links:
+        - web
+
+      networks:
+        - front-tier
+        - back-tier
+      ports:
+        - "80:80"
+        - "1936:1936"
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
 
 
 networks:
