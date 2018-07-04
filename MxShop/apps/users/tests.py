@@ -19,7 +19,7 @@ class UsersTestCase(TestCase):
         '''
         print("setUpTestData: Run once to set up non-modified data for all class methods.")
 
-        cls.data= {'name':'femn','password':'111111','email':'femn@gmail.com'}
+        cls.data= {'username':'femn','password':'111111','email':'femn@gmail.com'}
         cls.user = User.objects.create(**cls.data)
     def setUp(self):
         '''
@@ -47,10 +47,10 @@ class UsersTestCase(TestCase):
 
     # MODEL
     def test_first_name_max_length(self):
-        users = UserProfile.objects.get(name='femn')
-        max_length = users._meta.get_field('name').max_length
+        users = UserProfile.objects.get(username='femn')
+        max_length = users._meta.get_field('username').max_length
         self.assertEquals(max_length,30)
-        # name = users._meta.get_field('name').verbose_name 
+        # name = users._meta.get_field('name').verbose_name
         # self.assertEquals(name,'姓名')
 
 
@@ -61,7 +61,7 @@ class UsersTestCase(TestCase):
         """APP用户登录接口成功情况"""
 
 # path使用硬编码，不要使用reverse反解析url，以便在修改url之后能及时发现接口地址变化，并通知接口使用人员
-        path = '/api-auth/login/'
+        path = '/admin/login/'
         response = self.client.post(path, self.data,follow=True)
 # response.data是字典对象
 # response.content是json字符串对象
@@ -73,15 +73,21 @@ class UsersTestCase(TestCase):
 
 class UserPermissonTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create(name="femn") # username也可以
+        self.user = User.objects.create(username="femn") # username也可以
         self.user.set_password("111111")
         self.user.save()
         self.client.force_login(self.user)
 
     def test_user_permisson(self):
         # header = {'Authorization':'Token 96f467972a8c25009b71b26d740f7f82b696763c'}
-        path = '/shopcarts/'
+        path = '/api/v1/shopcarts/'
         response = self.client.get(path)
         self.assertEquals(response.status_code,
                     status.HTTP_200_OK,
-                    '/shopcarts/: 错误信息: {}'.format(str(response.content,encoding='utf-8')))
+                    '/api/v1/shopcarts/: 错误信息: {}'.format(str(response.content,encoding='utf-8')))
+
+    def test_user_login_param(self):
+        # header = {'Authorization':'Token 96f467972a8c25009b71b26d740f7f82b696763c'}
+        path = 'auth/login/'
+        response = self.client.post(path)
+        print(response.content)

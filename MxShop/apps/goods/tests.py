@@ -36,14 +36,14 @@ class GoodsListViewTestCase(TestCase):
         # # assert settings.DEBUG
         # self.assertTrue(settings.DEBUG)
 
-    def test_view_url_exists_at_desired_location(self): 
+    def test_view_url_exists_at_desired_location(self):
         '''
         视图可以通过正确的URL进行访问
         '''
 
-        resp = self.client.get('/goods/') 
+        resp = self.client.get('/api/v1/goods/')
         self.assertEqual(resp.status_code, 200)
-        resp = self.client.get('/goods/'+'?page=2') 
+        resp = self.client.get('/api/v1/goods/'+'?page=2')
         self.assertEqual(resp.status_code, 200)
-        resp = self.client.get('/goods/'+'?search=1') 
+        resp = self.client.get('/api/v1/goods/'+'?search=1')
         self.assertEqual(resp.status_code, 200)

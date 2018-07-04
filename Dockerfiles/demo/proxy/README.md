@@ -1,5 +1,5 @@
 ```bash
-proxy_pass http:myapp; #是services_name
+proxy_pass http://myapp; #是services_name
 
 # 创建多个服务
  docker-compose scale -h
