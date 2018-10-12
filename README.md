@@ -1,24 +1,44 @@
-### 简单使用
+#### 启动ELK日志系统,[具体教程请参考这里](https://github.com/twtrubiks/docker-elk-tutorial)
+```bash
+cd docker-elk
+# 创建images
+docker-compose build
+# 启动
+docker-compose up
+```
+
+#### 启动项目
 ```bash
 	cd Dockerfiles
 	docker-compose build  # 耐心等待下载images
 	docker-compose up 
-	# 可用GUI登陆mysql,redis
+    # 迁移数据库
+	docker exec -it dockerfiles_web_1 bash
+    python3 manage.py makemigrations
+    python3 manage.py migrate
+    # 收集静态文件
+    python3 manage.py collectstatic
 
-	# 命令行登陆,则需要进入容器中
+    # 创建管理员
+    python3 init_admin.py
+    # 还需要重置下密码
+	python3 manage.py changepassword admin (输入asdf1234)
+
+	# 更新数据
 	docker exec -it dockerfiles_mysql_1 bash
+    mysql -uroot -p123456 mxshop1 < /home/mxshop.sql
 	mysql -uroot -p123456
+        alter database mxshop1 default character set utf8;
+
+	# 可用GUI登陆mysql,redis
 	docker exec -it dockerfiles_redis_1 bash
 	redis-cli
 
-	# 登陆后台的话,还需要重置下密码
-	docker exec -it dockerfiles_web_1 bash
-	python3 manage.py changepassword admin (输入asdf1234)
+    # 访问
+    http://127.0.0.1/api/v1/
+    http://127.0.0.1/admin/
 
 ```
-
-
-
 ### [Django](https://docs.djangoproject.com/zh-hans/2.0/):Python web框架
 
 - 大而全的功能组件
@@ -61,24 +81,53 @@
 
 ##### DRF大概流程
 Request-> Router: 认证
+
 Router->ViewSet:路由匹配并得到对应的序列化
+
 ViewSet->Authentication: 身份校验
+
 Authentication->Throutting: 限流
+
 Throutting->Mixins: 对应序列化权限
+
 Mixins->Serializer->:序列化请求
-opt 反序列化
-    Serializer->Filter: 根据定义的 Filter 验证 Query
-end
-opt 序列化
-    Serializer->Field: 根据定义的 Field 序列化 Serializer 查询结果
-end
+
+if 反序列化:
+
+Serializer->Filter: 根据定义的 Filter 验证 Query
+
+if 序列化:
+
+Serializer->Field: 根据定义的 Field 序列化 Serializer 查询结果
+
 Serializer->Responce: 返回结果和状态
+
 Responce->Renderer: 根据请求头寻找最合适的 Renderer 渲染响应结果
 
 ### 编写docker-compose.yml遇到的坑
 mysql,redis启动之后,web一直连接不上,没有一点头绪的我,最后是google :docker-compose.yml django can't connect to mysql.(之前也不知道是怎么google的)
 
 才找到[解决的办法](https://stackoverflow.com/questions/47979270/django-cannot-connect-mysql-in-docker-compose),原来是在setting.py中配置数据库时,HOST必须是指定service的名字,而不是0.0.0.0或者其它任何一个这种形式的HOST
+
+### 更新到目前最新的Django和Jet后,在admin在遇到的bug
+
+    # 进入容器
+    docker exec -it dockerfiles_web_1 bash
+
+- render() got an unexpected keyword argument 'renderer'
+        apt install vim
+        vim /usr/local/lib/python3.6/site-packages/django/forms/boundfield.py
+        将93L的代码注释掉
+
+- __init__() missing 1 required positional argument: 'sortable_by'
+        vim /usr/local/lib/python3.6/site-packages/jet/utils.py 
+        223L 加上 model_admin.sortable_by
+        exit
+
+
+    docker ps |grep dockerfiles_web
+    # 将容器commit成image
+    docker commit -m " jet bug" 3e292079cf43  dockerfiles_web:latest
 
 ##### [持续集成](http://www.ruanyifeng.com/blog/2015/09/continuous-integration.html)
 CI(continuous intergation)持续集成指的是,频繁地(一天多次)将代码集成到主干,让产品可以快速迭代,同时还能保持高质量.它的核心措施是,代码集成到主干之前,必须通过自动化测试.只要有一个测试用例失败,就不能集成.持续集成并不能消除Bug,而是让它们非常容易发现和改正.
@@ -109,3 +158,4 @@ Jenkins 是一个可扩展的持续集成引擎(java).
 构建可持续的自动化检查:新增或修改后的代码时,CI系统会不断确认这些新代码是否破坏了原有软件的成功构建.
 构建可持续的自动化测试:构建检查的扩展部分,构建后执行预先制定的一套测试规则,完成后触发通知(Email,RSS等等)给相关的当事人
 软件构建自动化:配置完成后,对目标软件进行构建,部署.
+

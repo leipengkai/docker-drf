@@ -20,6 +20,7 @@ services:
         volumes:
             - './database/mysql:/var/lib/mysql'
             - './femn.conf:/etc/mysql/mysql.conf.d/femn.cnf'
+            - './mxshop.sql:/home/mxshop.sql'
 #            - './femn.conf:/etc/mysql/conf.d/qhh.cnf'
 #            - './femn.cnf:/etc/mysql/my.cnf'  # 不能覆盖镜像文件(mysql:5.7中启动文件)
 
@@ -70,6 +71,12 @@ services:
             - '../MxShop:/code'
             # (HOST:CONTAINER)
             #- /usr/src/app/static
+
+        logging:
+          driver: syslog
+          options:
+              syslog-address: tcp://0.0.0.0:5000
+              tag: web-container-tcp
         environment:
             - DEBUG= 'true'
 #        command: python3 manage.py runserver 0.0.0.0:8000

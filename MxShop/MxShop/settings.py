@@ -354,3 +354,44 @@ CHECK_BONUS_POINT = 2
 # 分享一次所给给分
 SHARE_BONUS_POINT = 1
 
+# LOGGING = {
+    # 'version': 1,
+    # 'disable_existing_loggers': False,
+    # 'formatters': {
+        # 'verbose': {
+            # 'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        # },
+        # 'simple': {
+            # 'format': '%(levelname)s %(message)s'
+        # },
+    # },
+    # 'handlers': {
+        # 'console': {
+            # 'level': 'INFO',
+            # 'class': 'logging.StreamHandler',
+            # 'formatter': 'simple'
+        # },
+        # 'logstash': {
+            # 'level': 'WARNING',
+            # 'class': 'logstash.TCPLogstashHandler',
+            # 'host': 'localhost',
+            # 'port': 5000,  # Default value: 5000
+            # 'version': 1,
+            # 'message_type': 'django_logstash',  # 'type' field in logstash message. Default value: 'logstash'.
+            # 'fqdn': False,  # Fully qualified domain name. Default value: false.
+            # 'tags': ['django.request'],  # list of tags. Default: None.
+        # },
+    # },
+    # 'loggers': {
+        # 'django': {
+            # 'handlers': ['console'],
+            # 'level': 'INFO',
+            # 'propagate': True,
+        # },
+        # 'django.request': {
+            # 'handlers': ['logstash'],
+            # 'level': 'WARNING',
+            # 'propagate': True,
+        # },
+    # }
+# }

@@ -16,7 +16,7 @@ Including another URLconf
 from filebrowser.sites import site
 from django.conf.urls import url, include
 import xadmin
-from MxShop.settings import MEDIA_ROOT,STATIC_URL
+from MxShop.settings import MEDIA_ROOT,STATIC_URL,STATIC_ROOT
 from django.contrib import admin
 from django.views.static import serve
 from rest_framework.documentation import include_docs_urls
@@ -113,7 +113,8 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
-    url(r'^static/(?P<path>.*)$', serve, {"document_root": STATIC_URL}),
+    url(r'^static/(?P<path>.*)$', serve, {"document_root": STATIC_ROOT}),
+    # url(r'^static/(?P<path>.*)$', serve, {"document_root": STATIC_URL}),
 
     url(r'^api/v1/', include(router.urls)),  # router注册的APIh
 
