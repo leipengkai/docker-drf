@@ -58,8 +58,8 @@ services:
         expose:
           - "80"
         # scale时,去掉绑定端口
-#        ports:
-#            - "8000:80" # 如果在uwsgi中使用http则容器的端口也要一致
+        ports:
+            - "8000:8000" # 如果在uwsgi中使用http则容器的端口也要一致
 #            - "9090:9090"
             # (HOST:CONTAINER(nginx) 只要把ports这参数注释掉,就可以使用docker-compose scale web=3
             # (3 这个数量会,会根据电脑的性能去写,如果性能不足,则减少数量)

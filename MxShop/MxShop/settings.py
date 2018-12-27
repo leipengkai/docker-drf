@@ -194,7 +194,7 @@ DATABASES = {
         'PORT': "3306",
         'default-character-set': 'utf8',
         'OPTION': {'init_command': 'SET storage_engine=INNODB;'},
-                   # 'charset': 'utf8'},
+        'OPTIONS': {'charset': 'utf8mb4'},
         'TEST': { # 单元测试的临时数据库
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': 'test2',

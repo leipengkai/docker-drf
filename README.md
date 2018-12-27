@@ -1,15 +1,15 @@
-#### 启动ELK日志系统,[具体教程请参考这里](https://github.com/twtrubiks/docker-elk-tutorial)
+#### [启动ELK日志系统](./docker-elk/README.md)
 ```bash
 cd docker-elk
-# 创建images
+# 创建images,第一次时执行
 docker-compose build
-# 启动
+# 启动ELK日志系统
 docker-compose up
 ```
 
-#### 启动项目
+#### 第一次启动项目所需要的配置步骤
 ```bash
-	cd Dockerfiles
+	cd ../Dockerfiles
 	docker-compose build  # 耐心等待下载images
 	docker-compose up 
     # 迁移数据库
@@ -28,8 +28,10 @@ docker-compose up
 	docker exec -it dockerfiles_mysql_1 bash
     mysql -uroot -p123456 mxshop1 < /home/mxshop.sql
 	mysql -uroot -p123456
-        alter database mxshop1 default character set utf8;
-
+        # 改变数据库的字符集
+        ALTER DATABASE mxshop1 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+        # 改变表的字符集,在需要的表加就可以了,其它的表就不要动
+        alter table mxshop1.goods_goods convert to character set utf8mb4 collate utf8mb4_bin;
 	# 可用GUI登陆mysql,redis
 	docker exec -it dockerfiles_redis_1 bash
 	redis-cli
@@ -39,6 +41,12 @@ docker-compose up
     http://127.0.0.1/admin/
 
 ```
+### 之后启动项目
+```bash
+cd Dockerfiles
+docker-compose up
+```
+
 ### [Django](https://docs.djangoproject.com/zh-hans/2.0/):Python web框架
 
 - 大而全的功能组件
