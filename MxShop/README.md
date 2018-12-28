@@ -1,188 +1,130 @@
-### 安装运行环境(如使用docker则不需要)
-python版本(ubuntu16.04版本)
+### [Django](https://docs.djangoproject.com/zh-hans/2.0/):Python web框架
+
+- 大而全的功能组件
+- 高效开发
+- 全自动化的管理后台
+- MVT架构 M-model数据模型 V-view视图 T-template模板
+- 高效的ORM数据操作,完善的路由地址映射,强大的视图模板支持
+- 多线程多用户高效服务
+部署时采用wsgi协议与服务器对接(被服务器托管),而这类服务器通常都是基于多线程的,也就是说每一个网络请求服务器都会有一个对应的线程来用web应用(如Django)进行处理.
+
+
+### [Django-rest-framework](http://www.django-rest-framework.org/):是一个开源的Django扩展,提供了便捷的REST API开发框架
+
+- 直观的API web界面,以及提供开发文档
+- 多种身份认证和权限认证方式的支持
+- 内置了限流系统
+- 内置了 OAuth1 和 OAuth2 的支持
+- 根据 Django ORM 或者其它库自动序列化
+- 丰富的定制层级:函数视图,类视图,视图集合到自动生成 API,满足各种需要.
+- 可扩展性,插件丰富,广泛使用,文档丰富
+
+######  [理解RESTful架构](http://www.ruanyifeng.com/blog/2011/09/restful)和[RESTful API 设计指南](http://www.ruanyifeng.com/blog/2014/05/restful_api.html)
+- RESTful API只是一个(设计API)标准不是个框架,是前后端分离最佳实践
+- API(面向资源(一个实体或者是一个网络上的具体信息或url):名词复数) + http协议(put/get/post/delete动词(状态转化 ))
+- 客户端和服务器之间,传递这种资源的某种表现层
+- URL/版本信息/名词复数
+
+##### view的关系图
+![view的关系图](https://ws2.sinaimg.cn/large/006tNbRwgy1fylripg5coj31pb0u0e81.jpg)
+结合[url.py的93行](./MxShop/urls.py)和[goods.views.py的151行](./apps/goods/views.py)有助于理解上面的图
+
+
+###### [Serializer-Mixins-ViewSets](http://www.cdrf.co/)
+- [ViewSet](https://blog.csdn.net/l_vip/article/details/79131289):router的动态绑定HTTP操作以及action操作(获取相应的Serializer),自定义返回给前端的内容以及状态
+
+- [Minxins](https://blog.csdn.net/l_vip/article/details/79142105):选择提供增删改查逻辑中的多种或者一种操作权限
+    - HTTP请求操作后,要有与之对应操作权限的Mixins(处理方法中具体的操作:create,delete,update,list,retrieve))
+    - 然后Mixin再去操作对应的Serializer对象(perform_create,perform_update,list...),数据保存(更新)后的逻辑后续处理
+
+- [Serializer](https://blog.csdn.net/l_vip/article/details/79156113):验证,展示,保存以及序列化与反序列化数据
+    - 将用户请求来的数据格式反序列化成Seriaizer对象,对其验证字段并创建保存更新(create,update...)以及展示(fileds)Serializer对象
+    - 最终通过instance.save()来保存和展示数据
+    - 然后通过序列化Serializer对象转化成其它格式(JSON),返回给用户.在数据保存之前进行相关操作
+
+- [xadmin使用](http://wongbingming.me/2018/1/16/Django-Xdamin.html)
+
+- [JWT官方文档](https://github.com/GetBlimp/django-rest-framework-jwt),[JWT认证](https://blog.leapoahead.com/2015/09/07/user-authentication-with-jwt/):用户信息保存在客户端,服务端只需要加解密和解编码就可以获取用户信息
+
+
+
+##### DRF大概流程
+Request-> Router: 认证
+
+Router->ViewSet:路由匹配并得到对应的序列化
+
+ViewSet->Authentication: 身份校验
+
+Authentication->Throutting: 限流
+
+Throutting->Mixins: 对应序列化操作权限
+
+Mixins->Serializer->:序列化请求
+
+if 反序列化:# 将post与patch/put的上来的数据进行验证
+
+Serializer->Filter: 根据定义的 Filter 验证 Query
+
+if 序列化:# queryset与model实例等进行序列化，转化成json格式，返回给用户(api接口)
+
+Serializer->Field: 根据定义的 Field 序列化 Serializer 查询结果
+
+Serializer->Responce: 返回结果和状态
+
+Responce->Renderer: 根据请求头寻找最合适的 Renderer 渲染响应结果
+
+
+### 更新到目前最新的Django和Jet后,在admin在遇到的bug
 ```bash
-sudo add-apt-repository ppa:deadsnakes/ppa
-sudo apt-get update
-sudo apt-get install python3.6
-sudo rm /use/bin/python3
-ln -s /usr/bin/python3.6 /usr/bin/python3
+# 进入容器
+docker exec -it dockerfiles_web_1 bash
+# bug1:
+- render() got an unexpected keyword argument 'renderer'
+# 解决方法:
+    apt install vim
+    vim /usr/local/lib/python3.6/site-packages/django/forms/boundfield.py
+    将93L的代码注释掉
 
-pip3 list
-# 如果有问题执行:
-export LC_ALL=C
-```
-依赖包下载与配置
-```bash
-sudo apt-get install libmysqlclient-dev  python3.6-dev mysql-server redis-server redis-tools
-# 如果是二进制下载的,设置开机启动
-/etc/init.d/redis-server start
-systemctl enable redis.service
-vim /etc/redis/redis.conf
-# bind 127.0.0.1
-
-
-/etc/init.d/mysql start
-systemctl enable mysql.service
-# 配置文件一般是在/etc/my.conf
-vim /etc/mysql/mysql.conf.d/mysqld.cnf
-bind-address		 = 0.0.0.0
-
-```
-
-安装python包的问题:
-```bash
-(sudo)pip3 install -U -r  requirements.txt
-(sudo)pip3 install xadmin
-
-# 如果xadmin有问题的话,则需要对应django版本
-# 当 xadmin --> admin,想要兼容两个管理系统的话,django版本为:1,则
-pip3 install xadmin
-# 如果版本为>=2,则将pip3 install xadmin换成
-proxychains4 pip3 install git+git:github.com/sshwsfc/xadmin.git@django2
-
-# 同时django2的版本还需要解决:list index out of range错误,将 xadmin/widgets.py 75的代码改成:
-input_html = [ht for ht in super(AdminSplitDateTime, self).render(name, value, attrs).split('>') if ht != '']
-```
-
-安装vue依赖包和运行vue
-```bash
-# 安装nodejs npm
-sudo apt-get install -y nodejs npm
-
-# 安装和更新node
-sudo npm install -g n
-sudo n stable  # 稳定版本  sudo n latest最新版本
-n ls  # 查看Node所有版本
-
-# 更新npm(Node.js包管理工具):
-sudo npm install npm@latest -g
-
-# 普通用户也用最新版本：
-sudo chown -R $USER:$(id -gn $USER) /home/femn/.config
-
-# 使用淘宝镜像安装第三方包:
-cd
-sudo npm install -g cnpm --registry=https:registry.npm.taobao.org
-cnpm --version
-
-# 安装vue依赖包和运行vue
-cd online-store
-cnpm install
-cnpm run dev
-```
-
-数据库方面的设置
-```bash
-CREATE DATABASE `mxshop1` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-GRANT ALL PRIVILEGES ON mxshop1.* TO 'root'@'%' IDENTIFIED BY '123456';
-FLUSH PRIVILEGES;
-
-# 当APP中没有 migrations文件时参考下面的两个命令 生成migrations文件
-    python3 manage.py makemigrations
-    # 注意如果没有生成迁移文件则需要指定APP_name:
-    python3 manage.py makemigrations users goods user_operation trade
-    # 当修改Model之后,python3 manage.py makemigrations就可以创建所有的APP_migrations文件
-python3 manage.py migrate
-cd db_tools
-mysql -uroot -p123456 mxshop1 < mxshop.sql
-cd ..
-python3 manage.py runserver
-# username:admin password:asdf1234
-
-# 如果自动创建一个新管理帐号的话：
-python3 manage.py createsuperuser
-# 则可能需要 再改下密码 才能登陆成功
-python3 manage.py changepassword
-
-```
-
-### 第三方工具的使用
-性能分析工具:
-```bash
-# 单个方法的性能分析
-sudo apt-get install kcachegrind  # 运行kcachegrind  分析可视化工具
-pip3 install pyprof2calltree  # 在worken mxshop 下载依赖包
-pyprof2calltree -i mkm_run.prof -k
-
-# Django中对文件的性能分析
-pip3 install pyinstrument
-# MIDDLEWARE = [
-# 'pyinstrument.middleware.ProfilerMiddleware',
-# ]
-# PYINSTRUMENT_PROFILE_DIR = 'profiles'
-
-# 当在url后面增加?profiles后,就会在项目的profiles的目录下生成一个对应的.html分析文件
-0.0.0.0:8000/?profiles
-
-
-# 对Django项目的性能分析
-pip3 install django-extensions  debug_toolbar  # debug_toolbar用来DB查询语句及耗时时间
-# INSTALLED_APPS = (
-# 'django_extensions',
-# 'debug_toolbar',
-# )
-
-mkdir ./apps/utils/profile_data
-python3 manage.py runprofileserver --use-cprofile --prof-path=./apps/utils/profile_data
-
-# 之后的对应的请求都会有一个.prof的文件生成
-pyprof2calltree -i xx.prof -k
+# bug2
+- __init__() missing 1 required positional argument: 'sortable_by'
+# 解决方法:
+    vim /usr/local/lib/python3.6/site-packages/jet/utils.py 
+    223L 加上 model_admin.sortable_by
+# 退出容器
+exit
+docker ps |grep dockerfiles_web
+# 将容器commit成image
+docker commit -m " jet bug" 3e292079cf43  dockerfiles_web:latest
 ```
 
 
-##### [TestCase单元测试](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Testing)
-测试一个网站是一项复杂的工作，因为它由多层逻辑组成 - 从HTTP级别的请求处理，查询模型到表单验证和处理以及模板呈现.
-我们应该测试任何属于我们设计的部分或由我们编写的代码定义的东西，但不测试已经由Django或Python开发团队测试过的库/代码.
+##### [持续集成](http://www.ruanyifeng.com/blog/2015/09/continuous-integration.html)
+CI(continuous intergation)持续集成指的是,频繁地(一天多次)将代码集成到主干,让产品可以快速迭代,同时还能保持高质量.它的核心措施是,代码集成到主干之前,必须通过自动化测试.只要有一个测试用例失败,就不能集成.持续集成并不能消除Bug,而是让它们非常容易发现和改正.
+持续集成强调开发人员提交了新代码之后,立刻进行构建,(单元)测试.根据测试结果,我们可以确定新代码和原有代码能否正确地集成在一起.
+
+持续交付(Continuous delivery)指的是,频繁地将软件的新版本,交付给质量团队或者用户,以供评审.如果评审通过,代码就进入生产阶段.
+持续交付可以看作持续集成的下一步.它强调的是,不管怎么更新,软件是随时随地可以交付的.
+
+持续部署(continuous deployment)是持续交付的下一步,指的是代码通过评审以后,自动化部署到生产环境.
+持续部署的目标是,代码在任何时刻都是可部署的,可以进入生产阶段.
+
+后者再前者的基础之上进一步自动化.
+
+持续部署的前提是能自动化完成测试,构建,部署等步骤.
+所谓构建,指的是将源码转换为可以运行的实际代码,比如安装依赖,配置各种资源(样式表,JS脚本,图片)等等
 
 
-unittest将在当前工作目录下任何使用模式test * .py命名的文件都会的测试,直接在pycharm中运行
-大多数测试的最佳基类是django.test.TestCase(基于unittest)。此测试类在运行测试之前创建一个干净的数据库，并在其自己的事务中运行每个测试函数。
-该类还拥有一个测试客户端，您可以使用该测试客户端模拟用户在视图级别与代码进行交互.
 
-Django运行单元测试时，会以settings里的数据库配置里的NAME新建一个以test_开关的临时数据库，并在测试结束后删除,所以不用关心testDown()清理工作。
-默认的测试数据库会以当前的migrations文件来创建数据表并进行迁移，但如果migrations文件很多，每次运行时间将很久，所以可以跳过迁移，直接以当前Model结果来创建表以提升测试效率.当您开始测试运行时，框架在您的派生类中执行选定的测试方法.
-```bash
-# from unittest import TestCase
-# unittest模块:将在当前工作目录下任何使用模式test*.py命名的文件都会的测试(django.test也是一样)
-# 通过Pycharm自动生成unittest测试:
-open any file | right mouse |Go To |Test |Create New Test | select test method 
-(只能对方法进行测试,然后直接在Pycharm运行就OK)
-点击文件或目录,右击"Run py.test in tests"
+https://www.jianshu.com/p/40eefc5d6ff8
+Jenkins的主要目标是监控软件开发流程,快速显示问题.所以能保证开发人员以及相关人员省时省力提高开发效率.
+CI系统在整个开发过程中的主要作用是控制:当系统在代码存储库中探测到修改时,它将运行构建的任务委托给构建过程本身.如果构建失败了,那么CI系统将通知相关人员,然后继续监视存储库.它的角色看起来是被动的;但它确能快速反映问题.
 
+部署一个CI系统需要的最低要求是,一个可获取的源代码的仓库,一个包含构建脚本的项目.
 
-# from django.test import TestCase(可对Model进行测试)
-vim apps/goods/tests.py
-# 通过Pycharm自动对test*.py文件进行测试:
-select dir | rigth mouse |Profile 'Test xxdir'
-# 但一直有错误RuntimeError:Model class xx doesn't declare an explicit app_label and isn't in an application in INSTALLED_APPS.
-solve : Edit configurations |Custom settins --> project_path/settings.py  || Options-->--keepdb
-同时导入 from goods.models import Goods, GoodsCategory   ,不用.models
+Jenkins 是一个可扩展的持续集成引擎(java).
+主要用于:
 
-# 也可以使用使用命令(相当于是指定Target)
-python3 manage.py test --keepdb  users.tests  # 执行user项目下的tests包(test*.py文件)或者tests.py(文件)
-python3 manage.py test --keepdb  users.tests.UsersTestCase # 单独执行某个test case
-python3 manage.py test --keepdb  users.tests.UsersTestCase.test_app_user_login_success # 单独执行某个测试方法
-python3 manage.py test --keepdb --settings=MxShop.settings tests
-
-```
-[pytest](https://pytest-django.readthedocs.io/en/latest/)
-```bash
-# Pycharm 默认是unittest，所以需要改下
-Please go to File | Settings | Tools | Python Integrated Tools and change the default test runner to py.test
-
-pip install pytest
-py.test --version
-```
-
-[微博开放平台](http://open.weibo.com/) 认证一些基本信息就可以了
-```bash
-我的应用 | 应用信息 |高级信息|授权回调页| http://0.0.0.0:8008/complete/weibo/|其它的填空
-再设置下 APP_KEY SECRET 
-```
-[第三方登陆](http://python-social-auth.readthedocs.io/en/latest/configuration/django.html)
-```bash
-# gitlab:social-app-django
-pip3 install social-auth-app-django
-访问: http://0.0.0.0:8008/index/weibo/
-```
+构建可持续的自动化检查:新增或修改后的代码时,CI系统会不断确认这些新代码是否破坏了原有软件的成功构建.
+构建可持续的自动化测试:构建检查的扩展部分,构建后执行预先制定的一套测试规则,完成后触发通知(Email,RSS等等)给相关的当事人
+软件构建自动化:配置完成后,对目标软件进行构建,部署.
 

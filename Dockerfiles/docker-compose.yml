@@ -72,11 +72,11 @@ services:
             # (HOST:CONTAINER)
             #- /usr/src/app/static
 
-        logging:
-          driver: syslog
-          options:
-              syslog-address: tcp://0.0.0.0:5000
-              tag: web-container-tcp
+#        logging:
+#          driver: syslog
+#          options:
+#              syslog-address: tcp://0.0.0.0:5000
+#              tag: web-container-tcp
         environment:
             - DEBUG= 'true'
 #        command: python3 manage.py runserver 0.0.0.0:8000
@@ -91,25 +91,9 @@ services:
                 #
                 #/usr/local/bin/gunicorn --bind 0.0.0.0:8000 MxShop.wsgi:application -w 2"
 
-#    web2:
-#        build: ../MxShop
-#        ports:
-#            - "8001:8000"
-#        links:
-#            - mysql
-#            - redis
-#        volumes:
-#            - '../MxShop:/code'
-#        environment:
-#            - DEBUG= 'true'
-#        command: uwsgi --ini uwsgi.ini --http :8000
-#        command: python3 manage.py runserver 0.0.0.0:8000
-
 #    nginx:
 #        restart: always
 #        build: nginx
-##        image: haproxy
-##        container_name: nginx-container
 #        ports:
 #            - "80:80"
 #            - "81:81"
@@ -122,10 +106,8 @@ services:
 #            - ./nginx/www:/usr/share/nginx/html
 #        volumes_from:
 #            - web
-##            - web2
 #        links:
 #            - web:drf_web
-##            - web2:drf_web2
 #        #docker run --name mysql1 -p 80:80 -v /home/femn/Documents/docker-django/Dockerfiles/nginx/www:/usr/share/nginx/html:ro  -d nginx
 #        networks:
 #          - front-tier

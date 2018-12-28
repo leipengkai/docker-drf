@@ -47,6 +47,7 @@ docker run -d --name mysql2 -p 3307:3306 -e MYSQL_ROOT_PASSWORD=123456  mysql:5.
 
 docker run -d --name mysql3 -p 3308:3306 --volumes-from mysql mysql:5.7
 ```
+##### docker-machine:安装和管理docker的工具
 
 ##### 本例docker编写的思路
 1.尽量不改变原来项目的结构,在同级目录下创建一个新目录
@@ -55,28 +56,30 @@ docker run -d --name mysql3 -p 3308:3306 --volumes-from mysql mysql:5.7
 
 3.建立mysql,redis,web这三个必须的容器,并设置容器相关属性
 
-##### 启动容器
+### 启动容器
 ```bash
 cd Dockerfiles
 docker-compose up
-# 如果启动有错误的话,可以用下面的命令来清除下缓存,再重新启动
 docker-compose ps
+# 如果启动有错误的话,可以用下面的命令来清除下缓存,再重新启动
+docker-compose down
 docker-compose rm
 ```
 
-###### 进入mysql容器,第一次启动时,需要设置uft8字符集
+### 进入mysql容器,第一次启动时,需要设置utf8mb4字符集
 ```bash
-# 在docker-compose.yml不知道怎样设置
+# 在Dockerfiles目录下的femn.conf中设置了字符集,但为了保险起见
 docker exec -it dockerfiles_mysql_1 bash
 
 # 进入mysql
 $ mysql -uroot -p123456
 # 设置uft8字符集
-mysql> alter database mxshop1 default character set utf8;
+mysql> ALTER DATABASE mxshop1 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+mysql> alter table mxshop1.goods_goods convert to character set utf8mb4 collate utf8mb4_bin;
 
 ```
 
-###### 进入web容器,初始化数据库
+### 进入web容器,初始化数据库
 ```bash
 docker exec -it dockerfiles_web_1 bash
 
@@ -93,3 +96,11 @@ $ python3 manage.py changepassword admin
 $ python3 manage.py collectstatic
 ```
 
+### 编写docker-compose.yml遇到的坑
+mysql,redis启动之后,web一直连接不上,没有一点头绪的我,最后是google :docker-compose.yml django can't connect to mysql.(之前也不知道是怎么google的)
+
+才找到[解决的办法](https://stackoverflow.com/questions/47979270/django-cannot-connect-mysql-in-docker-compose),原来是在setting.py中配置数据库时,HOST必须是指定service的名字,而不是0.0.0.0或者其它任何一个这种形式的HOST
+
+
+
+#### [自己写的有点乱的docker教程🤣](https://www.leipengkai.com/type/3/articles)
