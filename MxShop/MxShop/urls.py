@@ -16,7 +16,7 @@ Including another URLconf
 from filebrowser.sites import site
 from django.conf.urls import url, include
 import xadmin
-from MxShop.settings import MEDIA_ROOT,STATIC_URL,STATIC_ROOT
+from .settings import MEDIA_ROOT,STATIC_URL,STATIC_ROOT
 from django.contrib import admin
 from django.views.static import serve
 from rest_framework.documentation import include_docs_urls

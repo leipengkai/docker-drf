@@ -1,6 +1,22 @@
 version: '2'
 
 services:
+    node:
+        restart: always
+        build: node
+        working_dir: /vue/online-store
+        environment:
+            - NODE_ENV=production
+        volumes:
+            # 按理来说容器中的所有文件,都会挂载到宿主机中
+            - ./node:/vue  # 但容器中解压后得到的内容,或者cnpm install,下载时保存库的目录
+            # 是不会挂载到指定的宿主目录下的,我们只能将这些内容挂载到宿主机的默认路径下
+            - /vue/online-store/node_modules  # cnpm install的包,设置到默认宿主机挂载的路径下,否则无法下载
+        ports:
+            - "3000:3000"
+#       command: "cnpm run dev" # 不能这样运行
+        command: "npm start"
+
     mysql:
         #image: mysql
         image: mysql:5.7
@@ -59,7 +75,8 @@ services:
           - "80"
         # scale时,去掉绑定端口
         ports:
-            - "8000:8000" # 如果在uwsgi中使用http则容器的端口也要一致
+            # - "8000:80" # 如果在uwsgi中使用http则容器的端口也要一致
+            - "8000:8000"  # 当使用docker-compose做为Pycharm的解释器时,必须要显示指定port
 #            - "9090:9090"
             # (HOST:CONTAINER(nginx) 只要把ports这参数注释掉,就可以使用docker-compose scale web=3
             # (3 这个数量会,会根据电脑的性能去写,如果性能不足,则减少数量)
@@ -91,66 +108,57 @@ services:
                 #
                 #/usr/local/bin/gunicorn --bind 0.0.0.0:8000 MxShop.wsgi:application -w 2"
 
-#    nginx:
-#        restart: always
-#        build: nginx
-#        ports:
-#            - "80:80"
-#            - "81:81"
-#            - "82:82"
-#            - "83:83"
-#            - "443:443"
-#        volumes:
-#            - ./nginx/sites-enabled:/etc/nginx/sites-enabled
-#            - ./nginx/log:/var/log/nginx
-#            - ./nginx/www:/usr/share/nginx/html
-#        volumes_from:
-#            - web
-#        links:
-#            - web:drf_web
-#        #docker run --name mysql1 -p 80:80 -v /home/femn/Documents/docker-django/Dockerfiles/nginx/www:/usr/share/nginx/html:ro  -d nginx
-#        networks:
-#          - front-tier
-#          - back-tier
-    #nginx-proxy:
-        #image: jwilder/nginx-proxy
-        #ports:
-            #- "80:80"
-        #volumes:
-            #- /var/run/docker.sock:/tmp/docker.sock:ro
-            #- ./nginx/conf.d:/etc/nginx/conf.d
-            #- ./nginx/log:/var/log/nginx
-            #- ./nginx/www:/usr/share/nginx/html
-        #volumes_from:
-            #- web
-        #links:
-            #- web:drf_web
-            #docker run --name mysql1  -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock:ro -d jwilder/nginx-proxy
-            #docker run --name mysql1  -p 80:80 -v /home/femn/Documents/docker-django/Dockerfiles/nginx/www:/usr/share/nginx/html:ro -d jwilder/nginx-proxy
+    nginx:
+        restart: always
+        build: nginx
+        ports:
+            - "80:80"
+            - "81:81"
+            - "82:82"
+            - "83:83"
+            - "443:443"
+        volumes:
+            - ./nginx/sites-enabled:/etc/nginx/sites-enabled
+            - ./nginx/log:/var/log/nginx
+            - ./nginx/www:/usr/share/nginx/html
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - ./nginx/femn.pem:/etc/nginx/femn.pem
+            - ./nginx/femn_private.key:/etc/nginx/femn_private.key
+            - ./nginx/uwsgi.conf:/etc/nginx/sites-available/uwsgi.conf
+            - ./nginx/index.html:/usr/share/nginx/html/index.html
+        volumes_from:
+            - web
+        links:
+            - web:drf_web
+        networks:
+          - front-tier
+          - back-tier
+        #docker run --name mysql1 -p 80:80 -v /home/femn/Documents/docker-django/Dockerfiles/nginx/www:/usr/share/nginx/html:ro  -d nginx
 
-    haproxy:
-    # 第一种方式
-#      build: haproxy
+#    haproxy:
+#    # 第一种方式
+##      build: haproxy
+##      links:
+##        - web:drf_web
+#
+#    # 第二种方式
+#      environment:
+#        STATS_PORT: '1936'
+#        MONITOR_PORT: '80'
+#        MONITOR_URI: '/status'
+#      image: dockercloud/haproxy
 #      links:
-#        - web:drf_web
-
-    # 第二种方式
-      environment:
-        STATS_PORT: '1936'
-        MONITOR_PORT: '80'
-        MONITOR_URI: '/status'
-      image: dockercloud/haproxy
-      links:
-        - web
-
-      networks:
-        - front-tier
-        - back-tier
-      ports:
-        - "80:80"
-        - "1936:1936"
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
+#        - web
+#
+#      networks:
+#        - front-tier
+#        - back-tier
+#      ports:
+#        - "80:80"
+#        - "1936:1936"
+#      volumes:
+#        - /var/run/docker.sock:/var/run/docker.sock
 
 
 networks:

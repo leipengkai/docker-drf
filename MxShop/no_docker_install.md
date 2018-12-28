@@ -35,7 +35,7 @@ bind-address		 = 0.0.0.0
 安装python包的问题:
 ```bash
 (sudo)pip3 install -U -r  requirements.txt
-(sudo)pip3 install xadmin
+# (sudo)pip3 install xadmin
 
 # 如果xadmin有问题的话,则需要对应django版本
 # 当 xadmin --> admin,想要兼容两个管理系统的话,django版本为:1,则
@@ -65,14 +65,14 @@ sudo chown -R $USER:$(id -gn $USER) /home/femn/.config
 
 # 使用淘宝镜像安装第三方包:
 cd
-sudo npm install -g cnpm --registry=https:registry.npm.taobao.org
+sudo npm install -g cnpm --registry=https://registry.npm.taobao.org
 cnpm --version
 
 # 安装vue依赖包和运行vue
-unzip online-store.zip
-cd online-store
+cd Dockerfiles/node/online-store
 cnpm install
 cnpm run dev
+
 ```
 
 数据库方面的设置
