@@ -8,6 +8,40 @@
 - 多线程多用户高效服务
 部署时采用wsgi协议与服务器对接(被服务器托管),而这类服务器通常都是基于多线程的,也就是说每一个网络请求服务器都会有一个对应的线程来用web应用(如Django)进行处理.
 
+### Django处理流程
+```bash
+python manage.py runserver 0.0.0.0:80 
+# ruserver是使用django自己的web server,主要用于开发和调试中,部署到线上环境一般使用nginx+uwsgi模式
+```
+
+本项目是:
+    - the web client <-> 
+    - the web server(Nginx,http,应用层)<->
+    - unix socket(socket,传输层(http包通过socket方式解包/打包成TCP/UDP包)) <-> 
+    - uWSGI(用于描述web server如何与web application通信的规范) <->
+    - Django
+
+#### 简单说明
+- 加载settings.py并创建WSGIServer对象(启动django应用服务)
+    - manage.py是将settings.py以及读取命令行的参数,而根据ip:port生成WSGIServer对象,接受用户请求,为每个请求的用户生成一个WSGIHandler
+    - 与tornado差不多只不过它启动的是tornado.ioloop.IOLoop对象,单线程循环监听
+- 通过中间件在Web服务器端和Web应用之间的添加额外功能
+    - 对来自用户的数据进行预处理并生成Request对象,然后发送给应用
+    - 中间件类至少含有以下四个方法中的一个: process_request,process_view,process_exception,process_response
+    - WSGIHandler通过load_middleware将这个些方法分别添加到_request_middleware,_view_middleware,_response_middleware 和 _exception_middleware四个列表中. 其中request与view是按照顺序去执行的，而response和exception是反序的
+- 处理Request
+    - 通过Request对象获取到各类用户请求参数
+- 返回Response
+
+#### 具体说明
+![django处理流程](https://ws1.sinaimg.cn/large/006tNbRwgy1fyooltssrcj30xj0kvgre.jpg)
+
+### Nginx在本项目中的作用
+- Nginx 比起 uWSGI 能更好地处理静态资源
+- Nginx 可以设定 Cache 机制
+- Nginx 可以设定 反向代理器
+- Nginx 可以更方便配置ssl
+- Nginx 可以进行多台机器的负载均衡( Load balance )
 
 ### [Django-rest-framework](http://www.django-rest-framework.org/):是一个开源的Django扩展,提供了便捷的REST API开发框架
 

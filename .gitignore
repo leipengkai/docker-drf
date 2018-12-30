@@ -9,3 +9,4 @@ MxShop/apps/user_operation/migrations/*
 */*/*/migrations
 .DS_Store
 *.swp
+*.psd
