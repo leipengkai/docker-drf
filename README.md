@@ -1,8 +1,8 @@
 ### 项目说明
 是一个慕学生鲜商城项目,旨在学习和运用python,django,DRF,docker,docker-compose
-- [简单认识django和DRF](./MxShop/README.md)
-- [django的第三方工具包的简单使用说明](./MxShop/MxShop/README.md)
-- [简单认识Dokcer](./Dockerfiles/README.md)
+- [简单认识django和DRF](./MxShop)
+- [django的第三方工具包的简单使用说明](./MxShop/MxShop)
+- [简单认识Dokcer](./Dockerfiles)
 - 如果没有接触Docker的同学,可以使用[没有Docker版本的安装步骤](./MxShop/no_docker_install.md)
 
 ### 项目启动
@@ -20,7 +20,7 @@ curl -XPOST -D- "http://localhost:5601/api/saved_objects/index-pattern" \
     -H "kbn-version: 6.1.0" \
     -d '{"attributes":{"title":"logstash-*","timeFieldName":"@timestamp"}}’
 ```
-[具体一点的操作说明](./docker-elk/README.md)
+[具体一点的操作说明](./docker-elk/)
 
 #### 2.1:第一次启动项目所需要的配置步骤
 ```bash
@@ -29,6 +29,7 @@ docker-compose build  # 耐心等待下载images
 docker-compose up 
 # 迁移数据库
 docker exec -it dockerfiles_web_1 bash
+# 如果没有数据库则会自动创建,所以之后记得改数据库的字符集
 python3 manage.py makemigrations
 python3 manage.py migrate
 # 收集静态文件

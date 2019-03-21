@@ -15,11 +15,12 @@ python manage.py runserver 0.0.0.0:80
 ```
 
 本项目是:
-    - the web client <-> 
-    - the web server(Nginx,http,应用层)<->
-    - unix socket(socket,传输层(http包通过socket方式解包/打包成TCP/UDP包)) <-> 
-    - uWSGI(用于描述web server如何与web application通信的规范) <->
-    - Django
+
+- the web client <-> 
+- the web server(Nginx,http,应用层)<->
+- unix socket(socket,传输层(http包通过socket方式解包/打包成TCP/UDP包)) <-> 
+- uWSGI(用于描述web server如何与web application通信的规范) <->
+- Django
 
 #### 简单说明
 - 加载settings.py并创建WSGIServer对象(启动django应用服务)
