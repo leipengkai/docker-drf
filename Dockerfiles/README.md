@@ -102,5 +102,4 @@ mysql,redis启动之后,web一直连接不上,没有一点头绪的我,最后是
 才找到[解决的办法](https://stackoverflow.com/questions/47979270/django-cannot-connect-mysql-in-docker-compose),原来是在setting.py中配置数据库时,HOST必须是指定service的名字,而不是0.0.0.0或者其它任何一个这种形式的HOST
 
 
-
 #### [自己写的有点乱的docker教程🤣](https://www.leipengkai.com/type/3/articles)

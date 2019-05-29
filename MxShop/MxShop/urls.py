@@ -29,7 +29,7 @@ from django.conf.urls.static import static
 
 
 from goods.views import GoodsListViewSet, CategoryViewset, HotSearchsViewset, BannerViewset, GoodsSimpleListViewSet
-from goods.views import IndexCategoryViewset, GoodsSimpleListview, GoodsCommentListViewSet,GoodsDetailViewSet
+from goods.views import IndexCategoryViewset, GoodsSimpleListview, GoodsCommentListViewSet,GoodsDetailViewSet,WeiboLoginViewSet
 from users.views import SmsCodeViewset, UserViewset
 from user_operation.views import UserFavViewset, LeavingMessageViewset, AddressViewset, CheckInViewSet
 from trade.views import ShoppingCartViewset, OrderViewset
@@ -139,7 +139,10 @@ urlpatterns = [
     # url(r'^detail/(?P<pk>\d+)/$',GoodsDetailViewSet.as_view({'get':'retrieve'})),
     # url(r'^detail/(?P<pk>\d+)/$',GoodsDetailViewSet.as_view()),
     url(r'^detail/(?P<pk>\d+)/$',GoodsDetailViewSet.detail),
-    
+    url(r'^login/weibo/$',WeiboLoginViewSet.login), # 设置appkey,以及下面的回调
+    url(r'^complete/weibo/$',WeiboLoginViewSet.get_access_token),
+    # url(r'^complete/weibo/(?P<code>\w+)/$',WeiboLoginViewSet.get_access_token),
+
     # 第三方登录 social_login
     url('', include('social_django.urls', namespace='social')),
 

@@ -138,6 +138,31 @@ class GoodsDetailViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
         images = queryset.images.model.objects.filter(goods=queryset)
         goods_desc = queryset.goods_desc 
         goods_desc = re.sub('(src=".*?")',r'\1 class="img-responsive"',goods_desc)
+        g = Goods.objects.get(id=pk)
+        spec = g.spec.all() # 多对多正向查询 此商品所有规格
+        spec_value_list,sku_value_list =[],[]
+        for specmodel in spec:
+            all_value = specmodel.specvalue.all() # 一对多反向查询:SpecValue的小写形式,并且不需要加_set
+            for specvaluemodel in all_value:
+                # if specmodel == specvaluemodel.spec:
+                spec_value_list.append({"id":specmodel.id,"name":specmodel.name,"value":specvaluemodel.value})
+
+        sku = g.sku.all() # 一对多反向查询:sku的小写形式. 此商品的所有sku
+        for skumodel in sku:
+            all_sku_value = skumodel.skuvalue.all() # 一对多反向查询:SKUValue的小写形式
+            sku_ifno = {"id":skumodel.id,"name":skumodel.name,"price":skumodel.price,"stock":skumodel.stock,"cont":[]}
+            for skuvaluemodel in all_sku_value:
+                # if skumodel == skuvaluemodel.sku:
+                sku_ifno["cont"].append({
+                    "spec_id":skuvaluemodel.specvalue.spec.id,
+                    "spec_name":skuvaluemodel.specvalue.spec.name,
+                    "specvalue_id":skuvaluemodel.specvalue.id,
+                    "specvalue_name":skuvaluemodel.specvalue.value,
+                                    })
+            sku_value_list.append(sku_ifno)
+
+        print(spec_value_list)
+        print(sku_value_list)
 
 
         return render(request,'detail.html',{'goods':queryset,'images':images,'goods_desc':goods_desc})
@@ -147,6 +172,49 @@ class GoodsDetailViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
         # context =  RequestContext(request,{'goods':queryset,'images':images})
         # return  HttpResponse(t.render({'goods':queryset,'images':images}))
 
+class WeiboLoginViewSet(viewsets.GenericViewSet):
+
+
+
+
+    def login(request):
+        """
+            client_id   必填  string  申请应用时分配的App Key。
+            redirect_uri    必填  string  授权回调地址，站外应用需与设置的回调地址一致。
+        """
+        from django.conf import settings
+        client_id = settings.SOCIAL_AUTH_WEIBO_KEY
+        client_secret = settings.SOCIAL_AUTH_WEIBO_SECRET
+        weibo_auth_url = 'https://api.weibo.com/oauth2/authorize'
+        redirect_uri = "http://127.0.0.1/complete/weibo/"
+        auth_url = weibo_auth_url + "?client_id={client_id}&redirect_uri={re_url}".format(client_id=client_id,
+                                                                                          re_url=redirect_uri)
+        return render(request,'weibologin.html',{"auth_url":auth_url})
+
+    def get_access_token(request):
+        access_token_url = "https://api.weibo.com/oauth2/access_token"
+
+        import requests
+        from django.conf import settings
+        client_id = settings.SOCIAL_AUTH_WEIBO_KEY
+        client_secret = settings.SOCIAL_AUTH_WEIBO_SECRET
+        code = request.GET.get("code")
+        re_dict = requests.post(access_token_url, data={
+            "client_id": client_id,
+            # App Secret
+            "client_secret": client_secret,
+            "grant_type": "authorization_code",
+            "code": code ,
+            "redirect_uri": "http://127.0.0.1/complete/weibo/",
+        })
+        print(re_dict)
+        pass
+
+    def get_user_info(self,access_token):
+        user_url = "https://api.weibo.com/2/users/show.json"
+        uid = "5020302235"
+        get_url = user_url + "?access_token={at}&uid={uid}".format(at=access_token, uid=uid)
+        print(get_url)
 
 ###########################################################################
 # class GoodsSimpleListview(APIView):

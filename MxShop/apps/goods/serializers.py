@@ -4,7 +4,7 @@ __author__ = 'bobby'
 from rest_framework import serializers
 from django.db.models import Q
 
-from goods.models import Goods, GoodsCategory, HotSearchWords, GoodsImage, Banner
+from goods.models import Goods, GoodsCategory, HotSearchWords, GoodsImage, Banner,Spec,SpecValue,SKU,SKUValue
 from goods.models import GoodsCategoryBrand, IndexAd,GoodsComment,GoodsCommentIamge
 from users.models import UserProfile
 
@@ -37,9 +37,40 @@ class GoodsImageSerializer(serializers.ModelSerializer):
         fields = ("image", )
 
 
+class SKUValueSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SKUValue
+        fields = "__all__"
+
+class SKUSerializer(serializers.ModelSerializer):
+
+    skuvalue = SKUValueSerializer(many=True)
+
+    class Meta:
+        model = SKU
+        fields = "__all__"
+
+
+class SpecValueSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SpecValue
+        fields = "__all__"
+
+class SpecSerializer(serializers.ModelSerializer):
+
+    specvalue = SpecValueSerializer(many=True)
+
+    class Meta:
+        model = Spec
+        fields = "__all__"
+
 class GoodsSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
     images = GoodsImageSerializer(many=True)
+    spec = SpecSerializer(many=True)
+    sku = SKUSerializer(many=True)
 
     class Meta:
         model = Goods
@@ -136,11 +167,12 @@ class GoodsCommentSerializer(serializers.ModelSerializer):
         # return existed
 
 ###########################################################################
-class GoodsSimpleSerializer(serializers.ModelSerializer): # 在数据保存之前进行操作
+class GoodsSimpleSerializer(serializers.ModelSerializer): # 在数据保存之前进行操作:instance.save()
     # 验证字段并提供错误提示,并限制post传递的字段,get展示的字段,或者post和get的字段不同,则定义不同的serializer来满足需求
     # 按MODEL序列化并对数据库进行增删改查
     # 可以提供帮助文档的字段
     # 关联的ForeignKey,OTO表需要先有一条数据,再向admin注册(进行能内容的查看,管理)
+    # ModelSerializer已经重写update(),所以可以进行更新操作:put,patch.而基本的Serializer是没有重写的
 
     # Serializer
     # 需要显示的指明与Model中对应的字段  才能显示字段内容(get), 相当于说是跟Model没有关系了
@@ -151,10 +183,23 @@ class GoodsSimpleSerializer(serializers.ModelSerializer): # 在数据保存之�
     # 同时如果需要在 Serializer中保存或更新数据库的话,还要重写create() update()
 
     # username = serializers.CharField(label="用户名", help_text="用户名", required=True, allow_blank=False, validators=[UniqueValidator(queryset=User.objects.all(), message="用户已经存在")])
+    # error_messages={
+    #                    'blank': '请输入验证码',
+    #                    'required': '请输入正确的验证码',
+    #                    'max_length': '验证码格式错误',
+    #                    'min_length': '验证码格式错误',
+    #                    'invalid': '请输入正确的验证码',
+    #                },
     # password = serializers.CharField( style={'input_type': 'password'},help_text="密码", label="密码", write_only=True,)
 
-    # def validate_name(self, name:可以自己定义默认的,一般是由用户输入
+    # 得到传入的值
+    # def validate_name(self, name:可以自己定义默认的,一般是由用户输入) obj:则是class meta的model data
         # raise serializers.ValidationError("验证码错误")
+        # name=self.initial_data['name']
+        # comment_goods = xxSerializer(xxobjects.filter(), many=True, #
+               # context={'request': self.context['request']}).data # 为serializer中的添加url
+        # request = self.context.get('request')
+        # d['xximg'] = request.build_absolute_uri(xximg.url) # d为dict类型
 
     # def validate(self, attrs):
         # del attrs["code"]

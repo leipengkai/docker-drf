@@ -91,6 +91,30 @@ class GoodsCategoryBrand(models.Model):
         return self.name
 
 
+class Spec(models.Model):
+    """规格(属性)表"""
+    name = models.CharField(null=False,verbose_name="规格名",max_length=126)
+
+    class Meta:
+        verbose_name = "规格(属性)"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
+
+class SpecValue(models.Model):
+    """规格(属性)值表"""
+    value = models.CharField(null=False,verbose_name="规格值",max_length=126)
+    # 以一方的Model为多方的字段.related_name为自己的Model.方便drf与django的反向查询一致
+    spec = models.ForeignKey(Spec, verbose_name="规格", on_delete=models.CASCADE,related_name="specvalue")
+
+    class Meta:
+        verbose_name = "规格(属性)值" # Model在侧边栏的显示
+        verbose_name_plural = verbose_name  # 解决admin侧边栏的英文复数问题
+
+    def __str__(self):
+        return self.value  # 以str类型的方式去显示此Model
+
 class Goods(models.Model):
     """
     商品
@@ -127,6 +151,8 @@ class Goods(models.Model):
     is_new = models.BooleanField(default=False, verbose_name="是否新品",help_text='是否新品:True or False')
     is_hot = models.BooleanField(default=False, verbose_name="是否热销",help_text='是否热销:True or False')
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
+    spec = models.ManyToManyField(Spec,related_name="goods") # 多对多关联 django会默认生成第三张关联表,也可以自定义关联表
+    specvalue = models.ManyToManyField(SpecValue,related_name="goods")  # 可以不关联
 
     class Meta:
         verbose_name = '商品'
@@ -135,6 +161,34 @@ class Goods(models.Model):
     def __str__(self):
         return self.name
 
+class SKU(models.Model):
+    """ 具体商品:sku
+    Standard Product Unit （标准化产品单元):Goods.eg:iPhone6
+    stock keeping unit(库存量单位):GoodsSku. eg:iPhone6 32G 白色,iPhone6 128G 白色是另一个SKU
+    """
+    goods = models.ForeignKey(Goods,related_name="sku",on_delete=models.CASCADE,verbose_name="sku所属商品")
+    name = models.CharField(null=False,verbose_name="sku名",help_text='具体的商品全名',max_length=126)
+    price = models.DecimalField(max_digits=7,decimal_places=2,default=0, verbose_name="商品价格")
+    stock = models.IntegerField(default=0, verbose_name="商品库存")
+
+
+    class Meta:
+        verbose_name = "sku具体商品"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
+
+class SKUValue(models.Model):
+    sku = models.ForeignKey(SKU,related_name="skuvalue", verbose_name="sku商品",on_delete=models.CASCADE)
+    specvalue = models.OneToOneField(SpecValue,related_name="skuvalue", verbose_name="sku商品的规格值",on_delete=models.CASCADE)# ,parent_link=False
+
+    class Meta:
+        verbose_name = "sku值"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.specvalue.value # 注意比较要返回str类型
 
 class IndexAd(models.Model):
     category = models.ForeignKey(

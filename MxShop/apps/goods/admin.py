@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Goods, GoodsCategory, GoodsImage, GoodsCategoryBrand, Banner, HotSearchWords
-from .models import IndexAd
+from .models import IndexAd,Spec,SpecValue,SKU,SKUValue
 # Register your models here.
 
 
@@ -89,6 +89,28 @@ class HotSearchAdmin(admin.ModelAdmin):
 class IndexAdAdmin(admin.ModelAdmin):
     list_display = ["category", "goods"]
 
+class SpecAdmin(admin.ModelAdmin):
+    list_display = ["name"]
+    class SpecValueInline(admin.StackedInline):
+        model = SpecValue
+        extra = 3
+        style = 'tab'
+    inlines = [SpecValueInline]
+
+class SpecValueAdmin(admin.ModelAdmin):
+    list_display = ["value", "spec"]
+
+class GoodsSKUAdmin(admin.ModelAdmin):
+    list_display = ["goods", "name","price","stock"]
+
+    class SKUValueInline(admin.StackedInline):
+        model = SKUValue
+        extra = 3
+        style = 'tab'
+    inlines = [SKUValueInline]
+
+class SKUValueAdmin(admin.ModelAdmin):
+    list_display = ["sku", "specvalue"]
 
 admin.site.register(Goods, GoodsAdmin)
 
@@ -98,3 +120,8 @@ admin.site.register(GoodsCategoryBrand, GoodsBrandAdmin)
 
 admin.site.register(HotSearchWords, HotSearchAdmin)
 admin.site.register(IndexAd, IndexAdAdmin)
+
+admin.site.register(Spec, SpecAdmin)
+admin.site.register(SpecValue,SpecValueAdmin)
+admin.site.register(SKU, GoodsSKUAdmin)
+admin.site.register(SKUValue, SKUValueAdmin)

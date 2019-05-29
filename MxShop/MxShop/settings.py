@@ -248,7 +248,7 @@ AUTHENTICATION_BACKENDS = (
     # 'social_core.backends.twitter.TwitterOAuth',
     # 'social_core.backends.yahoo.YahooOpenId',
 
-    'users.views.CustomBackend',
+    'users.views.CustomBackend',# 当调用authenticate()时,会进行定制身份验证. jwt登录时:auth/login/时会认证
     'social_core.backends.weibo.WeiboOAuth2',
     'social_core.backends.qq.QQOAuth2',
     'social_core.backends.weixin.WeixinOAuth2',
@@ -341,9 +341,9 @@ SOCIAL_AUTH_WEIBO_SECRET = '3d1f9fe14d390e3067dd5df2009cbd57'
 
 SOCIAL_AUTH_QQ_KEY = 'foobar'
 SOCIAL_AUTH_QQ_SECRET = 'bazqux'
-#  http://127.0.0.1:8000/complete/weibo/
+#  http://127.0.0.1/complete/weibo/
 # 先退出微博
-# 再访问 127.0.0.1:8000/login/weibo/
+# 再访问 127.0.0.1/login/weibo/
 
 # 第三方登陆成功之后 跳转到此页面
 # SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/index/'

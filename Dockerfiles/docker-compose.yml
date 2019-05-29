@@ -32,7 +32,7 @@ services:
             - MYSQL_ROOT_HOST=%
 
         ports:
-            - '3306:3306'
+            - '3308:3306'
         volumes:
             - './database/mysql:/var/lib/mysql'
             - './femn.conf:/etc/mysql/mysql.conf.d/femn.cnf'
@@ -76,7 +76,7 @@ services:
         # scale时,去掉绑定端口
         ports:
             # - "8000:80" # 如果在uwsgi中使用http则容器的端口也要一致
-            - "8000:8000"  # 当使用docker-compose做为Pycharm的解释器时,必须要显示指定port
+            - "80:8000"  # 当使用docker-compose做为Pycharm的解释器时,必须要显示指定port
 #            - "9090:9090"
             # (HOST:CONTAINER(nginx) 只要把ports这参数注释掉,就可以使用docker-compose scale web=3
             # (3 这个数量会,会根据电脑的性能去写,如果性能不足,则减少数量)
