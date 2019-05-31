@@ -1,9 +1,9 @@
 ### 项目说明
 是一个慕学生鲜商城项目,旨在学习和运用python,django,DRF,docker,docker-compose
-- [简单认识django和DRF](./MxShop)
-- [django的第三方工具包的简单使用说明](./MxShop/MxShop)
+- [简单认识django和DRF](mxshop)
+- [django的第三方工具包的简单使用说明](mxshop/mxshop)
 - [简单认识Dokcer](./Dockerfiles)
-- 如果没有接触Docker的同学,可以使用[没有Docker版本的安装步骤](./MxShop/no_docker_install.md)
+- 如果没有接触Docker的同学,可以使用[没有Docker版本的安装步骤](mxshop/no_docker_install.md)
 
 ### 项目启动
 #### 1:启动ELK日志系统(如果不需要请忽略此步骤)

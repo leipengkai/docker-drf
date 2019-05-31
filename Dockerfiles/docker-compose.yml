@@ -1,6 +1,24 @@
 version: '2'
 
 services:
+
+    mq:
+        image: "rabbitmq:3-management"
+#        hostname: "rabbit1"
+        environment:
+            RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+            RABBITMQ_DEFAULT_USER: "rabbitmq"
+            RABBITMQ_DEFAULT_PASS: "rabbitmq"
+            RABBITMQ_DEFAULT_VHOST: "/"
+        ports:
+        - "15672:15672"
+        - "5672:5672"
+        labels:
+            NAME: "mq1"
+#        volumes:
+#        - "./enabled_plugins:/etc/rabbitmq/enabled_plugins"
+#        - "./rabbitmq.config:/etc/rabbitmq/rabbitmq.config"
+
     node:
         restart: always
         build: node
@@ -67,7 +85,7 @@ services:
 
     web:
         restart: always
-        build: ../MxShop
+        build: ../mxshop
         networks:
           - front-tier
           - back-tier
@@ -76,7 +94,10 @@ services:
         # scale时,去掉绑定端口
         ports:
             # - "8000:80" # 如果在uwsgi中使用http则容器的端口也要一致
-            - "80:8000"  # 当使用docker-compose做为Pycharm的解释器时,必须要显示指定port
+            - "8000:8000"  # 当使用docker-compose做为Pycharm的解释器时,必须要显示指定port
+#            1.主机port:config中drf_docker中配置的port,所以不需要command命令去绑定pycharm的启动
+#            2.使用pycharm启动后,不要docker commit,不然但docker-compose up启动时,会找不到文件,生产volumes的地方不同
+#            3.所以不管是在哪个平台下commit了,另一个平台就使用不了了.解决方法是两个平台都commit一次,或者使用pychram平台为主
 #            - "9090:9090"
             # (HOST:CONTAINER(nginx) 只要把ports这参数注释掉,就可以使用docker-compose scale web=3
             # (3 这个数量会,会根据电脑的性能去写,如果性能不足,则减少数量)
@@ -85,7 +106,7 @@ services:
             - mysql
             - redis
         volumes:
-            - '../MxShop:/code'
+            - '../mxshop:/code'
             # (HOST:CONTAINER)
             #- /usr/src/app/static
 
@@ -106,7 +127,7 @@ services:
                 #python3 init_admin.py &&
                 #python3 manage.py runserver 0.0.0.0:8000"
                 #
-                #/usr/local/bin/gunicorn --bind 0.0.0.0:8000 MxShop.wsgi:application -w 2"
+                #/usr/local/bin/gunicorn --bind 0.0.0.0:8000 mxshop.wsgi:application -w 2"
 
     nginx:
         restart: always

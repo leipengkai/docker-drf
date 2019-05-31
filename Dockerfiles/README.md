@@ -36,7 +36,7 @@ docker network create my_network # 创建一个网络
 docker run --name mysql -v ./database/mysql:/var/lib/mysql -p 3306:3306 \
 	--network=my_network -e POSTGRES_PASSWORD=123456 mysql:5.7
 
-docker run --name web -v ..MxShop/code -p 8000:8000 --network=my_network \
+docker run --name web -v ..mxshop/code -p 8000:8000 --network=my_network \
 	--restart always web_image python manage.py runserver 0.0.0.0:8000
 
 ```

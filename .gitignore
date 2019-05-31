@@ -1,11 +1,11 @@
 Dockerfiles/database
 Dockerfiles/nginx/log
-MxShop/static
+mxshop/static
 .idea
-MxShop/apps/users/migrations/*
-MxShop/apps/goods/migrations/*
-MxShop/apps/trade/migrations/*
-MxShop/apps/user_operation/migrations/*
+mxshop/apps/users/migrations/*
+mxshop/apps/goods/migrations/*
+mxshop/apps/trade/migrations/*
+mxshop/apps/user_operation/migrations/*
 */*/*/migrations
 .DS_Store
 *.swp
