@@ -23,6 +23,7 @@ from .models import Goods, GoodsCategory, HotSearchWords, Banner, GoodsComment
 from .filters import GoodsFilter, GoodsCommentFilter
 from .serializers import GoodsSerializer, CategorySerializer, HotWordsSerializer, BannerSerializer
 from .serializers import IndexCategorySerializer, GoodsSimpleSerializer, GoodsCommentSerializer
+from .tasks import add
 # Create your views here.
 
 
@@ -55,6 +56,8 @@ class GoodsListViewSet(
     ordering_fields = ('sold_num', 'shop_price')
 
     def retrieve(self, request, *args, **kwargs):
+        result = add(1,2)
+        print(result)
         instance = self.get_object()
         instance.click_num += 1
         instance.save()

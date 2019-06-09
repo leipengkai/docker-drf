@@ -105,12 +105,14 @@ class Spec(models.Model):
 class SpecValue(models.Model):
     """规格(属性)值表"""
     value = models.CharField(null=False,verbose_name="规格值",max_length=126)
-    # 以一方的Model为多方的字段.related_name为自己的Model.方便drf与django的反向查询一致
+    # Model的命名方式 以类的命名规范使用
+    # 以一方的Model为多方的字段.related_name为自己的Model(全部小写).方便drf与django的反向查询一致
     spec = models.ForeignKey(Spec, verbose_name="规格", on_delete=models.CASCADE,related_name="specvalue")
 
     class Meta:
-        verbose_name = "规格(属性)值" # Model在侧边栏的显示
-        verbose_name_plural = verbose_name  # 解决admin侧边栏的英文复数问题
+        # admin管理后台的侧边栏的Model显示
+        verbose_name = "规格(属性)值" # 显示名
+        verbose_name_plural = verbose_name  # 解决显示名英文复数问题
 
     def __str__(self):
         return self.value  # 以str类型的方式去显示此Model
@@ -151,7 +153,7 @@ class Goods(models.Model):
     is_new = models.BooleanField(default=False, verbose_name="是否新品",help_text='是否新品:True or False')
     is_hot = models.BooleanField(default=False, verbose_name="是否热销",help_text='是否热销:True or False')
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
-    spec = models.ManyToManyField(Spec,related_name="goods") # 多对多关联 django会默认生成第三张关联表,也可以自定义关联表
+    spec = models.ManyToManyField(Spec,related_name="goods") # 多对多关联 django会默认生成第三张关联表,也可以自定义关联表(联合主键)
     specvalue = models.ManyToManyField(SpecValue,related_name="goods")  # 可以不关联
 
     class Meta:

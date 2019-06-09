@@ -1,8 +1,8 @@
 ### 项目说明
 是一个慕学生鲜商城项目,旨在学习和运用python,django,DRF,docker,docker-compose
-- [简单认识django和DRF](mxshop)
-- [django的第三方工具包的简单使用说明](mxshop/mxshop)
-- [简单认识Dokcer](./Dockerfiles)
+- [简单认识django和DRF](mxshop/README.md)
+- [django的第三方工具包的简单使用说明](mxshop/mxshop/README.md)
+- [简单认识Dokcer](./Dockerfiles/README.md)
 - 如果没有接触Docker的同学,可以使用[没有Docker版本的安装步骤](mxshop/no_docker_install.md)
 
 ### 项目启动
@@ -20,7 +20,7 @@ curl -XPOST -D- "http://localhost:5601/api/saved_objects/index-pattern" \
     -H "kbn-version: 6.1.0" \
     -d '{"attributes":{"title":"logstash-*","timeFieldName":"@timestamp"}}’
 ```
-[具体一点的操作说明](./docker-elk/)
+[具体一点的操作说明](./docker-elk/README.md)
 
 #### 2.1:第一次启动项目所需要的配置步骤
 ```bash
@@ -72,4 +72,4 @@ docker-compose up
 | http://127.0.0.1:5601/ |  [Kibana日志系统后台](http://127.0.0.1:5601/)  |
 | mysql数据库 | 用户名,密码:root,123456  |
 | 在Pycharm上对项目的设置  | 将MxShop下的apps和extra_apps目录<br>设置成Sources Root  |
-| 如果想在Pycharm将docker-compose作为远程解释器  | [参考这里进行设置](https://www.leipengkai.com/article/46)  |
+| 如果想在Pycharm将docker-compose作为远程解释器  | [参考这里进行设置](https://www.leipengkai.com/article/46/)  |

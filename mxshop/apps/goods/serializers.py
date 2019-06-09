@@ -60,7 +60,10 @@ class SpecValueSerializer(serializers.ModelSerializer):
 
 class SpecSerializer(serializers.ModelSerializer):
 
-    specvalue = SpecValueSerializer(many=True)
+    # 反向关联时,一定要写明,不然不会有所显示
+    specvalue = SpecValueSerializer(many=True) # 反向关联一个serializer 一对一
+    # specvalue = serializers.PrimaryKeyRelatedField(many=True, read_only=True) # 反向关联一个specvalue的id
+    goods = serializers.PrimaryKeyRelatedField(many=True, read_only=True) # 多对多
 
     class Meta:
         model = Spec

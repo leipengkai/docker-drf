@@ -4,7 +4,7 @@ services:
 
     mq:
         image: "rabbitmq:3-management"
-#        hostname: "rabbit1"
+#        hostname: "rabbitmq"
         environment:
             RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
             RABBITMQ_DEFAULT_USER: "rabbitmq"
@@ -97,7 +97,7 @@ services:
             - "8000:8000"  # 当使用docker-compose做为Pycharm的解释器时,必须要显示指定port
 #            1.主机port:config中drf_docker中配置的port,所以不需要command命令去绑定pycharm的启动
 #            2.使用pycharm启动后,不要docker commit,不然但docker-compose up启动时,会找不到文件,生产volumes的地方不同
-#            3.所以不管是在哪个平台下commit了,另一个平台就使用不了了.解决方法是两个平台都commit一次,或者使用pychram平台为主
+#            3.便没有试过在终端docker commit之后,pycharm能不能 正常启动??
 #            - "9090:9090"
             # (HOST:CONTAINER(nginx) 只要把ports这参数注释掉,就可以使用docker-compose scale web=3
             # (3 这个数量会,会根据电脑的性能去写,如果性能不足,则减少数量)
@@ -105,6 +105,7 @@ services:
         links:
             - mysql
             - redis
+            - mq
         volumes:
             - '../mxshop:/code'
             # (HOST:CONTAINER)

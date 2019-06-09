@@ -9,9 +9,11 @@ logger = logging.getLogger(__name__)
 
 
 @shared_task
-def test_msg(msg):
+def add(x,y):
     try:
-        logger.info("\n开始发送msg")
-        logger.info(msg)
+        print("\n开始发送msg")
+        time.sleep(5)
+        print("\n[Done]")
+        return x+y
     except Exception as e:
         logger.error("sleep: {}".format(e))

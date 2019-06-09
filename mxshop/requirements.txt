@@ -79,3 +79,6 @@ XlsxWriter
 xlwt
 zipp
 aliyun-python-sdk-core
+SQLAlchemy
+flask
+pymsql

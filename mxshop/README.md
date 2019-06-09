@@ -81,6 +81,8 @@ python manage.py runserver 0.0.0.0:80
 
 - [JWT官方文档](https://github.com/GetBlimp/django-rest-framework-jwt),[JWT认证](https://blog.leapoahead.com/2015/09/07/user-authentication-with-jwt/):用户信息保存在客户端,服务端只需要加解密和解编码就可以获取用户信息
 
+- [SKU模型简单设计](https://www.leipengkai.com/article/56/),包括model之间的关联,Serializer的便利性,熟悉ndm模型(明了模型之间的关系),复合主键,联合主键(多对多自定义关联)
+
 
 
 ##### DRF大概流程
@@ -120,7 +122,7 @@ docker exec -it dockerfiles_web_1 bash
     vim /usr/local/lib/python3.6/site-packages/django/forms/boundfield.py
     将93L的代码注释掉
 
-# bug2
+# bug2 ,最新版本已经不存在这个bug了
 - __init__() missing 1 required positional argument: 'sortable_by'
 # 解决方法:
     vim /usr/local/lib/python3.6/site-packages/jet/utils.py 

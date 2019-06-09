@@ -398,7 +398,7 @@ SHARE_BONUS_POINT = 1
 # Celery 设置
 # import djcelery
 # djcelery.setup_loader()  # 去每一个应用目录下找 tasks.py 文件，到文件中去执行 celery 任务函数
-CELERY_IMPORTS = ('trade.tasks',)
+CELERY_IMPORTS = ('goods.tasks',)
 
 
 CELERY_ACCEPT_CONTENT = ['json']
@@ -407,6 +407,11 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Shanghai'
 
 # CELERY_BROKER_URL = 'redis://redis:6379/0' # celery中间队列
-CELERY_BROKER_URL = 'amqp://localhost'
-BROKER_URL = 'amqp://rabbitmq:rabbitmq@localhost:5672/'  # connect RabbitMQ
+# CELERY_BROKER_URL = 'amqp://localhost'
+# BROKER_URL = 'amqp://rabbitmq:rabbitmq@localhost:5672/'  # connect RabbitMQ
+# CELERY_BROKER_URL = 'amqp://mq'
+# BROKER_URL = 'amqp://rabbitmq:rabbitmq@rabbitmq:5672//'  # connect RabbitMQ
+# CELERY_BROKER_URL = 'amqp://rabbitmq:rabbitmq@rabbitmq:5672//'  # connect RabbitMQ
 # BROKER_URL = 'redis://redis:6379/1' # and add this app:
+
+BROKER_URL = 'redis://redis:6379/0'

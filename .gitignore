@@ -10,3 +10,4 @@ mxshop/apps/user_operation/migrations/*
 .DS_Store
 *.swp
 *.psd
+__pycache__/
