@@ -35,7 +35,7 @@ class GoodsPagination(PageNumberPagination):
 
 
 class GoodsListViewSet(
-        CacheResponseMixin,
+        # CacheResponseMixin,
         mixins.ListModelMixin,
         mixins.RetrieveModelMixin,
         viewsets.GenericViewSet):
@@ -56,8 +56,9 @@ class GoodsListViewSet(
     ordering_fields = ('sold_num', 'shop_price')
 
     def retrieve(self, request, *args, **kwargs):
-        result = add(1,2)
-        print(result)
+        result = add.delay(1,2)
+        print(result.ready())
+
         instance = self.get_object()
         instance.click_num += 1
         instance.save()
@@ -310,6 +311,7 @@ class GoodsSimpleListViewSet(viewsets.ReadOnlyModelViewSet):
 
     # def get_serializer_class(self):
         # if self.action == 'retrieve':
+        # list:GET,create:POST,read:GET,update:PUT,partial_update:PATCH(局部更新)
             # return OrderDetailSerializer
         # elif self.action == 'list': # GET()
             # return OrderListSerializer

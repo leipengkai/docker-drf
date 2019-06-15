@@ -48,7 +48,7 @@ def callback_func(method, body):
     code = d['code'] if d['code'] else None  # 验证码
     print(" [x] %r:%r" % (routing_key, body))
     # 真正的处理业务
-    # eval("{}('{}','{}','{}','{}','{}')".format(target_type, target, routing_key, action, target_type, code))
+    eval("{}('{}','{}','{}','{}','{}')".format(target_type, target, routing_key, action, target_type, code))
     print(" [x] Done")
 
 
@@ -58,3 +58,5 @@ if __name__ == "__main__":
 
 # 模拟启动消费者服务:
 # python custom.py
+# nohup python -u custom.py 2> output                 # 错误输出
+# nohup python -u custom.py > output 2>&1 &            # 错误输出和标准输出 后台运行进程

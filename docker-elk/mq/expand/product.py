@@ -57,7 +57,7 @@ class Product():
         channel.queue_declare(queue=QUEUENAME, durable=True)
         result = channel.confirm_delivery() # 开启config模式:异步回调
 
-        if channel.basic_publish(
+        channel.basic_publish(
             exchange='',
             routing_key=QUEUENAME,
             body=body_json,
@@ -65,9 +65,8 @@ class Product():
                 delivery_mode=2,  # make message persistent
             ),
             mandatory=True
-        ):
-            print(" [x] Sent %r:%r" % (self.routing_key, self.code))
-        print(result)
+        )
+        print(" [x] Sent %r:%r" % (self.routing_key, self.code))
         # print(result2)
         connection.close()
 

@@ -4,7 +4,7 @@ services:
 
     mq:
         image: "rabbitmq:3-management"
-#        hostname: "rabbitmq"
+        hostname: "mq"
         environment:
             RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
             RABBITMQ_DEFAULT_USER: "rabbitmq"
@@ -94,7 +94,7 @@ services:
         # scale时,去掉绑定端口
         ports:
             # - "8000:80" # 如果在uwsgi中使用http则容器的端口也要一致
-            - "8000:8000"  # 当使用docker-compose做为Pycharm的解释器时,必须要显示指定port
+            - "8080:8000"  # 当使用docker-compose做为Pycharm的解释器时,必须要显示指定port
 #            1.主机port:config中drf_docker中配置的port,所以不需要command命令去绑定pycharm的启动
 #            2.使用pycharm启动后,不要docker commit,不然但docker-compose up启动时,会找不到文件,生产volumes的地方不同
 #            3.便没有试过在终端docker commit之后,pycharm能不能 正常启动??
@@ -129,6 +129,21 @@ services:
                 #python3 manage.py runserver 0.0.0.0:8000"
                 #
                 #/usr/local/bin/gunicorn --bind 0.0.0.0:8000 mxshop.wsgi:application -w 2"
+
+    worker:
+        build: ../mxshop
+        restart: always
+        networks:
+          - front-tier
+          - back-tier
+            # command: celery worker -A mxshop -l info -Q default -n default@%h
+        command: celery worker -A mxshop -l info
+ 
+        volumes:
+          - '../mxshop:/code'
+        links:
+            - web
+            - mq
 
     nginx:
         restart: always

@@ -11,6 +11,7 @@ WORKDIR /code
 RUN apt-get update && apt-get -y upgrade && apt-get install -y cron swig vim
 # 设置时区
 RUN echo "Asia/Shanghai" > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata
+RUN echo 'alias ll="ls -al"' >> /etc/bashrc && . /etc/bashrc
 ENV PYTHONPATH=/usr/local/lib/python3.6/site-packages
 #RUN python manage.py collectstatic --noinput
 

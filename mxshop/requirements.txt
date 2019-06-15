@@ -81,4 +81,4 @@ zipp
 aliyun-python-sdk-core
 SQLAlchemy
 flask
-pymsql
+pymysql

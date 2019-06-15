@@ -6,7 +6,10 @@ from celery import Celery
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mxshop.settings')
 
-app = Celery('mxshop' , backend='amqp', broker_url='amqp://rabbitmq:rabbitmq@rabbitmq:5672//')
+
+HOST_IP = "192.168.43.173" # 不能再是127.0.0.1之类的ip
+app = Celery('mxshop' , backend='redis', broker='pyamqp://rabbitmq:rabbitmq@{}:5672//'.format(HOST_IP), result_backend='redis://redis:6379/0') 
+
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.
@@ -22,9 +25,6 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 #     CELERY_TIMEZONE = 'Asia/Shanghai',
 #     CELERY_ENABLE_UTC = True
 # )
-app.conf.broker_url = 'redis://redis:6379/0'
-
-app.conf.broker_url = 'amqp://rabbitmq:rabbitmq@rabbitmq:5672//'
 
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks()

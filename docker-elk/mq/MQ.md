@@ -25,6 +25,12 @@
 - 在Exchange Type与Binding key固定的情况下(在正常使用时一般这些内容都是固定配置好的),我们的生产者就可以在发送消息给Exchange时,通过指定Routing Key来决定消息流向哪里
 
 > Exchange: 消息交换机,它指定消息按什么规则,路由到哪个队列
+- exchange，交换器名称
+- type，交换器类型，如fanout,direct,topic
+- durable，是否持久化，持久化可以将交换器存盘，在服务器重启后不会丢失相关信息
+- autoDelete，是否自动删除。自动删除的前提是至少有一个队列或交换器与这个交换器绑定，之后所有与这个交换器绑定的队列或交换器都与此解绑，并不是与此连接的客户端都断开
+- internal，是否是内置的，内置的交换器客户端无法直接发送消息到这个交换器中，只能通过交换器路由到交换器的方式
+- argument，其他一些结构化参数
 
 - Exchange Type有fanout、direct、topic、headers这四种（AMQP规范里还提到两种Exchange Type，分别为system与自定义)
 
@@ -32,9 +38,15 @@
 
 > Queue: 消息队列载体,每个消息都会被投入到一个或多个队列
 
+- queue，队列名称
+- durable，是否持久化。持久化的队列会存盘，在服务器重启时可以保证不丢失相关信息
+- exclusive，是否排他，如果一个队列声明为排他，该队列仅对首声声明它的连接可见，并在连接断开后自动删除
+- autoDelete，是否自动删除。自动删除前提是：至少有一个消费者连接到这个队列，之后所有与这个队列连接的消费者都断开时，才自动删除
+- arguments，其他参数
+
 > Consumer: 消息消费者,就是接受消息的程序
 
-> Message acknowledgment:no_ack(针对消费者,是否要删除队列中的消息)
+> Message acknowledgment:no_ack:为保证消息从队列可靠达到消费者(针对消费者,是否要删除队列中的消息)
 
 - 在实际应用中,可能会发生消费者收到Queue中的消息,但没有处理完成就宕机(或出现其他意外)的情况,这种情况下就可能会导致消息丢失
 - 为了避免这种情况发生,我们可以要求消费者在消费完消息后发送一个回执给RabbitMQ,RabbitMQ收到消息回执(Message acknowledgment)后才将该消息从Queue中移除
@@ -91,3 +103,5 @@
 参考:
 
 [一篇全面透彻的RabbitMQ指南](https://juejin.im/entry/599e5e3b5188252437799049)
+[RabbitMQ深入理解(一)进阶/管理/配置](https://pdf.us/2018/06/01/1167.html)
+生产者:客户端与MQ服务器建立一个连接connection->在连接上创建一个信道channel->创建一个交换器exchange和一个队列queue,并通过路由键进行绑定->发送消息->关闭资源
