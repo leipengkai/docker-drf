@@ -1,4 +1,7 @@
 from __future__ import absolute_import, unicode_literals
+import pymysql
+
+pymysql.install_as_MySQLdb()  # docker-compose up启动时,需要注释掉
 
 # This will make sure the app is always imported when
 # Django starts so that shared_task will use this app.

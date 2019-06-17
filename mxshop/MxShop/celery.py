@@ -4,11 +4,15 @@ from celery import Celery
 
 # http://docs.celeryproject.org/en/latest/django/first-steps-with-django.html#using-celery-with-d
 # set the default Django settings module for the 'celery' program.
+# celery+django 的mq和redis的连接居然多坑
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mxshop.settings')
 
 
-HOST_IP = "192.168.43.173" # 不能再是127.0.0.1之类的ip
-app = Celery('mxshop' , backend='redis', broker='pyamqp://rabbitmq:rabbitmq@{}:5672//'.format(HOST_IP), result_backend='redis://redis:6379/0') 
+# HOST_IP = "192.168.43.173" # 不能再是127.0.0.1之类的ip
+HOST_IP = "192.168.50.142"
+app = Celery('mxshop' , backend='redis', broker='pyamqp://rabbitmq:rabbitmq@{}:5672//'.format(HOST_IP)) # , result_backend='redis://redis:6379/0') # docker-compose up一
+
+# app = Celery('mxshop' , backend='redis', broker='pyamqp://rabbitmq:rabbitmq@{}:5672//'.format(HOST_IP), result_backend='redis://redis:6379/0') # docker-compose up二
 
 
 # Using a string here means the worker doesn't have to serialize

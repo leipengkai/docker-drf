@@ -188,9 +188,10 @@ DATABASES = {
         'NAME': "mxshop1",
         'USER': 'root',
         'PASSWORD': "123456",
-        # 'HOST': "0.0.0.0",
-        'HOST': "mysql",  # docker-compose.yml mysql的服务名
-        'PORT': "3306",
+        'HOST': "0.0.0.0",
+        'PORT': "3308",
+        # 'HOST': "mysql",  # docker-compose.yml mysql的服务名
+        # 'PORT': "3306",
         'default-character-set': 'utf8',
         'OPTION': {'init_command': 'SET storage_engine=INNODB;'},
         'OPTIONS': {'charset': 'utf8mb4'},
@@ -400,4 +401,5 @@ SHARE_BONUS_POINT = 1
 # djcelery.setup_loader()  # 去每一个应用目录下找 tasks.py 文件，到文件中去执行 celery 任务函数
 CELERY_IMPORTS = ('goods.tasks',)
 # BROKER_URL = 'pyamqp://rabbitmq:rabbitmq@rabbitmq:5672//'  # connect RabbitMQ 连接失败一直阻塞
-# CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+# CELERY_RESULT_BACKEND = 'redis://redis:6379/0'  # docker-compose up
+CELERY_RESULT_BACKEND = 'redis://0.0.0.0:6379/0'  # web服务由pycharm启动

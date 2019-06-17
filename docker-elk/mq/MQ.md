@@ -105,3 +105,4 @@
 [一篇全面透彻的RabbitMQ指南](https://juejin.im/entry/599e5e3b5188252437799049)
 [RabbitMQ深入理解(一)进阶/管理/配置](https://pdf.us/2018/06/01/1167.html)
 生产者:客户端与MQ服务器建立一个连接connection->在连接上创建一个信道channel->创建一个交换器exchange和一个队列queue,并通过路由键进行绑定->发送消息->关闭资源
+消费端的监控(),高并发生产者时的解决办法(celery异步)

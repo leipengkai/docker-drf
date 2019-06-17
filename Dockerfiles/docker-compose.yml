@@ -142,7 +142,7 @@ services:
         volumes:
           - '../mxshop:/code'
         links:
-            - web
+            - redis
             - mq
 
     nginx:

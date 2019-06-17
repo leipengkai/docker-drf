@@ -73,3 +73,18 @@ docker-compose up
 | mysql数据库 | 用户名,密码:root,123456  |
 | 在Pycharm上对项目的设置  | 将MxShop下的apps和extra_apps目录<br>设置成Sources Root  |
 | 如果想在Pycharm将docker-compose作为远程解释器  | [参考这里进行设置](https://www.leipengkai.com/article/46/)  |
+
+
+
+### 为什么不再使用pychram去启动docker-compose.yml
+- 只能指定一个docker-compose.yml中的web服务,从而带动启动它的依赖服务
+- 主要原因在于docker-compose up 和pychram启动docker-compose.yml不兼容
+    - 一些连接服务的输入方式不一样,一些特殊的连接服务的方式,两者来回启动会互相影响
+    - docker commit 之后,另一种启动方式将会失败
+    - 不方便记忆,来回切换需要改的配置
+#### 解决的办法:
+- docker-compose up  启动所有服务,也就是整个项目
+- docker-compose up mysql redis mq worker  # 启动web服务所依赖的服务
+    - 使用pycharm启动web服务(python包,修改连接服务的连接写法(mysql,rdis,mq))
+    - docker commit 只会针对docker-compose up这种启动方式.同时也很方便的添加python包
+两种方法启动, 只需要改mxshop/__init__.py和setting.py文件
