@@ -13,7 +13,7 @@ channel.queue_declare(queue='hello')
 for i in range(21):
     # 向队列发送消息
     channel.basic_publish(
-        routing_key='hello', # 使用默认的交换机,在生产者中必须指定 routing_key,对应的消费者不需要
+            routing_key='hello', # 使用默认的交换机,在生产者中必须指定 routing_key,对应的消费者不需要,而且不能为空与channel.basic_consume(queue='hello')一致
         exchange='', 
         body=str(i),
     )

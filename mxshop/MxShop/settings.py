@@ -121,6 +121,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',  # DB性能分析工具
     # 'pyinstrument.middleware.ProfilerMiddleware',
+    'django.middleware.locale.LocaleMiddleware', # 国际化
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -234,10 +235,18 @@ AUTH_PASSWORD_VALIDATORS = [
 # 设置时区
 LANGUAGE_CODE = 'zh-hans'  # 中文支持，django1.8以后支持；1.8以前是zh-cn
 TIME_ZONE = 'Asia/Shanghai'
-USE_I18N = True
+USE_I18N = True # 需要开启支持国际化
 USE_L10N = True
 USE_TZ = False  # 默认是Ture，时间是utc时间，由于我们要用本地时间，所用手动修改为false！！！！
-
+LANGUAGES = (
+    ('en', ('English')),
+    ('zh-hans', ('中文简体')),
+    ('zh-hant', ('中文繁體')),
+)
+#翻译文件所在目录，需要手工创建
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
 # JWT默认是usernaem,password登陆
 AUTHENTICATION_BACKENDS = (
 

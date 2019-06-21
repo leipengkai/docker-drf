@@ -24,3 +24,5 @@ connection.close()
 
 
 # python new_task.py heloo........ # 有几个点,就睡眠几秒
+只声明队列名时,必须在生产端指明routing_key
+
