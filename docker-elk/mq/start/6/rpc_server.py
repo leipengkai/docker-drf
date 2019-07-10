@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import pika
 
-# custome 消费者
+# custome 消费者  server端
 credentials = pika.PlainCredentials('rabbitmq', 'rabbitmq')
 connection = pika.BlockingConnection(pika.ConnectionParameters('localhost',5672,'/',credentials))
 

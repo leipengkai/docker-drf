@@ -344,3 +344,15 @@ class GoodsSimpleListViewSet(viewsets.ReadOnlyModelViewSet):
 # def retrieve(self, request, *args, **kwargs): # 处理展示的状态
     # instance = self.get_object() 
     # userMembershipInfo = instance.membershipInfo
+
+    # POST :create
+    # GET :list retrieve
+    # PUT : update
+    # PATCH: partial_update
+    # def get_serializer_class(self):
+        # if self.action == 'list':
+            # return HelpDocSerializerss
+        # if self.action == 'retrieve':
+            # return HelpDocSerializerss
+        # DELETE: delete:不走这里
+        # return HelpDocSerializerss

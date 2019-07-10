@@ -411,4 +411,4 @@ SHARE_BONUS_POINT = 1
 CELERY_IMPORTS = ('goods.tasks',)
 # BROKER_URL = 'pyamqp://rabbitmq:rabbitmq@rabbitmq:5672//'  # connect RabbitMQ 连接失败一直阻塞
 # CELERY_RESULT_BACKEND = 'redis://redis:6379/0'  # docker-compose up
-CELERY_RESULT_BACKEND = 'redis://0.0.0.0:6379/0'  # web服务由pycharm启动
+CELERY_RESULT_BACKEND = 'redis://192.168.50.130:6379/0'  # web服务由pycharm启动

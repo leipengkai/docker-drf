@@ -177,7 +177,7 @@ class GoodsSimpleSerializer(serializers.ModelSerializer): # 在数据保存之�
     # 关联的ForeignKey,OTO表需要先有一条数据,再向admin注册(进行能内容的查看,管理)
     # ModelSerializer已经重写update(),所以可以进行更新操作:put,patch.而基本的Serializer是没有重写的
 
-    # Serializer
+    # Serializer  
     # 需要显示的指明与Model中对应的字段  才能显示字段内容(get), 相当于说是跟Model没有关系了
     # 灵活性比较高(灵活的操作数据库,并可以不用去验证Model字段的正确性)
     # validated_data是已经序列化好的数据了:Goods 如果是没有序列化好的的数据的话,就是goods_id
@@ -195,6 +195,10 @@ class GoodsSimpleSerializer(serializers.ModelSerializer): # 在数据保存之�
     #                },
     # password = serializers.CharField( style={'input_type': 'password'},help_text="密码", label="密码", write_only=True,)
 
+    # create_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False, read_only=True)
+
+
+
     # 得到传入的值
     # def validate_name(self, name:可以自己定义默认的,一般是由用户输入) obj:则是class meta的model data
         # raise serializers.ValidationError("验证码错误")
@@ -209,7 +213,8 @@ class GoodsSimpleSerializer(serializers.ModelSerializer): # 在数据保存之�
         # return attrs
 
     # def create(self, validated_data):
-        # # 已经序列化的好的数据: validated_data
+        # self.initial_data # 所有字段
+        # # 已经序列化的好的数据: validated_data  指定model中的字段
         # user = self.context["request"].user
         # existed = UserAddress.objects.filter(user=user)
         # if not existed:
@@ -251,6 +256,8 @@ class GoodsSimpleSerializer(serializers.ModelSerializer): # 在数据保存之�
             # )
         # ]
         fields = "__all__"  # 注意自定义的字段一定要写进来,这里用__all__表示所有字段都包括了,否则需要写明
+        # exclude = ["is_deleted"] # exclude  
+
 
 # 先会去验证Model字段是否合法,然后才到ModelSerializer这边来进行其它的验证
 # 包括 serializer字段 (UniqueValidator)--> validate_字段()-->  validate() -->create()
@@ -261,6 +268,19 @@ class GoodsSimpleSerializer(serializers.ModelSerializer): # 在数据保存之�
     
     # serializer_related  购物车
     # goods = serializers.PrimaryKeyRelatedField(required=True, queryset=Goods.objects.filter( goods_num__gte=1))
+    # son_cat = serializers.SerializerMethodField()
+
+    # def get_son_cat(self, obj):
+        # """
+        # 嵌套类中也支持排序(顶级类目和二级类目一致排序(正反),但不一起排序,他们是分开的)
+        # """  
+        # ordering = self.context.get('ordering') # views中thisSerializer(category, many=True, context={'ordering': ordering})
+        # cat = HelpCategory.objects.filter(parent_id=obj.category_id)
+        # if ordering:
+            # cat = cat.order_by(ordering)
+        # cat = HelpCategorySerializer2(
+            # cat, many=True).data
+        # return cat
     # 必须要指定queryset,post时让其选一个,get时只是一些基本的信息,这里只是个goods_id_list
     # 当然也可以指定其它参数read_only,default
     
@@ -268,3 +288,7 @@ class GoodsSimpleSerializer(serializers.ModelSerializer): # 在数据保存之�
     # goods = GoodsSerializer(many=False, read_only=True)
 
 
+
+
+
+# blank=False, null=False;POST,PUT会有限制,必须要传递.PATCH可以不传递
