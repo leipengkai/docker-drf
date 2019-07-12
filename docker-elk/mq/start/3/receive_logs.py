@@ -34,7 +34,7 @@ channel.start_consuming()
 # emit_log.py 只声明交换机(不声明队列名二选一)
 # routing_key 如果要设置,两端都要设置.如果不设置,则消息会发送到所有队列中
 
-
+# 开启两个
 # python receive_logs.py >> logs_from_rabbit.log
 # python receive_logs.py
 
