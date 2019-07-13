@@ -1,0 +1,14 @@
+
+broker = 'pyamqp://rabbitmq:rabbitmq@192.168.50.130:5672//'
+
+logging = 'DEBUG'
+
+
+address = '0.0.0.0' # 保证外网可以访问
+port = 5555
+
+basic_auth = ['rabbitmq:rabbitmq'] # 用户名：密码
+
+persistent = True # 持久化celery tasks（如果为False的话，重启flower后，监控的tasks全部消失了！）
+db = './flowerdb' # 持久化tasks存储的地方
+

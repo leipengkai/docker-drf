@@ -109,3 +109,13 @@ CELERY_ROUTES = {
     'tasks3.add1': {'queue': 'queue_add_reduce', 'routing_key': 'key1', 'delivery_mode': 1},
     'tasks3.add2': {'queue': 'queue_sum', 'routing_key': 'key2', 'delivery_mode': 1},
 }
+
+
+"""
+注意设置celery的worker预取值“ CELERYD_PREFETCH_MULTIPLIER “，如果你的task是很耗时的任务，最好设置为1，避免造成队列拥堵。如果你的task是非耗时的任务，则可根据实际情况调大此值，提高吞吐量
+
+最好设置task的软超时时间” CELERYD_TASK_SOFT_TIME_LIMIT “，如果任务超过此时间没有执行完成，则会报错celery.exceptions.SoftTimeLimitExceeded（可在代码中捕获做相应业务处理），避免造成队列拥堵
+
+一定要设置“ CELERYD_MAX_TASKS_PER_CHILD ”，此值表示每个worker工作进程在执行了多少task之后便重新建立worker进程，解决celery的内存泄漏问题
+
+"""

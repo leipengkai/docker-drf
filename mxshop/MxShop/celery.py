@@ -8,7 +8,7 @@ from celery import Celery
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mxshop.settings')
 
 
-# HOST_IP = "192.168.43.173" # 不能再是127.0.0.1之类的ip
+# HOST_IP = "0.0.0.0" # 不能再是127.0.0.1之类的ip
 HOST_IP = "192.168.50.130"
 app = Celery('mxshop' , backend='redis', broker='pyamqp://rabbitmq:rabbitmq@{}:5672//'.format(HOST_IP)) # , result_backend='redis://redis:6379/0') # docker-compose up一
 
