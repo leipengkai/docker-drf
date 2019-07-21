@@ -114,11 +114,11 @@ services:
             # (HOST:CONTAINER)
             #- /usr/src/app/static
 
-        logging:
-          driver: syslog
-          options:
-              syslog-address: tcp://0.0.0.0:5000
-              tag: web-container-tcp
+        #logging:
+          #driver: syslog
+          #options:
+              #syslog-address: tcp://0.0.0.0:5000
+              #tag: web-container-tcp
         environment:
             - DEBUG= 'true'
 #        command: python3 manage.py runserver 0.0.0.0:8000
@@ -171,6 +171,27 @@ services:
             - web
         links:
             - web:drf_web
+
+        #logging_driver: "gelf"
+        #log_options:
+          #gelf-address: "udp://0.0.0.0:12201"
+          #gelf-tag: "first-logs"
+
+        #logging:
+          #driver: "gelf"
+          #options:
+              #gelf-address: "udp://0.0.0.0:12201"
+              ##tag: nginx_udp
+
+        logging:
+          driver: syslog #  当关闭nginx后台开启时,使用此driver会报错
+          options:
+              syslog-address: tcp://0.0.0.0:5000
+              tag: nginx
+
+        #docker run -d -p 8080:80 --log-driver gelf --log-opt gelf-address=udp://localhost:12201 nginx:latest
+
+        # /var/log/nginx/access.log
         networks:
           - front-tier
           - back-tier

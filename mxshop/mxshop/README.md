@@ -1,3 +1,36 @@
+### 使用pycharm启动代码调试
+- 启动依赖服务:
+
+    ```bash
+    docker-compose up mq mysql redis 
+    ```
+
+- 修改连接方式:
+
+    ```bash
+    cd mxshop/mxshop
+    tree -l
+    .
+    ├── README.md
+    ├── __init__.py  # pycharm启动时, 使用pymsql驱动连接数据库
+    ├── celery.py    # 当本地的ip变了时, 需要修改HOST_IP. (不管哪种方式都需要)
+    ├── settings.py  # 修改连接mysql, redis, 以及CELERY_RESULT_BACKEND的设置
+    ├── urls.py
+    └── wsgi.py
+
+    ```
+
+
+- 本地启动work:
+
+    ```bash
+    cd ../   # 在manage.py的目录下运行
+    celery worker -A mxshop -l info
+    # 注意: 当docker启动的服务不能使用时,重启下docker,就可以解决
+    ```
+
+
+
 ### 第三方工具的使用
 性能分析工具:
 ```bash

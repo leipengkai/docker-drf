@@ -8,6 +8,10 @@ COPY uwsgi.conf /etc/nginx/sites-available/
 
 RUN mkdir -p /etc/nginx/sites-enabled/\
 	&& ln -s /etc/nginx/sites-available/uwsgi.conf /etc/nginx/sites-enabled/
+
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stderr /var/log/nginx/error.log
+
 COPY index.html /usr/share/nginx/html
 
 # RUN mkdir -p /etc/nginx/sites-enabled/\

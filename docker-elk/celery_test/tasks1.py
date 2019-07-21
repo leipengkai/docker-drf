@@ -55,6 +55,8 @@ def add1(x, y):
 # 再cd(celery_test)到本py文件的目录下,运行work
 celery -A tasks1 worker -l info  # --loglevel=info 
 # 确保只启动一个worker(我在docker-compose启动了一个worker,这里从启动了一个则会有错,大概是Some Celery tasks work, others are NotRegistered)
+# 因为默认celery会生成一个以celery为名的队列, mq不允许重新定义(不同参数)一个已经存在的队列, 所以当第二个启动时,还是之前的那个celery的队列
+
 # 然后在另一个终端运行 python (也是在celery_test目录下)
 from tasks1 import add1,add
 add1.delay(4, 4)
