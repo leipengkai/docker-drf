@@ -1,0 +1,107 @@
+version: '2'
+
+services:
+    rabbitmq-node-1:
+        image: rabbitmq:3-management
+        container_name: rabbitmq-node-1
+        hostname: rabbitmq-node-1
+        ports:
+            - "15673:15672"
+            - "5673:5672"
+        networks: 
+            - front-tier
+            - back-tier
+        volumes:
+            - $PWD/storage/rabbitmq-node-1:/var/lib/rabbitmq
+        environment:
+            - RABBITMQ_NODE_TYPE=stats
+            - RABBITMQ_NODE_NAME=rabbit@stats
+            - RABBITMQ_ERLANG_COOKIE=cluster_cookie
+            - RABBITMQ_DEFAULT_USER="admin"
+            - RABBITMQ_DEFAULT_PASS="admin"
+  
+    rabbitmq-node-2:
+        image: rabbitmq:3-management
+        container_name: rabbitmq-node-2
+        hostname: rabbitmq-node-2
+        ports:
+            - "15674:15672"
+            - "5674:5672"
+        networks: 
+            - front-tier
+            - back-tier
+        volumes:
+            - $PWD/storage/rabbitmq-node-2:/var/lib/rabbitmq
+            - ./cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
+        # 通过脚本创建mq集群
+        entrypoint: /usr/local/bin/cluster-entrypoint.sh
+
+
+        environment:
+            - RABBITMQ_NODE_TYPE=queue-disc
+            - RABBITMQ_NODE_NAME=rabbit@queue-disc1
+            - RABBITMQ_ERLANG_COOKIE=cluster_cookie
+            - RABBITMQ_DEFAULT_USER="admin"
+            - RABBITMQ_DEFAULT_PASS="admin"
+      
+    rabbitmq-node-3:
+        image: rabbitmq:3-management
+        container_name: rabbitmq-node-3
+        hostname: rabbitmq-node-3
+        ports:
+            - "15675:15672"
+            - "5675:5672"
+        networks: 
+              - front-tier
+              - back-tier
+        volumes:
+            - $PWD/storage/rabbitmq-node-3:/var/lib/rabbitmq
+            - ./cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
+        environment:
+            - RABBITMQ_NODE_TYPE=queue-ram
+            - RABBITMQ_NODE_NAME=rabbit@queue-ram1
+            - RABBITMQ_ERLANG_COOKIE=cluster_cookie
+            - RABBITMQ_DEFAULT_USER="admin"
+            - RABBITMQ_DEFAULT_PASS="admin"
+        entrypoint: /usr/local/bin/cluster-entrypoint.sh
+
+    #haproxy:
+        #build: haproxy
+        #container_name: haproxy
+        #hostname: haproxy
+        #ports:
+            #- "5677:5672"  # mq
+            #- "1937:1936"  # haproxy status
+            #- "15677:15672" # mq_ui
+        #volumes:
+            #- ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+            #- ./haproxy/docker-entrypoint-override.sh:/docker-entrypoint-override.sh
+            #- ./haproxy/keepalived:/keepalived
+        #networks: 
+            #- front-tier
+            #- back-tier
+
+    haproxy2:
+      build: haproxy2
+      depends_on:
+        - rabbitmq-node-1
+        - rabbitmq-node-2
+        - rabbitmq-node-3
+
+      networks:
+        - front-tier
+        - back-tier
+      ports:
+        - "5676:5672"  # mq
+        - "1936:1936"  # haproxy status
+        - "15676:15672" # mq_ui
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - ./haproxy2/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+
+
+networks:
+  front-tier:
+    driver: bridge
+  back-tier:
+    driver: bridge
