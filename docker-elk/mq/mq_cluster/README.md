@@ -1,3 +1,6 @@
+[高可用rabbitmq集群](./mq_haproxy.png)
+
+
 ### mq服务使用HaProxy进行负载均衡
 #### 注意docker-compose.yml使用的是haproxy2这个镜像
 
@@ -34,7 +37,7 @@ docker-compose up
 |内容|说明|注意|
 |---|---|---|
 |haproxy.cfg |[haproxy.cfg配置说明](https://www.lijiaocn.com/%E6%8A%80%E5%B7%A7/2017/06/26/haproxy-usage.html)|1.haproxy不要为latest,我选的是1.7.3<br>2.在默认设置时,必须设置成tcp mode<br>3.监控页面的listen设置成监控所有|
-|haproxy监控页面 |[haproxy监控页面](http://0.0.0.0:1936/stats)| 1936:1936(宿主:容器),http |
+|haproxy监控页面 |[haproxy监控页面](http://0.0.0.0:1936/)| 1936:1936(宿主:容器),http |
 |haproxy负载mq_ui |[mq_ui页面](http://0.0.0.0:15676)| 15676:15676(宿主:容器), http |
 |haproxy负载mq服务 |对mq实例服务进行负载| 5676:5676(宿主:容器),tcp |
 
@@ -70,3 +73,30 @@ python send.py
 # 这两个py文件,是通过haproxy负载的设置: '0.0.0.0',5676
 # 可以通过mq_ui:  http://0.0.0.0:15676/#/ . 看到消息的发送状态
 ```
+
+[由于Mac中,不管使用哪种docker网络模式,都无法互通](https://docs.docker.com/docker-for-mac/networking/#/there-is-no-docker0-bridge-on-osx)
+
+所以下面的测试基本是没有意义的
+
+### mq服务使用HaProxy,并在haproxy镜像中安装keepalived
+
+```
+docker-compose --file docker-compose-keepalived.yml up
+docker-compose --file docker-compose-keepalived.yml down
+# 因为与下面的port有冲突,所以必须down才能,启动另外一个
+```
+
+### 启动两个haproxy,杀死其中一个,使用nginx代理模拟VIP
+
+
+```
+docker-compose --file docker-compose-keepalived-nginx.yml up
+docker-compose --file docker-compose-keepalived-nginx.yml scale haproxy=2
+docker-compose --file docker-compose-keepalived-nginx.yml down
+```
+
+|内容|说明|注意|
+|---|---|---|
+|haproxy监控页面 |[haproxy监控页面](http://0.0.0.0:1937/)| 1937:1936(宿主:容器),http |
+|haproxy负载mq_ui |[mq_ui页面](http://0.0.0.0:15677)| 15677:15672(宿主:容器), http |
+|haproxy负载mq服务 |对mq实例服务进行负载| 5677:5672(宿主:容器),tcp |

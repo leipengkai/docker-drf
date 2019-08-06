@@ -73,10 +73,6 @@ services:
             - "5672"  # mq
             - "1936"  # haproxy status
             - "15672" # mq_ui
-        #ports:
-            #- "5677:5672"  # mq
-            #- "1937:1936"  # haproxy status
-            #- "15677:15672" # mq_ui
         volumes:
             - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
             - ./haproxy/docker-entrypoint-override.sh:/docker-entrypoint-override.sh
@@ -89,6 +85,7 @@ services:
         networks: 
             - front-tier
             - back-tier
+
     nginx:
         restart: always
         build: nginx
@@ -110,36 +107,14 @@ services:
             - haproxy
         depends_on:
             - haproxy
-
         #logging:
           #driver: syslog #  当关闭nginx后台开启时,使用此driver会报错
           #options:
               #syslog-address: tcp://0.0.0.0:5000
               #tag: nginx
-
-
         networks:
           - front-tier
           - back-tier
-
-    #haproxy2:
-      #build: haproxy2
-      #depends_on:
-        #- rabbitmq-node-1
-        #- rabbitmq-node-2
-        #- rabbitmq-node-3
-
-      #networks:
-        #- front-tier
-        #- back-tier
-      #ports:
-        #- "5676:5672"  # mq
-        #- "1936:1936"  # haproxy status
-        #- "15676:15672" # mq_ui
-      #volumes:
-        #- /var/run/docker.sock:/var/run/docker.sock
-        #- ./haproxy2/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
-
 
 networks:
   front-tier:
