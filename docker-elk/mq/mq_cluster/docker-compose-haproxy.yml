@@ -65,51 +65,69 @@ services:
             - RABBITMQ_DEFAULT_PASS="admin"
         entrypoint: /usr/local/bin/cluster-entrypoint.sh
 
-    haproxy:
-        build: haproxy
-        # container_name: haproxy
-        hostname: haproxy
-        expose:
-            - "5672"  # mq
-            - "1936"  # haproxy status
-            - "15672" # mq_ui
+    haproxy2:
+      build: haproxy2
+      depends_on:
+        - rabbitmq-node-1
+        - rabbitmq-node-2
+        - rabbitmq-node-3
+
+      networks:
+        - front-tier
+        - back-tier
+      ports:
+        - "5676:5672"  # mq
+        - "1936:1936"  # haproxy status
+        - "15676:15672" # mq_ui
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - ./haproxy2/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+
+    #haproxy:
+        #build: haproxy
+        ## container_name: haproxy
+        #hostname: haproxy
+        #expose:
+            #- "5672"  # mq
+            #- "1936"  # haproxy status
+            #- "15672" # mq_ui
+        ##ports:
+            ##- "5677:5672"  # mq
+            ##- "1937:1936"  # haproxy status
+            ##- "15677:15672" # mq_ui
+        #volumes:
+            #- ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+            #- ./haproxy/docker-entrypoint-override.sh:/docker-entrypoint-override.sh
+            #- ./haproxy/keepalived:/keepalived
+        #depends_on:
+          #- rabbitmq-node-1
+          #- rabbitmq-node-2
+          #- rabbitmq-node-3
+        ## network_mode: host
+        #networks: 
+            #- front-tier
+            #- back-tier
+    #nginx:
+        #restart: always
+        #build: nginx
         #ports:
             #- "5677:5672"  # mq
             #- "1937:1936"  # haproxy status
             #- "15677:15672" # mq_ui
-        volumes:
-            - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
-            - ./haproxy/docker-entrypoint-override.sh:/docker-entrypoint-override.sh
-            - ./haproxy/keepalived:/keepalived
-        depends_on:
-          - rabbitmq-node-1
-          - rabbitmq-node-2
-          - rabbitmq-node-3
-        # network_mode: host
-        networks: 
-            - front-tier
-            - back-tier
-    nginx:
-        restart: always
-        build: nginx
-        ports:
-            - "5677:5672"  # mq
-            - "1937:1936"  # haproxy status
-            - "15677:15672" # mq_ui
-        volumes:
-            - ./nginx/sites-enabled:/etc/nginx/sites-enabled
-            - ./nginx/log:/var/log/nginx
-            - ./nginx/www:/usr/share/nginx/html
-            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-            - ./nginx/femn.pem:/etc/nginx/femn.pem
-            - ./nginx/femn_private.key:/etc/nginx/femn_private.key
-            - ./nginx/uwsgi.conf:/etc/nginx/sites-available/uwsgi.conf
-            - ./nginx/index.html:/usr/share/nginx/html/index.html
-        volumes_from:
-            - haproxy
-        depends_on:
-            - haproxy
+        #volumes:
+            #- ./nginx/sites-enabled:/etc/nginx/sites-enabled
+            #- ./nginx/log:/var/log/nginx
+            #- ./nginx/www:/usr/share/nginx/html
+            #- ./nginx/nginx.conf:/etc/nginx/nginx.conf
+            #- ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+            #- ./nginx/femn.pem:/etc/nginx/femn.pem
+            #- ./nginx/femn_private.key:/etc/nginx/femn_private.key
+            #- ./nginx/uwsgi.conf:/etc/nginx/sites-available/uwsgi.conf
+            #- ./nginx/index.html:/usr/share/nginx/html/index.html
+        #volumes_from:
+            #- haproxy
+        #depends_on:
+            #- haproxy
 
         #logging:
           #driver: syslog #  当关闭nginx后台开启时,使用此driver会报错
@@ -118,27 +136,9 @@ services:
               #tag: nginx
 
 
-        networks:
-          - front-tier
-          - back-tier
-
-    #haproxy2:
-      #build: haproxy2
-      #depends_on:
-        #- rabbitmq-node-1
-        #- rabbitmq-node-2
-        #- rabbitmq-node-3
-
-      #networks:
-        #- front-tier
-        #- back-tier
-      #ports:
-        #- "5676:5672"  # mq
-        #- "1936:1936"  # haproxy status
-        #- "15676:15672" # mq_ui
-      #volumes:
-        #- /var/run/docker.sock:/var/run/docker.sock
-        #- ./haproxy2/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+        #networks:
+          #- front-tier
+          #- back-tier
 
 
 networks:

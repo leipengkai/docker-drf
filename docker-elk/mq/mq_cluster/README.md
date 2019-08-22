@@ -8,7 +8,7 @@
 
 ```bash
 cd mq_cluster
-docker-compose up
+docker-compose  --file docker-compose-haproxy.yml up
 
 ```
 - mq镜像集群
@@ -46,6 +46,7 @@ docker-compose up
 
 ``` bash
 # 加入集群
+# docker exec -it rabbitmq-node-2 ifconfig # 这种命令也是可以的
 docker exec -it rabbitmq-node-2 bash -c "rabbitmqctl stop_app"
 docker exec -it rabbitmq-node-2 bash -c "rabbitmqctl join_cluster rabbit@rabbitmq-node-1"
 docker exec -it rabbitmq-node-2 bash -c "rabbitmqctl start_app"
@@ -72,18 +73,40 @@ python revc.py
 python send.py
 # 这两个py文件,是通过haproxy负载的设置: '0.0.0.0',5676
 # 可以通过mq_ui:  http://0.0.0.0:15676/#/ . 看到消息的发送状态
+
+
+docker-compose --file docker-compose-haproxy.yml ps
+# 关掉其中两个容器, 一个一个关
+docker-compose --file docker-compose-haproxy.yml kill rabbitmq-node-2
+docker-compose --file docker-compose-haproxy.yml kill rabbitmq-node-1
+# 稍微等下(让haproxy切换不同的容器),再运行 revc.py ,send.py.不然过快运行脚本,可以连接mq服务失败
+# 可以发现也是成功的,同时也可以在mq_ui和haproxy监控页面上看到两个已经停止的容器(服务)状态
+
+# 一个一个开, 按关闭的倒序的顺序来启动
+docker-compose --file docker-compose-haproxy.yml up -d rabbitmq-node-1
+docker-compose --file docker-compose-haproxy.yml up -d rabbitmq-node-2
+
 ```
 
-[由于Mac中,不管使用哪种docker网络模式,都无法互通](https://docs.docker.com/docker-for-mac/networking/#/there-is-no-docker0-bridge-on-osx)
+
+
+由于Mac中,不管使用哪种docker网络模式,[mac主机都无法通过IP与容器互通,容器之间可以通过IP互通](https://docs.docker.com/docker-for-mac/networking/#/there-is-no-docker0-bridge-on-osx)
+[官方的docker-mac网络说明](https://docs.docker.com/docker-for-mac/networking/)
 
 所以下面的测试基本是没有意义的
 
-### mq服务使用HaProxy,并在haproxy镜像中安装keepalived
+
+### mq服务使用HaProxy,并在haproxy镜像中安装keepalived 失败
 
 ```
 docker-compose --file docker-compose-keepalived.yml up
+docker-compose --file docker-compose-keepalived.yml ps
+docker exec -it mq_cluster_haproxy_master_1 bash
+    ip a
+
 docker-compose --file docker-compose-keepalived.yml down
 # 因为与下面的port有冲突,所以必须down才能,启动另外一个
+# 大概思路: https://www.cnblogs.com/dowi/p/10309418.html
 ```
 
 ### 启动两个haproxy,杀死其中一个,使用nginx代理模拟VIP

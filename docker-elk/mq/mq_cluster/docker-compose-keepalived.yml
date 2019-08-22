@@ -9,8 +9,8 @@ services:
             - "15673:15672"
             - "5673:5672"
         networks: 
-            - front-tier
-            - back-tier
+          extnetwork:
+            ipv4_address: 172.20.0.2
         volumes:
             - $PWD/storage/rabbitmq-node-1:/var/lib/rabbitmq
         environment:
@@ -28,8 +28,9 @@ services:
             - "15674:15672"
             - "5674:5672"
         networks: 
-            - front-tier
-            - back-tier
+          extnetwork:
+            ipv4_address: 172.20.0.3
+
         volumes:
             - $PWD/storage/rabbitmq-node-2:/var/lib/rabbitmq
             - ./cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
@@ -52,8 +53,9 @@ services:
             - "15675:15672"
             - "5675:5672"
         networks: 
-              - front-tier
-              - back-tier
+          extnetwork:
+            ipv4_address: 172.20.0.4
+
         volumes:
             - $PWD/storage/rabbitmq-node-3:/var/lib/rabbitmq
             - ./cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
@@ -65,7 +67,7 @@ services:
             - RABBITMQ_DEFAULT_PASS="admin"
         entrypoint: /usr/local/bin/cluster-entrypoint.sh
 
-    haproxy:
+    haproxy_master:
         build: haproxy
         # container_name: haproxy
         hostname: haproxy
@@ -83,11 +85,32 @@ services:
           - rabbitmq-node-3
         # network_mode: host
         networks: 
-            - front-tier
-            - back-tier
+          extnetwork:
+            ipv4_address: 172.20.0.5
 
+    haproxy_backup:
+        build: haproxy
+        # container_name: haproxy
+        hostname: haproxy
+        ports:
+            - "5678:5672"  # mq
+            - "1938:1936"  # haproxy status
+            - "15678:15672" # mq_ui
+        volumes:
+            - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+            - ./haproxy/docker-entrypoint-override.sh:/docker-entrypoint-override.sh
+            - ./haproxy/keepalived2:/keepalived
+        depends_on:
+          - rabbitmq-node-1
+          - rabbitmq-node-2
+          - rabbitmq-node-3
+        networks: 
+          extnetwork:
+            ipv4_address: 172.20.0.6
+ 
 networks:
-  front-tier:
-    driver: bridge
-  back-tier:
-    driver: bridge
+   extnetwork:
+      ipam:
+         config:
+         - subnet: 172.20.0.0/16
+           gateway: 172.20.0.1

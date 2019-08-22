@@ -6,16 +6,14 @@ vrrp_script chk_haproxy {
     timeout 20
 }
 
-vrrp_instance VI_1 {
+vrrp_instance VI_2 {
     interface ${INTERFACE:-eth0}
     state ${STATE:-MASTER}
     virtual_router_id ${VIRTUAL_ROUTER_ID:-51}
     priority ${PRIORITY:-101} # 101 on master, 100 on backups
 
-    mcast_src_ip 172.20.0.5    #MASTER服务器IP,从服务器写从服务器的IP
-
     virtual_ipaddress {
-        ${VIRTUAL_IP:-172.20.0.100}/${VIRTUAL_MASK:-16} # VIP
+        192.168.99.100
     }
 
     track_interface {

@@ -11,3 +11,5 @@ mxshop/apps/user_operation/migrations/*
 *.swp
 *.psd
 __pycache__/
+
+*.swo

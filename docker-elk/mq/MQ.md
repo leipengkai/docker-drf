@@ -109,3 +109,23 @@
 生产者:客户端与MQ服务器建立一个连接connection->在连接上创建一个信道channel->创建一个交换器exchange和一个队列queue,并通过路由键进行绑定->发送消息->关闭资源
 消费端的监控(),高并发生产者时的解决办法(celery异步)
 
+
+
+docker exec -it rabbitmq-node-3 bash
+rabbitmqctl list_connections # 所有消费端
+rabbitmqctl list_queues # 所有队列
+
+发现有100多万条数据了。清除的命令是：
+
+rabbitmqctl reset
+
+但是在使用此命令前，要先关闭应用，否则不能清除。关闭应用的命令为：
+
+rabbitmqctl stop_app
+
+执行了这两条命令后再次启动此应用。命令为：
+
+rabbitmqctl start_app
+
+
+
