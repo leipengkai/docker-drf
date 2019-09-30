@@ -32,7 +32,7 @@
 
 - 定时任务:向定时导数据报表,定时发送通知类似场景,虽然Linux的计划任务可以帮我实现,但是非常不利于管理,而Celery可以提供管理接口和丰富的API
 
-### hh
+### 注意
 celery默认会创建一个celery交换机,绑定,队列,没有匹配任何绑定的任务会发送到此celery队列中
 
 
@@ -48,35 +48,66 @@ pip install celery redis
 
 #### [简单例子](http://docs.celeryproject.org/en/latest/getting-started/first-steps-with-celery.html)
 vim celery_test/tasks1.py
+
 ```python
-from celery import Celery
+
+from celery import Celery, Task
+from celery.utils.log import get_task_logger
 import time
+
+logger = get_task_logger(__name__)
 
 HOST_IP = "127.0.0.1"
 app = Celery('tasks',backend='redis', broker='pyamqp://rabbitmq:rabbitmq@{}//'.format(HOST_IP),\
-            result_backend='redis://{}:6379/0'.format(HOST_IP)) 
+            result_backend='redis://{}:6379/0'.format(HOST_IP))
 
 # 默认存储结果是在amqp协议中的mq中:
 # app = Celery('tasks',backend='amqp', broker='pyamqp://rabbitmq:rabbitmq@{}//'.format(HOST_IP))
 
 
+class demotask(Task):
+
+    def on_success(self, retval, task_id, args, kwargs):   # 任务成功执行
+        logger.info('task id:{} , arg:{} , successful !'.format(task_id,args))
+
+
+
+    def on_failure(self, exc, task_id, args, kwargs, einfo):  #任务失败执行
+        logger.info('task id:{} , arg:{} , failed ! erros : {}' .format(task_id,args,exc))
+
+
+    def on_retry(self, exc, task_id, args, kwargs, einfo):    #任务重试执行
+        logger.info('task id:{} , arg:{} , retry !  einfo: {}'.format(task_id, args, exc))
+
+@app.task(base=demotask,bind=True)
+def add(self,x, y):
+    time.sleep(5)
+    return x + y
 
 @app.task
 def add1(x, y):
-    time.sleep(5)  
+    time.sleep(5)
     return x + y
 
 
 """
 # 先启动mq,redis服务,并安装celery,redis的python包
 # 再cd(celery_test)到本py文件的目录下,运行work
-celery -A tasks1 worker -l info  # --loglevel=info
+celery -A tasks1 worker -l info  # --loglevel=info 
+# 确保只启动一个worker(我在docker-compose启动了一个worker,这里从启动了一个则会有错,大概是Some Celery tasks work, others are NotRegistered)
+# 因为默认celery会生成一个以celery为名的队列, mq不允许重新定义(不同参数)一个已经存在的队列, 所以当第二个启动时,还是之前的那个celery的队列
 
-# 然后在另一个终端运行 python (也是在celery_test目录下),模拟添加任务
-from tasks1 import add1
+# 然后在另一个终端运行 python (也是在celery_test目录下)
+from tasks1 import add1,add
 add1.delay(4, 4)
 result = add1.delay(4, 4)
-result.ready() # 检查存储是否生效
+result2 = add.delay(4, 4)
+result.ready() # 检查存储是否生效,判断任务是否以及有结果，有结果为True
+result2.ready() 
+
+docker exec -it dockerfiles_web_1 bash
+cd /opt/project/docker-elk/celery  # pycharm启动
+
 # redis存储时,result_backen指明后,必须还要写指明backend
 """
 
@@ -181,6 +212,9 @@ celery -A mxshop  worker -l info
 
 ### django+celery+docker-compose
 
+- rabbitmq的HOST_IP必须为局域网的IP,不再是127.0.0.1
+- 其它的连接方式,以docker-compose 的server_name为连接方式
+
 > 修改mq以及redis的连接方法
 
 vim mxshop/mxshop/celery.py
@@ -247,6 +281,7 @@ vim docker-compose.yml
             --result-backend redis://192.168.43.173:6379/0
 ```
 
+### [代码](https://github.com/leipengkai/docker-drf/tree/master/docker-elk/celery_test)
 
 ### 不使用django-celery包的说明
 下面是较前django版本中,以及使用django-celery,不再适用

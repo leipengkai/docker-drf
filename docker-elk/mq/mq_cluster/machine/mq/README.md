@@ -15,9 +15,11 @@ docker-machine ssh vm2 "  vim --version"
 # /usr/local/share/vim
 
  docker-machine ssh vm2 " tce-load -wi nginx"
+# /usr/local/sbin/nginx
 
 docker-machine ssh vm2 "nginx -v"
 docker-machine ssh vm2 "nginx -t"
+docker-machine ssh vm2 "ps -ef | grep nginx "
 
 docker-machine ssh vm2 " wget http://tinycorelinux.net/8.x/x86/tcz/haproxy.tcz"
 docker-machine ssh vm2 "tce-load -i haproxy.tcz /usr/local/sbin/"

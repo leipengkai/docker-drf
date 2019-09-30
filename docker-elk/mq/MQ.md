@@ -46,13 +46,13 @@
 
 > Consumer: 消息消费者,就是接受消息的程序
 
-> Message acknowledgment:no_ack:为保证消息从队列可靠达到消费者(针对消费者,是否要删除队列中的消息)
+> Message acknowledgment:no_ack:为保证消息从队列可靠达到消费者(针对消费者,是否要删除队列中的消息) 2目录已经实现
 
 - 在实际应用中,可能会发生消费者收到Queue中的消息,但没有处理完成就宕机(或出现其他意外)的情况,这种情况下就可能会导致消息丢失
 - 为了避免这种情况发生,我们可以要求消费者在消费完消息后发送一个回执给RabbitMQ,RabbitMQ收到消息回执(Message acknowledgment)后才将该消息从Queue中移除
 
 
-> Message durability:针对rabbitmq,是否将消息持久化
+> Message durability:针对rabbitmq,是否将消息持久化 2目录已经实现
 
 - 如果我们希望即使在RabbitMQ服务重启的情况下,也不会丢失消息,我们可以将Queue与Message都设置为可持久化的(durable),这样可以保证绝大部分情况下我们的RabbitMQ消息不会丢失.
 - 消息队列持久化包括3个部分: 

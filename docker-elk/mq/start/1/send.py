@@ -6,11 +6,13 @@ credentials = pika.PlainCredentials('rabbitmq', 'rabbitmq')
 connection = pika.BlockingConnection(pika.ConnectionParameters('localhost',5672,'/',credentials))
 
 channel = connection.channel()
+channel1 = connection.channel()
 
 # 指定定义队列
 channel.queue_declare(queue='hello')
+channel1.queue_declare(queue='hello')
 
-for i in range(21):
+for i in range(5):
     # 向队列发送消息
     channel.basic_publish(
             routing_key='hello', # 使用默认的交换机,在生产者中必须指定 routing_key,对应的消费者不需要,而且不能为空与channel.basic_consume(queue='hello')一致
@@ -18,6 +20,15 @@ for i in range(21):
         body=str(i),
     )
     print(" [x] Sent {}".format(str(i)))
+
+for i in range(5):
+    # 向队列发送消息
+    channel1.basic_publish(
+            routing_key='hello', # 使用默认的交换机,在生产者中必须指定 routing_key,对应的消费者不需要,而且不能为空与channel.basic_consume(queue='hello')一致
+        exchange='', 
+        body=str(i),
+    )
+    print("channel1 [x] Sent {}".format(str(i)))
 
 connection.close()
 

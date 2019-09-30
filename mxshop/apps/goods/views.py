@@ -19,10 +19,10 @@ from rest_framework_extensions.cache.mixins import CacheResponseMixin
 from django.shortcuts import render
 
 
-from .models import Goods, GoodsCategory, HotSearchWords, Banner, GoodsComment
+from .models import Goods, GoodsCategory, HotSearchWords, Banner, GoodsComment,  TestModel
 from .filters import GoodsFilter, GoodsCommentFilter
 from .serializers import GoodsSerializer, CategorySerializer, HotWordsSerializer, BannerSerializer
-from .serializers import IndexCategorySerializer, GoodsSimpleSerializer, GoodsCommentSerializer
+from .serializers import IndexCategorySerializer, GoodsSimpleSerializer, GoodsCommentSerializer,  TestModelSerializer
 from .tasks import add
 # Create your views here.
 
@@ -219,6 +219,10 @@ class WeiboLoginViewSet(viewsets.GenericViewSet):
         uid = "5020302235"
         get_url = user_url + "?access_token={at}&uid={uid}".format(at=access_token, uid=uid)
         print(get_url)
+
+class TestModelViewSet(viewsets.ModelViewSet):
+    queryset = TestModel.objects.all()
+    serializer_class = TestModelSerializer
 
 ###########################################################################
 # class GoodsSimpleListview(APIView):
