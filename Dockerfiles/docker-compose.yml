@@ -121,9 +121,9 @@ services:
               #tag: web-container-tcp
         environment:
             - DEBUG= 'true'
-        command: python3 manage.py runserver 0.0.0.0:80
+        #command: python3 manage.py runserver 0.0.0.0:80
 #        command: uwsgi --ini uwsgi.ini
-        #command: uwsgi --ini uwsgi.ini
+        command: uwsgi --ini uwsgi.ini
 #        command: uwsgi --emperor /code/uwsgi/  # --plugin python --enable-threads
 
         #command: bash -c "python3 manage.py makemigrations &&

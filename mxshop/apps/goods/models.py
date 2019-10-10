@@ -305,37 +305,3 @@ class GoodsCommentIamge(models.Model):
     def __str__(self):
         return self.comment.comment
 
-class TestModel(models.Model):
-    '''
-    Model基本使用测试
-    '''
-
-    __tablename__ = 'test_model'
-
-    
-    # message_id = models.AutoField(primary_key=True) # 没有约束(可以重复,可传可不传参数),自动递增,默认不用传递此参数
-    # django会自动对没有AutoField的表建立一个id字段当做逻辑主键
-    banner_id = models.IntegerField(primary_key=True) # 有约束(不能重复,必须传递参数),如果不传,则在创建时返回serializer.data 中的内容banner_id为null.
-    # blank=False, null=False;POST,PUT会有限制,必须要传递.PATCH可以不传递
-
-    # get时,验证数据的完整性
-    user_id = models.IntegerField(verbose_name="用户id", default=0) # 没有default=0则要验证数据完整性
-    company_name = models.CharField(max_length=128, verbose_name="公司名字") # 不验证数据完整性
-
-
-    content = models.CharField(max_length=2, blank=False, verbose_name="模板内容") 
-    routing_key = models.CharField(max_length=255, unique=True, verbose_name="路由关键字") # 一个关键字对一个模板
-    # max_length=255,unique=True, python3 manage.py migrate,不能运行最大字段大于255,同时具有唯一性的字段
-
-    create_time = models.DateTimeField(default=datetime.now, verbose_name="创建时间") # Auto=True则一更新此条记录就会更新这个字段的当前时间
-
-
-
-    class Meta:
-        verbose_name = "Model基本使用测试"
-        verbose_name_plural = verbose_name
-
-    def __str__(self):
-        return self.routing_key
-
-

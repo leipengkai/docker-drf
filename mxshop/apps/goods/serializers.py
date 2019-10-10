@@ -5,7 +5,7 @@ from rest_framework import serializers
 from django.db.models import Q
 
 from goods.models import Goods, GoodsCategory, HotSearchWords, GoodsImage, Banner,Spec,SpecValue,SKU,SKUValue
-from goods.models import GoodsCategoryBrand, IndexAd,GoodsComment,GoodsCommentIamge, TestModel
+from goods.models import GoodsCategoryBrand, IndexAd,GoodsComment,GoodsCommentIamge
 from users.models import UserProfile
 
 

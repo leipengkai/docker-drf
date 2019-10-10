@@ -25,16 +25,16 @@
 - 在Exchange Type与Binding key固定的情况下(在正常使用时一般这些内容都是固定配置好的),我们的生产者就可以在发送消息给Exchange时,通过指定Routing Key来决定消息流向哪里
 
 > Exchange: 消息交换机,它指定消息按什么规则,路由到哪个队列
+
 - exchange，交换器名称
-- type，交换器类型，如fanout,direct,topic
+- type，交换器类型，fanout、direct、topic、headers这四种(AMQP规范里还提到两种Exchange Type，分别为system与自定义)
 - durable，是否持久化，持久化可以将交换器存盘，在服务器重启后不会丢失相关信息
 - autoDelete，是否自动删除。自动删除的前提是至少有一个队列或交换器与这个交换器绑定，之后所有与这个交换器绑定的队列或交换器都与此解绑，并不是与此连接的客户端都断开
 - internal，是否是内置的，内置的交换器客户端无法直接发送消息到这个交换器中，只能通过交换器路由到交换器的方式
 - argument，其他一些结构化参数
 
-- Exchange Type有fanout、direct、topic、headers这四种（AMQP规范里还提到两种Exchange Type，分别为system与自定义)
 
-> Binding: 绑定,它的作用就是把exchange和queue按照路由规则绑定起来
+> Binding: 绑定,它的作用就是通过routing_key把exchange和queue按照路由规则绑定起来
 
 > Queue: 消息队列载体,每个消息都会被投入到一个或多个队列
 
@@ -73,59 +73,58 @@
 - 解决的方法之一: AMQP协议实现了事务机制(类似Mysql的事务)
 
 ```
-        channel.queue_declare(queue=QUEUENAME, durable=True)
-        try:
-            channel.tx_select()
-
-
-            channel.basic_publish(
-                exchange='',
-                routing_key=QUEUENAME,
-                body=body_json,
-                properties=pika.BasicProperties(
-                    delivery_mode=2,  # make message persistent
-                )
-            )
-            print(1/0)
-            channel.tx_commit()
-        except ValueError as e:
-            print(e)
-            channel.tx_rollback()
-        # 由于这种方式(走协议,发请求),会经常连接服务器,导致有一定的耗时,进而降低了rabbitmq的吞吐量
-
+try:
+    channel.tx_select()
+    channel.basic_publish(
+        exchange='',
+        routing_key=QUEUENAME,
+        body=body_json,
+        properties=pika.BasicProperties(
+            delivery_mode=2,  # make message persistent
+        )
+    )
+    print(1/0)
+    channel.tx_commit()
+except ValueError as e:
+    print(e)
+    channel.tx_rollback()
+# 由于这种方式(走协议,发请求),会经常连接服务器,导致有一定的耗时,进而降低了rabbitmq的吞吐量
 
 ```
 
-[rabbitmq可视化管理web](http://0.0.0.0:15672/#/queues)
+> 生产者:客户端与MQ服务器建立一个连接connection->在连接上创建一个信道channel->创建一个交换器exchange和一个队列queue,并通过路由键进行绑定->发送消息->关闭资源
 
-[官方实例](https://www.rabbitmq.com/getstarted.html), [相对较旧的中文实例](https://rabbitmq.mr-ping.com/tutorials_with_python/[1]Hello_World.html):当作英文版的翻译.  [本项目](./start):基本和官方一样,只是有点自己的注释
+> 消费端的监控(),高并发生产者时的解决办法(celery异步)
 
-[选择监控](https://www.psychz.net/client/question/en/zabbix-vs-nagios-vs-cacti.html)
-
-参考:
-
-[一篇全面透彻的RabbitMQ指南](https://juejin.im/entry/599e5e3b5188252437799049)
-[RabbitMQ深入理解(一)进阶/管理/配置](https://pdf.us/2018/06/01/1167.html)
-生产者:客户端与MQ服务器建立一个连接connection->在连接上创建一个信道channel->创建一个交换器exchange和一个队列queue,并通过路由键进行绑定->发送消息->关闭资源
-消费端的监控(),高并发生产者时的解决办法(celery异步)
+> 生产者指定exchange,routing_key.而消费者指定exchange,queue,routing_key,如果没有声明exchange,则只需要指定queue就行
 
 
+### 简单使用
+- [本项目启动](./mq_cluster/README.md)
+- [官方实例](https://www.rabbitmq.com/getstarted.html)
+- [相对较旧的中文实例](https://rabbitmq.mr-ping.com/tutorials_with_python/[1]Hello_World.html):当作英文版的翻译
+- [本项目官方实例](./start):基本和官方一样,只是有点自己的注释
+- [选择监控](https://www.psychz.net/client/question/en/zabbix-vs-nagios-vs-cacti.html)
 
+
+### 管理命令
+
+```
 docker exec -it rabbitmq-node-3 bash
 rabbitmqctl list_connections # 所有消费端
 rabbitmqctl list_queues # 所有队列
 
-发现有100多万条数据了。清除的命令是：
-
+# 如果发现有100多万条数据了。清除的命令是：
 rabbitmqctl reset
 
-但是在使用此命令前，要先关闭应用，否则不能清除。关闭应用的命令为：
-
+# 但是在使用此命令前，要先关闭应用，否则不能清除。关闭应用的命令为：
 rabbitmqctl stop_app
 
-执行了这两条命令后再次启动此应用。命令为：
-
+# 执行了这两条命令后再次启动此应用。命令为：
 rabbitmqctl start_app
+```
 
+### 参考
 
-
+- [一篇全面透彻的RabbitMQ指南](https://juejin.im/entry/599e5e3b5188252437799049)
+- [RabbitMQ深入理解(一)进阶/管理/配置](https://pdf.us/2018/06/01/1167.html)
