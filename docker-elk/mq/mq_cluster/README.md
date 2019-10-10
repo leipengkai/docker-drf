@@ -1,4 +1,4 @@
-[高可用rabbitmq集群](./mq_haproxy.png)
+![高可用rabbitmq集群](./mq_haproxy.png)
 
 
 ### mq服务使用HaProxy进行负载均衡

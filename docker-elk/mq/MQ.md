@@ -1,4 +1,7 @@
-### rabbitmq相关定义:
+
+### [了解Mq组成以及相关定义](https://blog.csdn.net/yinwenjie/article/details/50820369)
+![mq组成](./mq.png)
+
 > Broker(RabbitMQ Server): 简单来说就是消息队列服务器实体,是一种传输服务
 
 - 维护一条从Producer到Consumer的路线,保证数据能够按照指定的方式进行传输
