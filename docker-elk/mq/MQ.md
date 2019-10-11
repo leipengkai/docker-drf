@@ -103,7 +103,7 @@ except ValueError as e:
 
 
 ### 简单使用
-- [本项目启动](./mq_cluster/README.md)
+- [本项目启动](./mq_cluster)
 - [官方实例](https://www.rabbitmq.com/getstarted.html)
 - [相对较旧的中文实例](https://rabbitmq.mr-ping.com/tutorials_with_python/[1]Hello_World.html):当作英文版的翻译
 - [本项目官方实例](./start):基本和官方一样,只是有点自己的注释
