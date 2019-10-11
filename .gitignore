@@ -13,3 +13,7 @@ mxshop/apps/user_operation/migrations/*
 __pycache__/
 
 *.swo
+
+docker-elk/celery_test/advanced/flowerdb.db
+
+docker-elk/celery_test/advanced/celery.log
