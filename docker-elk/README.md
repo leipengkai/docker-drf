@@ -5,6 +5,8 @@
 - [Logstash](https://www.elastic.co/cn/products/logstash):Logstash从docker或者其它地方收集log,通过[logstash.conf](./logstash/pipeline/logstash.conf)来过滤和解析我们想要的log,并可将其存储供以后使用
 - [Elasticsearch](https://www.elastic.co/):Logstash将收集到的log,交给Elasticsearch进行索引(index),组成一个全文搜索服务
 - [Kibana](https://www.elastic.co/products/kibana):Logstash和ElasticSearch提供的日志分析友好的Web界面,帮助汇总、分析和搜索重要数据日志
+- filebeat采集日志,然后发送到消息队列,redis，kafaka.然后logstash去获取,利用filter功能过滤分析,然后存储到elasticsearch中
+ 
 
 #### 启动ELK日志系统
 ```bash
@@ -36,7 +38,7 @@ curl -XPOST -D- "http://localhost:5601/api/saved_objects/index-pattern" \
     -H "kbn-version: 6.1.0" \
     -d '{"attributes":{"title":"logstash-*","timeFieldName":"@timestamp"}}’
 
-# 模拟向Logstash发送log
+# 模拟向Logstash发送log,默认保存在logstash-*的Index下
 echo 'hello world' > 2.md
 nc localhost 5000 < 2.md
 # 注意echo ‘hello world' > nc localhost 5000 这种方式发送失败

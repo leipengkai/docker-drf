@@ -183,6 +183,7 @@ services:
               #gelf-address: "udp://0.0.0.0:12201"
               ##tag: nginx_udp
 
+        # 如果没开elk,则将下面的注释掉
         logging:
           driver: syslog #  当关闭nginx后台开启时,使用此driver会报错
           options:

@@ -6,7 +6,7 @@
 - 如果没有接触Docker的同学,可以使用[没有Docker版本的安装步骤](mxshop/no_docker_install.md)
 
 ### 项目启动
-#### 1:启动ELK日志系统(如果不需要请忽略此步骤)
+#### 1.1:启动ELK日志系统(如果不需要请忽略此步骤)
 ```bash
 cd docker-elk
 # 创建images,第一次时执行
@@ -14,18 +14,38 @@ docker-compose build
 # 启动ELK日志系统
 docker-compose up
 
+```
+
+#### 1.2:启动之后,打开[Kibana日志系统后台](http://127.0.0.1:5601/),如果没有出现下图画面
+![kibana创建index.png](https://i.loli.net/2020/06/16/6seiAZYUgrTRE7c.png)
+
+则用代码创建:
+```bash
 # 为Kibana创建一个index pattern
+# 有可能json格式不正确,导致上传失败,多换下-d的内容,试试
 curl -XPOST -D- "http://localhost:5601/api/saved_objects/index-pattern" \
     -H "Content-Type: application/json" \
     -H "kbn-version: 6.1.0" \
-    -d '{"attributes":{"title":"logstash-*","timeFieldName":"@timestamp"}}’
+    -d "{\"attributes\":{\"title\":\"logstash-*\",\"timeFieldName\":\"@timestamp\"}}"
+
+    # -d '{"attributes":{"title":"logstash-*","timeFieldName":"@timestamp"}}
+
+
+# 为了 docker-elk/logstash/pipeline/logstash.conf-->index => "nginx",而创建
+curl -XPOST -D- "http://localhost:5601/api/saved_objects/index-pattern" \
+    -H "Content-Type: application/json" \
+    -H "kbn-version: 6.1.0" \
+    -d "{\"attributes\":{\"title\":\"nginx*\",\"timeFieldName\":\"@timestamp\"}}"
 ```
+
+
 [具体一点的操作说明](./docker-elk/README.md)
 
 #### 2.1:第一次启动项目所需要的配置步骤
 ```bash
 cd ../Dockerfiles
 docker-compose build  # 耐心等待下载images
+# 启动项目
 docker-compose up 
 # 迁移数据库
 docker exec -it dockerfiles_web_1 bash
@@ -33,7 +53,7 @@ docker exec -it dockerfiles_web_1 bash
 python3 manage.py makemigrations
 python3 manage.py migrate
 # 收集静态文件
-python3 manage.py collectstatic
+python3 manage.py collectstatic(要执行)
 
 # 创建管理员
 python3 init_admin.py
@@ -59,6 +79,7 @@ redis-cli
 #### 2.2: 之后启动项目
 ```bash
 cd Dockerfiles
+# 修改mxshop/mxshop/celery.py的HOST_IP值(要执行)
 docker-compose up
 ```
 
