@@ -1,6 +1,8 @@
 Dockerfiles/database
 Dockerfiles/nginx/log
 mxshop/static
+zabbix-docker/database
+zabbix-docker/zbx_env
 .idea
 mxshop/apps/users/migrations/*
 mxshop/apps/goods/migrations/*

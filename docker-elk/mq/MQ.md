@@ -30,14 +30,21 @@
 > Exchange: 消息交换机,它指定消息按什么规则,路由到哪个队列
 
 - exchange，交换器名称
-- type，交换器类型，fanout、direct、topic、headers这四种(AMQP规范里还提到两种Exchange Type，分别为system与自定义)
+- type，交换器类型,
+    - fanout: 订阅模式. 每个生产者信息,都发送到每个队列中
+    - direct: 精确路由匹配. 生产者信息,发送到routing_key相等的队列中
+    - topic: 模糊路由匹配. 生产者信息,发送到routing_key模糊匹配的队列中
+    - headers
+    - AMQP规范里还提到两种Exchange Type,分别为system与自定义
 - durable，是否持久化，持久化可以将交换器存盘，在服务器重启后不会丢失相关信息
 - autoDelete，是否自动删除。自动删除的前提是至少有一个队列或交换器与这个交换器绑定，之后所有与这个交换器绑定的队列或交换器都与此解绑，并不是与此连接的客户端都断开
 - internal，是否是内置的，内置的交换器客户端无法直接发送消息到这个交换器中，只能通过交换器路由到交换器的方式
 - argument，其他一些结构化参数
 
 
-> Binding: 绑定,它的作用就是通过routing_key把exchange和queue按照路由规则绑定起来
+> Binding: 
+- 绑定,它的作用就是通过routing_key把exchange和queue按照路由规则绑定起来
+- 只有显示申明exchange,才需要绑定.默认下的exchange,只要指定routing_key,就够了
 
 > Queue: 消息队列载体,每个消息都会被投入到一个或多个队列
 
@@ -110,6 +117,7 @@ except ValueError as e:
 - [选择监控](https://www.psychz.net/client/question/en/zabbix-vs-nagios-vs-cacti.html)
 
 
+
 ### 管理命令
 
 ```
@@ -126,6 +134,9 @@ rabbitmqctl stop_app
 # 执行了这两条命令后再次启动此应用。命令为：
 rabbitmqctl start_app
 ```
+
+### 私人[项目实例](https://gitlab.com/leipengkai/server_message),本地在github/server_message
+
 
 ### 参考
 
