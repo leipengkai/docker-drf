@@ -2,22 +2,23 @@ version: '2'
 services:
  zabbix-server:
   image: zabbix/zabbix-server-mysql:alpine-trunk
+  container_name: zabbix-server
   ports:
    - "10051:10051"
   volumes:
    # echo "Asia/Shanghai" > /private/etc/timezone
-   #- /private/etc/localtime:/etc/localtime:ro
-   #- /private/etc/timezone:/etc/timezone:ro 
-   - ./zbx_env/usr/lib/zabbix/alertscripts:/usr/lib/zabbix/alertscripts:ro
-   - ./zbx_env/usr/lib/zabbix/externalscripts:/usr/lib/zabbix/externalscripts:ro
-   #- ./zbx_env/usr/share/doc:/usr/share/doc:ro
-   #- ./zbx_env/usr/share/doc/zabbix-server-mysql:/usr/share/doc/zabbix-server-mysql:ro
-   - ./zbx_env/var/lib/zabbix/modules:/var/lib/zabbix/modules:ro
-   - ./zbx_env/var/lib/zabbix/enc:/var/lib/zabbix/enc:ro
-   - ./zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro
-   - ./zbx_env/var/lib/zabbix/mibs:/var/lib/zabbix/mibs:ro
+   #- /private/etc/localtime:/etc/localtime
+   #- /private/etc/timezone:/etc/timezone
+   - ./zbx_env/usr/lib/zabbix/alertscripts:/usr/lib/zabbix/alertscripts
+   - ./zbx_env/usr/lib/zabbix/externalscripts:/usr/lib/zabbix/externalscripts
+   #- ./zbx_env/usr/share/doc:/usr/share/doc
+   #- ./zbx_env/usr/share/doc/zabbix-server-mysql:/usr/share/doc/zabbix-server-mysql
+   - ./zbx_env/var/lib/zabbix/modules:/var/lib/zabbix/modules
+   - ./zbx_env/var/lib/zabbix/enc:/var/lib/zabbix/enc
+   - ./zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys
+   - ./zbx_env/var/lib/zabbix/mibs:/var/lib/zabbix/mibs
   volumes_from:
-   - zabbix-snmptraps:ro
+   - zabbix-snmptraps
   links:
    - mysql-server:mysql-server
    # 被动代理
@@ -48,10 +49,10 @@ services:
    - zabbix-server:zabbix-server
   mem_limit: 512m
   volumes:
-   #- /private/etc/localtime:/etc/localtime:ro
-   #- /private/etc/timezone:/etc/timezone:ro
-   - ./zbx_env/etc/ssl/nginx:/etc/ssl/nginx:ro
-   - ./simkai.ttf:/usr/share/zabbix/fonts/graphfont.ttf:ro
+   #- /private/etc/localtime:/etc/localtime
+   #- /private/etc/timezone:/etc/timezone
+   - ./zbx_env/etc/ssl/nginx:/etc/ssl/nginx
+   - ./simkai.ttf:/usr/share/zabbix/fonts/graphfont.ttf
   env_file:
    - .env_db_mysql
    - .env_web
@@ -61,23 +62,28 @@ services:
 
  zabbix-agent:
   image: zabbix/zabbix-agent:alpine-trunk
+  container_name: zabbix-agent
   ports:
    - "10050:10050"
   volumes:
-   #- /private/etc/localtime:/etc/localtime:ro
-   #- /private/etc/timezone:/etc/timezone:ro
-   - ./zbx_env/etc/zabbix/zabbix_agentd.d:/etc/zabbix/zabbix_agentd.d:ro
-   - ./zbx_env/var/lib/zabbix/modules:/var/lib/zabbix/modules:ro
-   - ./zbx_env/var/lib/zabbix/enc:/var/lib/zabbix/enc:ro
-   - ./zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro
+   #- /private/etc/localtime:/etc/localtime
+   #- /private/etc/timezone:/etc/timezone
+   - ./zbx_env/etc/zabbix/zabbix_agentd.d:/etc/zabbix/zabbix_agentd.d
+   - ./zbx_env/var/lib/zabbix/modules:/var/lib/zabbix/modules
+   - ./zbx_env/var/lib/zabbix/enc:/var/lib/zabbix/enc
+   - ./zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys
   links:
    - zabbix-server:zabbix-server
   env_file:
    - .env_agent
+
+  #network_mode: host
+
   privileged: true
   pid: "host"
+
   networks:
-   - zbx_net_frontend
+   #- zbx_net_frontend
    - zbx_net_backend
 
  zabbix-java-gateway:
@@ -95,12 +101,12 @@ services:
    #ports:
     #- "10051:10051"
   #volumes:
-   #- ./zbx_env/usr/lib/zabbix/alertscripts:/usr/lib/zabbix/alertscripts:ro
-   #- ./zbx_env/usr/lib/zabbix/externalscripts:/usr/lib/zabbix/externalscripts:ro
-   #- ./zbx_env/var/lib/zabbix/modules:/var/lib/zabbix/modules:ro
-   #- ./zbx_env/var/lib/zabbix/enc:/var/lib/zabbix/enc:ro
-   #- ./zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro
-   #- ./zbx_env/var/lib/zabbix/mibs:/var/lib/zabbix/mibs:ro
+   #- ./zbx_env/usr/lib/zabbix/alertscripts:/usr/lib/zabbix/alertscripts
+   #- ./zbx_env/usr/lib/zabbix/externalscripts:/usr/lib/zabbix/externalscripts
+   #- ./zbx_env/var/lib/zabbix/modules:/var/lib/zabbix/modules
+   #- ./zbx_env/var/lib/zabbix/enc:/var/lib/zabbix/enc
+   #- ./zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys
+   #- ./zbx_env/var/lib/zabbix/mibs:/var/lib/zabbix/mibs
   #links:
    #- zabbix-server:zabbix-server
    #env_file:
@@ -111,7 +117,7 @@ services:
    ports:
     - "162:162/udp"
    volumes:
-    - ./zbx_env/var/lib/zabbix/snmptraps:/var/lib/zabbix/snmptraps:rw
+    - ./zbx_env/var/lib/zabbix/snmptraps:/var/lib/zabbix/snmptraps
    networks:
     - zbx_net_frontend
     - zbx_net_backend
@@ -137,7 +143,7 @@ services:
  db_data_mysql:
     image: busybox
     volumes:
-    - ./zbx_env/var/lib/mysql:/var/lib/mysql:rw
+    - ./zbx_env/var/lib/mysql:/var/lib/mysql
     networks:
       - zbx_net_frontend
       - zbx_net_backend
