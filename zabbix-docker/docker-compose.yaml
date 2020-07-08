@@ -129,6 +129,7 @@ services:
   #volumes_from:
     #- db_data_mysql
   command: [mysqld, --character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci]
+  # , --default-authentication-plugin=mysql_native_password  8.0
   volumes:
     - './database/mysql:/var/lib/mysql'
     - './femn.conf:/etc/mysql/mysql.conf.d/femn.cnf'

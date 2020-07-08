@@ -45,6 +45,13 @@ nc localhost 5000 < 2.md
 # 注意echo ‘hello world' > nc localhost 5000 这种方式发送失败
 
 打开:http://localhost:5601/-->Kibana—Discover—message 可看到刚刚发送的信息
+
+
+# 为了 docker-elk/logstash/pipeline/logstash.conf-->index => "nginx",而创建
+curl -XPOST -D- "http://localhost:5601/api/saved_objects/index-pattern" \
+    -H "Content-Type: application/json" \
+    -H "kbn-version: 6.1.0" \
+    -d "{\"attributes\":{\"title\":\"nginx*\",\"timeFieldName\":\"@timestamp\"}}"
 ```
 
 #### 整合到[docker-compose.yml](../Dockerfiles/docker-compose.yml)中
