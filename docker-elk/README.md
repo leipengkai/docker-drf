@@ -65,3 +65,73 @@ curl -XPOST -D- "http://localhost:5601/api/saved_objects/index-pattern" \
       # 注意加上之后,pycharm控制台中就不会显示log了,查看日志:http://localhost:5601/
 ```
 - 如果项目的settings.py中不设置LOGGING,则使用默认的
+
+
+### filebeat --> logstash --> ES -->kibana
+
+```bash
+# 为了避免使用到之前的版本,先build
+docker-compose build
+# 启动
+docker-compose up
+
+
+
+######################################################
+由于filebeat-->ES,才能使用filebeat的内置模块,只是为测试
+
+# 之后,只要这两句就行了
+docker exec -it filebeat bash
+filebeat setup --dashboards 
+
+
+
+ln -sv ~/Downloads/modules_access.log ./github/docker-drf/elk/logs/nginx/modules_access.log
+# ln文件可以被正常输入
+
+# 将modules.d保存到本地,再映射到容器
+docker run -it --rm --name test1 docker.elastic.co/beats/filebeat-oss:7.8.0  bash
+
+cd ~/Downloads/github/docker-drf/elk/filebeat 
+
+docker cp test1:/usr/share/filebeat/modules.d ./
+
+# filebeat modules enable nginx 等于下面这行命令
+# mv modules.d/nginx.yml.disabled modules.d/nginx.yml
+
+vim modules.d/nginx.yml
+    - module: nginx
+      access:
+        enabled: true
+        #var.paths: ["/usr/share/filebeat/mylogs/nginx/access.log"]
+        var.paths: ["/usr/share/filebeat/mylogs/nginx/modules_access.log"]
+      error:
+        enabled: true
+        var.paths: ["/usr/share/filebeat/mylogs/nginx/error.log"]
+
+# 启动
+cd ../
+docker-compose up
+
+
+
+
+# 启动filebeat内置模块
+docker exec -it filebeat bash
+filebeat modules enable nginx
+filebeat modules list
+
+filebeat setup --dashboards 
+# 在kibana创建一个 filebeat-* 的index  *,记得先删除之前的
+进入kibana-->Dashboards-->搜索nginx
+
+filebeat test output
+# ok
+
+filebeat -e
+# Exiting: data path already locked by another beat. 也没关系
+
+
+由于filebeat-->ES,才能使用filebeat的内置模块,只是为测试
+######################################################
+```

@@ -5,6 +5,13 @@
 cluster.name: "docker-cluster"
 network.host: 0.0.0.0
 
+# 数据存放路径
+#path.data: /var/lib/elasticsearch
+# 本程序的日志
+#path.logs: /var/log/elasticsearch
+
+#bootstrap.memory_lock: true
+
 # minimum_master_nodes need to be explicitly set when bound on a public IP
 # set to 1 to allow single node clusters
 # Details: https://github.com/elastic/elasticsearch/pull/17288
@@ -14,3 +21,9 @@ discovery.zen.minimum_master_nodes: 1
 ## see https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
 #
 discovery.type: single-node
+
+#node.name: web1
+#
+#discovery.seed_hosts: ["web1", "web2"]
+#cluster.initial_master_nodes: ["web1"]
+

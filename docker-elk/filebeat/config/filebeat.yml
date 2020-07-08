@@ -1,0 +1,49 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /usr/share/filebeat/mylogs/*/*.log
+
+filebeat.config:
+  modules:
+    path: /usr/share/filebeat/modules.d/*.yml
+    reload.enabled: true
+    reload.period: 10s
+    
+#filebeat.config:
+  #modules:
+    #path: ${path.config}/modules.d/*.yml
+    #reload.enabled: false
+
+#filebeat.modules:
+#- module: nginx
+  #access:
+    #enabled: true
+    #var.paths: ["/usr/share/filebeat/mylogs/nginx/access.log"]
+  #error:
+    #enabled: true
+    #var.paths: ["/usr/share/filebeat/mylogs/nginx/error.log"]
+
+#setup.dashboards: # 要启动kibana才能启动.注释掉解决filebeat启动失败问题
+  #enabled: true
+
+
+setup.kibana:
+  host: "kibana:5601"
+
+output.logstash:
+  hosts: ["logstash:5044"]
+
+processors:
+  - add_docker_metadata:
+      host: "unix:///host_docker/docker.sock"
+
+
+
+#processors:
+#- add_cloud_metadata: ~
+
+#output.elasticsearch:
+  #hosts: '${ELASTICSEARCH_HOSTS:elasticsearch:9200}'
+  #username: '${ELASTICSEARCH_USERNAME:}'
+  #password: '${ELASTICSEARCH_PASSWORD:}'

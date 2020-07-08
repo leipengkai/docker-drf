@@ -1,8 +1,9 @@
-version: '2'
+version: '3'
 
 services:
 
   elasticsearch:
+    container_name: elasticsearch
     build:
       context: elasticsearch/
     volumes:
@@ -10,39 +11,112 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+    stdin_open: true
+    tty: true
+    logging:
+      #driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "50"
+
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - elk
 
   logstash:
+    container_name: logstash
     build:
       context: logstash/
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
     ports:
-      - "5000:5000"
-      - "12201:12201/udp"
+      #- "5000:5000" # 只能有一个tcp
+      - "5044:5044"
+      #- "12201:12201/udp"
+    stdin_open: true
+    tty: true
+    logging:
+      #driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "50"
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - elk
+    links:
+      - elasticsearch:elasticsearch
     depends_on:
       - elasticsearch
 
   kibana:
+    container_name: kibana
     build:
       context: kibana/
     volumes:
       - ./kibana/config/:/usr/share/kibana/config:ro
     ports:
       - "5601:5601"
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_USERNAME: elk
+      ELASTICSEARCH_PASSWORD: elk
+      # 解决连接到localhost:9200问题
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+    stdin_open: true
+    tty: true
+    logging:
+      #driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "50"
     networks:
       - elk
+    links:
+      - elasticsearch:elasticsearch
     depends_on:
       - elasticsearch
 
+  filebeat:
+    user: root
+    container_name: filebeat
+    build:
+      context: filebeat/
+    links:
+      - logstash:logstash
+      - elasticsearch:elasticsearch
+    depends_on:
+      - logstash
+      - elasticsearch
+    #command: ./filebeat -e -c filebeat.yml
+    volumes:
+      - /var/run/docker.sock:/host_docker/docker.sock
+      - /var/lib/docker:/host_docker/var/lib/docker
+      - ./logs:/usr/share/filebeat/mylogs
+      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ./filebeat/modules.d:/usr/share/filebeat/modules.d
+    command: ["--strict.perms=false"]
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    stdin_open: true
+    tty: true
+    networks:
+      - elk
+    #deploy:
+      #mode: global
+    logging:
+      #driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "50"
 networks:
 
   elk:
