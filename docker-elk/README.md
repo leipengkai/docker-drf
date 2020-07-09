@@ -119,6 +119,50 @@ output到elasticsearch的index必须是以"logstash-"开头的，修改后问题
 ```
 <center>![kibana展示ip位置](https://i.loli.net/2020/07/09/RGcqQEp8SxDYf17.png "kibana展示ip位置")</center>
 
+- url访问前10
+ 
+```bash
+{"query": 
+    {"bool": 
+        {"must_not": 
+            [
+            {"match": { "request": "robots.txt" } },
+            {"match": { "request": "ftptest.cgi" } },
+            {"match": { "request": "login.cgi" } },
+            ]
+        }
+    }
+}
+
+http://localhost:5601/status
+```
+
+- [kibana制作nginx平均响应时间](https://blog.csdn.net/u010603691/article/details/79310495)
+
+- 设置密码
+
+```
+
+docker run -it --rm --name test1 docker.elastic.co/elasticsearch/elasticsearch-oss:7.8.0 bash
+./bin/elasticsearch-certutil ca
+
+ docker exec -it elasticsearch bash
+
+ELASTIC_PASSWORD_FILE=/run/secrets/bootstrapPassword.txt
+
+密码设置需要x-pack,x-pack需要不是oss版本的
+ERROR: X-Pack is not available with the oss distribution; to use X-Pack features use the default distribution
+
+https://www.jianshu.com/p/5a85ead17c23
+https://www.ipyker.com/2019/03/13/elastic-x-pack
+在ELK7 以后已经直接将x-pack集成到ELK中不在需要单独安装，但是只有在7.1版本后才免费开放安全配置，否则需要付费使用
+
+ELK支持安全认证功能，但是需要安装xpack插件。我在做认证测试时，发现ELK在6.3版本默认已经安装了xpack插件，在6.3之前的版本还是需要手动安装xpack软件
+```
+
+用k8s-copy来安装非oss版本的
+
+
 
 ## 说明
 

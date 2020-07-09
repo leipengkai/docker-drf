@@ -8,6 +8,7 @@ services:
       context: elasticsearch/
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./elasticsearch/config/auth_conf_hello.log:/run/secrets/auth_conf_hello.log:ro
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -21,6 +22,11 @@ services:
 
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      XPACK.SECURITY.ENABLED: "true"
+      ELASTIC_PASSWORD: "elk"
+      #有下面的配置有作用
+      #ELASTIC_PASSWORD_FILE: "/run/secrets/auth_conf_hello.log"
+
     networks:
       - elk
 
@@ -66,8 +72,11 @@ services:
       - "5601:5601"
     environment:
       ELASTICSEARCH_URL: http://elasticsearch:9200
-      ELASTICSEARCH_USERNAME: elk
-      ELASTICSEARCH_PASSWORD: elk
+      XPACK.SECURITY.ENABLED: "true"
+      #ELASTICSEARCH_USERNAME: "hello"
+      #ELASTICSEARCH_PASSWORD: "hello"
+      ELASTICSEARCH_USERNAME: "elastic"
+      ELASTICSEARCH_PASSWORD: "elk"
       # 解决连接到localhost:9200问题
       ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
     stdin_open: true
