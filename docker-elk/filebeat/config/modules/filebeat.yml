@@ -31,6 +31,7 @@ filebeat.config:
 setup.kibana:
   host: "kibana:5601"
 
+# filebeat只能有一个类型的output,
 output.logstash:
   hosts: ["logstash:5044"]
 

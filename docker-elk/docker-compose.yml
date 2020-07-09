@@ -94,12 +94,17 @@ services:
     depends_on:
       - logstash
       - elasticsearch
-    #command: ./filebeat -e -c filebeat.yml
+    #command: ./filebeat -e -strict.perms=false --path.config multi_enable/json
+    # filebeat读过的文件就不会再读了,即使用了不同的配置文件.这种尝试失败
+      # 指定文件名启动,但filebeat是以目录+必须filebeat.yml的启动方式,所以加此目录
+      #- ./filebeat/config:/usr/share/filebeat/multi_enable
     volumes:
       - /var/run/docker.sock:/host_docker/docker.sock
       - /var/lib/docker:/host_docker/var/lib/docker
       - ./logs:/usr/share/filebeat/mylogs
-      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      # 默认command时,要指定挂载一个filebeat.yml ok
+      #- ./filebeat/config/modules/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ./filebeat/config/json/filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./filebeat/modules.d:/usr/share/filebeat/modules.d
     command: ["--strict.perms=false"]
     ulimits:
@@ -114,6 +119,7 @@ services:
       #mode: global
     logging:
       #driver: "json-file"
+      #限制,一次性10m
       options:
         max-size: "10m"
         max-file: "50"

@@ -69,11 +69,41 @@ curl -XPOST -D- "http://localhost:5601/api/saved_objects/index-pattern" \
 
 ### filebeat --> logstash --> ES -->kibana
 
+#### filebeat
+
+注意:
+- filebeat只能有一个output,不管什么类型
+- 启动时,只会找默认目录(自己另外指定失败)下的,filebeat.yml文件
+- 日志文件,不用用ln过来的
+- 对日志文件,增量读取
+
+
+#### logstash
+
+```
+# 靠filebeat采集数据到Logstash,Logstash再进行grok转换成json格式.数据很大的话grok转换成json格式挺耗资源的,所以都是事先将日志通过程序转换成json格式
+nginx_text_to_json.py
+
+# 日志产生时间替换@timestamp
+
+filter {
+    grok {
+    }
+    date {
+    }
+}
+```
+
+## 说明
+
 ```bash
 # 为了避免使用到之前的版本,先build
 docker-compose build
 # 启动
 docker-compose up
+
+docker-compose down之后再up
+会重新加入filebeat-->logstast-->es-->kibana
 
 
 
@@ -88,6 +118,14 @@ filebeat setup --dashboards
 
 ln -sv ~/Downloads/modules_access.log ./github/docker-drf/elk/logs/nginx/modules_access.log
 # ln文件可以被正常输入
+
+# 只能使用绝对路径,才能成功
+ln -sv ~/Downloads/github/docker-drf/docker-elk/json_access.log logs/nginx
+ln -sv ~/Downloads/github/docker-drf/docker-elk/error.log logs/nginx
+# 不能用ln的方式,之前是有一个实体文件在,导致以为使用ln也可以.
+# 导致我一直看不到日志的输入,我去
+
+
 
 # 将modules.d保存到本地,再映射到容器
 docker run -it --rm --name test1 docker.elastic.co/beats/filebeat-oss:7.8.0  bash
@@ -119,6 +157,7 @@ docker-compose up
 # 启动filebeat内置模块
 docker exec -it filebeat bash
 filebeat modules enable nginx
+filebeat modules disable nginx
 filebeat modules list
 
 filebeat setup --dashboards 
