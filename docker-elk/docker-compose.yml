@@ -35,6 +35,7 @@ services:
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - ./logstash/geoip/GeoLite2-City.mmdb:/usr/share/logstash/geoip/GeoLite2-City.mmdb
     ports:
       #- "5000:5000" # 只能有一个tcp
       - "5044:5044"

@@ -81,7 +81,8 @@ curl -XPOST -D- "http://localhost:5601/api/saved_objects/index-pattern" \
 #### logstash
 
 ```
-# 靠filebeat采集数据到Logstash,Logstash再进行grok转换成json格式.数据很大的话grok转换成json格式挺耗资源的,所以都是事先将日志通过程序转换成json格式
+# 靠filebeat采集数据到Logstash,Logstash再进行grok转换成json格式
+# 数据很大的话grok转换成json格式挺耗资源的,所以都是事先将日志通过程序转换成json格式
 nginx_text_to_json.py
 
 # 日志产生时间替换@timestamp
@@ -93,6 +94,31 @@ filter {
     }
 }
 ```
+
+#### kibana
+
+- kibana使用地图展示nginx客户端IP区域
+
+```bash
+1. 注册并下载包[GeoLite2 City](https://dev.maxmind.com/geoip/geoip2/geolite2/)
+解压后得到GeoLite2-City.mmdb, 挂载到logstash下
+
+2. does not contain any of the following compatible field types: geo_point
+output到elasticsearch的index必须是以"logstash-"开头的，修改后问题就解决了. eg:logstash-nginx-access-*
+
+
+3. 但原来的json格式却没了, 加个判断:
+    if "access" in [tags] {      
+        geoip {
+        }
+    }
+
+4. 进入kibana-->index(logstash-nginx-access-*)-->Dashboards-->create-->map-->\
+    count(Metrics)-->加Buckets-->Aggregation:Geohash-->Field:geoip.location-->update-->选择1天-->save
+# 范围不要选太大了,我选了一年的,结果只能点最多的,其它的根本就点不了,还以为不对呢
+```
+<center>![kibana展示ip位置](https://i.loli.net/2020/07/09/RGcqQEp8SxDYf17.png "kibana展示ip位置")</center>
+
 
 ## 说明
 

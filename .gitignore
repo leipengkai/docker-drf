@@ -16,6 +16,7 @@ __pycache__/
 
 *.swo
 *.log
+*.mmdb
 
 docker-elk/celery_test/advanced/flowerdb.db
 
