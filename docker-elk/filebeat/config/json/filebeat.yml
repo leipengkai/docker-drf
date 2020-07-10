@@ -23,10 +23,14 @@ filebeat.inputs:
 
 setup.kibana:
   host: "kibana:5601"
+  username: "elasitc"
+  password: "changeme"
 
 # filebeat只能有一个类型的output,
 output.logstash:
   hosts: ["logstash:5044"]
+  username: "elasitc"
+  password: "changeme"
   #enabled: true 
 
 processors:

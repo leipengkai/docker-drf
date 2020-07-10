@@ -1,5 +1,6 @@
 # https://github.com/elastic/filebeat-docker
-FROM docker.elastic.co/beats/filebeat-oss:7.8.0
+#FROM docker.elastic.co/beats/filebeat-oss:7.8.0
+FROM docker.elastic.co/beats/filebeat:7.8.0
 USER root
 RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
 

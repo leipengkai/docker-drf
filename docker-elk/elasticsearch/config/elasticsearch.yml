@@ -3,7 +3,47 @@
 ## from https://github.com/elastic/elasticsearch-docker/blob/master/build/elasticsearch/elasticsearch.yml
 #
 cluster.name: "docker-cluster"
+# network.host 设置允许其他ip访问,解除ip绑定
 network.host: 0.0.0.0
+
+# xpack.security 则是安全相关配置,其中ssl的证书需要自己生成
+xpack.security.enabled: true
+
+# 开启x-pack安全验证
+xpack.security.audit.enabled: true
+# basic仅使用x-pack的免费版本  trial license:30天试用
+xpack.license.self_generated.type: basic
+
+# 如果是basic license的话需要加入下面这一行，不然的话restart elasticsearch之后会报错。
+# 开启集群中https传输
+xpack.security.transport.ssl.enabled: true
+
+xpack.security.transport.ssl.keystore.type: PKCS12
+xpack.security.transport.ssl.verification_mode: certificate
+xpack.security.transport.ssl.keystore.path: elastic-certificates.p12
+xpack.security.transport.ssl.truststore.path: elastic-certificates.p12
+xpack.security.transport.ssl.truststore.type: PKCS12
+
+#certificate: 需要使用同样的证书才能加入集群
+#full: 除了验证证书以外,还需要检测hostname和ip
+#none: 不需要验证证书即可加入集群,一般在调试情况下使用
+
+# 开启api接口https传输
+# todo 运行容器,执行命令(设置密码): bin/elasticsearch-setup-passwords interactive ,之后再打开
+#xpack.security.http.ssl.enabled: true
+
+#xpack.security.http.ssl.key: certs/node1.key
+#xpack.security.http.ssl.certificate: certs/node1.crt
+#xpack.security.http.ssl.certificate_authorities: certs/ca.crt
+
+#xpack.security.http.ssl.keystore.path: elastic-certificates.p12
+#xpack.security.http.ssl.truststore.path: elastic-certificates.p12
+
+
+#xpack.security.http.ssl.client_authentication: none
+#xpack.http.ssl.verification_mode: certificate
+# xpack.http.ssl.verification_mode: none
+# http client did not trust this server's certificate, closing connection Netty4HttpChannel
 
 # 数据存放路径
 #path.data: /var/lib/elasticsearch

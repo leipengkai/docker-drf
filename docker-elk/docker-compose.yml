@@ -7,11 +7,13 @@ services:
     build:
       context: elasticsearch/
     volumes:
+      # docker-compose down也不会重新加载filebeat数据了,设置的密码也能保存
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+      - ./elasticsearch/logs:/usr/share/elasticsearch/logs
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
-      - ./elasticsearch/config/auth_conf_hello.log:/run/secrets/auth_conf_hello.log:ro
+      - ./elasticsearch/config/elastic-certificates.p12:/usr/share/elasticsearch/config/elastic-certificates.p12:ro
     ports:
       - "9200:9200"
-      - "9300:9300"
     stdin_open: true
     tty: true
     logging:
@@ -21,9 +23,17 @@ services:
         max-file: "50"
 
     environment:
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-      XPACK.SECURITY.ENABLED: "true"
-      ELASTIC_PASSWORD: "elk"
+      #- node.name=es01
+      #- cluster.name=es-docker-cluster
+      #- discovery.seed_hosts=es02,es03
+      #- cluster.initial_master_nodes=es01,es02,es03
+      #- bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ELASTIC_PASSWORD=changeme"
+      #ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+
+      #XPACK.SECURITY.ENABLED: "true"
+      #ELASTIC_PASSWORD: "elk"
       #有下面的配置有作用
       #ELASTIC_PASSWORD_FILE: "/run/secrets/auth_conf_hello.log"
 
@@ -45,6 +55,7 @@ services:
     ports:
       #- "5000:5000" # 只能有一个tcp
       - "5044:5044"
+      - "9600:9600/udp"
       #- "12201:12201/udp"
     stdin_open: true
     tty: true
@@ -72,11 +83,9 @@ services:
       - "5601:5601"
     environment:
       ELASTICSEARCH_URL: http://elasticsearch:9200
-      XPACK.SECURITY.ENABLED: "true"
-      #ELASTICSEARCH_USERNAME: "hello"
-      #ELASTICSEARCH_PASSWORD: "hello"
+      XPACK_SECURITY_ENABLED: "true"
       ELASTICSEARCH_USERNAME: "elastic"
-      ELASTICSEARCH_PASSWORD: "elk"
+      ELASTICSEARCH_PASSWORD: "changeme"
       # 解决连接到localhost:9200问题
       ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
     stdin_open: true
