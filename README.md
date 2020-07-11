@@ -101,6 +101,18 @@ worker和vue容器,一启动,都会导致ES失败!!我嘞个去🥶🥶
 
 ```
 
+### elk会接收到乱码日志
+
+```
+nginx的request的内容就是乱码,而且也没有请求方法
+在Kibana在: no cached mapping for thie field
+
+解决方法 1:
+就根据没有请求访求来,请这个请求,return为444状态
+
+```
+
+
 
 
 

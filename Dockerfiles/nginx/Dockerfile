@@ -13,6 +13,8 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
 COPY index.html /usr/share/nginx/html
+RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' >/etc/timezone
+
 
 # RUN mkdir -p /etc/nginx/sites-enabled/\
 #     && ln -s /etc/nginx/sites-available/my_nginx.conf /etc/nginx/sites-enabled/\
