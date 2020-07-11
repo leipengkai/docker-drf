@@ -4,5 +4,5 @@
 #
 http.host: "0.0.0.0"
 path.config: /usr/share/logstash/pipeline
-xpack.management.elasticsearch.username: elastic
-xpack.management.elasticsearch.password: changeme
+xpack.management.elasticsearch.username: "elastic"
+xpack.management.elasticsearch.password: "changeme" 

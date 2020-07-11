@@ -7,8 +7,12 @@ filebeat.inputs:
 - type: log
   enabled: true 
   paths:
-    - /usr/share/filebeat/mylogs/nginx/access.log
-    - /usr/share/filebeat/mylogs/nginx/new_json_access.log 
+    # 测试logs
+    #- /usr/share/filebeat/mylogs/nginx/access.log
+    #- /usr/share/filebeat/mylogs/nginx/new_json_access.log 
+    # nginx logs
+    - /usr/share/filebeat/mylogs/access.log
+    - /usr/share/filebeat/mylogs/json_access.log 
   json.keys_under_root: true
   json.overwrite_keys: true
   tags: ["access"]
@@ -16,7 +20,10 @@ filebeat.inputs:
 - type: log
   enabled: true 
   paths:
+    # 测试logs
     - /usr/share/filebeat/mylogs/nginx/error.log
+    # nginx logs
+    - /usr/share/filebeat/mylogs/error.log
   tags: ["error"]
 
 

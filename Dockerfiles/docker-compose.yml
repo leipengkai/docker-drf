@@ -22,7 +22,8 @@ services:
 #        - "./enabled_plugins:/etc/rabbitmq/enabled_plugins"
 #        - "./rabbitmq.config:/etc/rabbitmq/rabbitmq.config"
 
-    node:
+    vue:
+        container_name: vue1
         restart: always
         build: node
         working_dir: /vue/online-store
@@ -174,21 +175,24 @@ services:
 
         #logging_driver: "gelf"
         #log_options:
-          #gelf-address: "udp://0.0.0.0:12201"
+          #gelf-address: "udp://0.0.0.0:9600"
           #gelf-tag: "first-logs"
 
         #logging:
           #driver: "gelf"
           #options:
-              #gelf-address: "udp://0.0.0.0:12201"
+              #gelf-address: "udp://0.0.0.0:9600"
               ##tag: nginx_udp
 
         # 如果没开elk,则将下面的注释掉
-        logging:
-          driver: syslog #  当关闭nginx后台开启时,使用此driver会报错
-          options:
-              syslog-address: tcp://0.0.0.0:5000
-              tag: nginx
+        #logging:
+          #driver: syslog #  当关闭nginx后台开启时,使用此driver会报错
+          #options:
+              #syslog-address: tcp://0.0.0.0:5044
+              #tag: nginx
+        # 注释后,日志将保存在默认位置:/var/log/nginx/.不再是软链接
+        # access.log -> /dev/stdout
+        # error.log -> /dev/stderr
 
         #docker run -d -p 8080:80 --log-driver gelf --log-opt gelf-address=udp://localhost:12201 nginx:latest
 

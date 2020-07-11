@@ -34,8 +34,7 @@ cd docker-elk
 # 创建images,第一次时执行
 docker-compose build
 
-# 先启动elasticsearch,设置密码(ES 说明中有),再启动项目
-
+# 服务器内存最好有3G
 # 启动项目,ELK日志系统
 docker-compose up
 
@@ -164,6 +163,7 @@ filter {
     ```
     - elk其它组件的[配置文件的修改]( https://blog.csdn.net/qq_41980563/article/details/88725584)
     - 如果是从oss版本换到非oss版本的,请清除一下chrome的浏览记录,不然可能会打不开http://127.0.0.1:5601
+- 启动SSL,需要订阅:[docker compose elasticsearch dns ssl](https://www.elastic.co/guide/en/elasticsearch/reference/current/configuring-tls-docker.html)
 
 #### kibana
 

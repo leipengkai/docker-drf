@@ -3,7 +3,7 @@ version: '3'
 services:
 
   elasticsearch:
-    container_name: elasticsearch
+    container_name: elasticsearch1
     build:
       context: elasticsearch/
     volumes:
@@ -41,7 +41,7 @@ services:
       - elk
 
   logstash:
-    container_name: logstash
+    container_name: logstash1
     build:
       context: logstash/
     ulimits:
@@ -74,7 +74,7 @@ services:
       - elasticsearch
 
   kibana:
-    container_name: kibana
+    container_name: kibana1
     build:
       context: kibana/
     volumes:
@@ -104,7 +104,7 @@ services:
 
   filebeat:
     user: root
-    container_name: filebeat
+    container_name: filebeat1
     build:
       context: filebeat/
     links:
@@ -120,7 +120,10 @@ services:
     volumes:
       - /var/run/docker.sock:/host_docker/docker.sock
       - /var/lib/docker:/host_docker/var/lib/docker
-      - ./logs:/usr/share/filebeat/mylogs
+      # 测试logs
+      #- ./logs:/usr/share/filebeat/mylogs
+      # 此项目的web,nginx日志
+      - ../Dockerfiles/nginx/log:/usr/share/filebeat/mylogs
       # 默认command时,要指定挂载一个filebeat.yml ok
       #- ./filebeat/config/modules/filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./filebeat/config/json/filebeat.yml:/usr/share/filebeat/filebeat.yml
