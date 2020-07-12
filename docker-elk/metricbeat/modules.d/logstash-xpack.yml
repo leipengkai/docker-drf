@@ -4,6 +4,8 @@
 - module: logstash
   xpack.enabled: true
   period: 10s
-  hosts: ["localhost:9600"]
+  hosts: ["logstash:9600"]
+  username: "elasitc"
+  password: "changeme"
   #username: "user"
   #password: "secret"

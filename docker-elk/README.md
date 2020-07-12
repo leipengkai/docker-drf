@@ -46,6 +46,7 @@ docker-compose ps
 # Dockerfiles目录与docker-elk目录同级,eg:
 
 # 手动追加,多行为一行
+
 cat <<EOF >> ~/Downloads/github/docker-drf/Dockerfiles/nginx/log/access.log
 { "time_local": "12/Jul/2020:11:29:01 +0800", "remote_addr": "172.27.0.1", "referer": "http://127.0.0.1/api/v1/goods/", \
 "request": "GET /api/v1/goods/echo_test?page=2 HTTP/1.1", "status": 200, "bytes": 6586, \
@@ -53,6 +54,35 @@ cat <<EOF >> ~/Downloads/github/docker-drf/Dockerfiles/nginx/log/access.log
 Chrome/83.0.4103.116 Safari/537.36", "x_forwarded": "", "up_addr": "unix:/code/app.sock","up_host": "",\
 "upstream_time": "1.206","request_time": "1.206","host":"172.27.0.6","http_host":"127.0.0.1","tcp_xff":""}
 EOF
+
+
+# 脚本追加一条
+vim auto_nginx_access_log.sh
+
+    #!/bin/sh
+    outfile=$1
+
+    year=$(date +"%Y") # 
+    month=$(LANG=en_us_88591; date +"%b") # 
+    day=$(date +"%d") # day
+    hour=$(date +"%k") # 
+    minute=$(date +"%M") # 
+    second=$(date +"%S") # 
+    MES="$day/$month/$year:$hour:$minute:$second"
+    echo "$MES"
+
+    cat  << EOF >> "$outfile"
+    { "time_local": "$MES +0800", "remote_addr": "172.27.0.1", "referer": "http://127.0.0.1/api/v1/goods/", \
+    "request": "GET /api/v1/goods/echo_test?page=2 HTTP/1.1", "status": 200, "bytes": 6586, \
+    "http_user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) \
+    Chrome/83.0.4103.116 Safari/537.36", "x_forwarded": "", "up_addr": "unix:/code/app.sock","up_host": "",\
+    "upstream_time": "1.206","request_time": "1.206","host":"172.27.0.6","http_host":"127.0.0.1","tcp_xff":""}
+    EOF
+
+chmod +x auto_nginx_access_log.sh
+
+
+./auto_nginx_access_log.sh ~/Downloads/github/docker-drf/Dockerfiles/nginx/log/access.log
 
 ```
 
@@ -250,6 +280,7 @@ output到elasticsearch的index必须是以"logstash-"开头的，修改后问题
 
 #### [Metricbeat](https://www.elastic.co/guide/en/beats/metricbeat/current/index.html)
 
+- 30秒,刷新一次,它输出的日志会比较多,占磁盘
 - 启动Metricbeat 监控,也是basic免费版本的功能 😘😘
 
 ```
@@ -273,6 +304,12 @@ docker-compose up
 docker exec metricbeat1 ./metricbeat modules enable elasticsearch-xpack
 docker exec metricbeat1 ./metricbeat modules list
 
+vim metricbeat/modules.d/elasticsearch-xpack
+  hosts: ["http://elasticsearch:9200"]
+  username: "elastic"
+  password: "changeme"
+
+
 # Enable the collection of monitoring data:
 https://www.elastic.co/guide/en/elasticsearch/reference/7.8/configuring-metricbeat.html
 # 点击"View in Console",会进入到localhost:5601的命令行Console,直接运行命令即可
@@ -280,6 +317,64 @@ https://www.elastic.co/guide/en/elasticsearch/reference/7.8/configuring-metricbe
 
 ```
 <center>![elk-metricbeat监控](https://i.loli.net/2020/07/12/eJ3iNqcysAWwznC.gif "elk-metricbeat监控")</center>
+
+
+- 监控[logstash日志](https://www.elastic.co/guide/en/logstash/current/monitoring-with-metricbeat.html)
+
+```
+docker exec metricbeat1 ./metricbeat modules enable logstash-xpack
+vim metricbeat/modules.d/logstash-xpack.yml
+  hosts: ["logstash:9600"]
+  username: "elasitc"
+  password: "changeme"
+# 可以将这些内容,直接保存在metricbeat.yml中
+# https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-reference-yml.html
+
+vim logstash/config/logstash.yml
+    monitoring.enabled: false
+```
+
+- 监控[filebeat日志](https://www.elastic.co/guide/en/beats/filebeat/current/monitoring-metricbeat-collection.html),,只能output:ES
+
+```
+# 监控面板上显示Beats
+# filebeat
+vim filebeat/config/json/filebeat.yml
+    http.enabled: true
+    http.port: 5066     # 记得在docker-compose 加上此port, 不是此容器的,而metricbeat容器也没有5066端口
+    monitoring.enabled: false
+    
+vim metricbeat/config/metricbeat.yml
+
+http.enabled: true
+http.port: 5066
+monitoring.enabled: false
+
+metricbeat.modules:
+- module: beat
+  metricsets:
+    - stats
+    - state
+  period: 10s
+  hosts: ["http://localhost:5066"]
+  #username: "user"
+  #password: "secret"
+  xpack.enabled: true
+
+#docker exec metricbeat1 ./metricbeat modules enable beat-xpack
+#vim metricbeat/modules.d/beat-xpack.yml
+  #hosts: ["http://localhost:5066"]   # docker-commpose加depends_on:filebeat
+  ##username: "elasitc"
+  ##password: "changeme"
+#docker exec metricbeat1 ./metricbeat modules disable beat-xpack
+
+docker-compose down
+docker-compose up
+
+docker-compose restart logstash
+docker-compose restart metricbeat
+```
+
 
 #### 整合到[docker-compose.yml](https://github.com/leipengkai/docker-drf/blob/master/Dockerfiles/docker-compose.yml)中
 
@@ -295,7 +390,7 @@ https://www.elastic.co/guide/en/elasticsearch/reference/7.8/configuring-metricbe
 - 如果项目的settings.py中不设置LOGGING,则使用默认的
 
 
-
+[此图片来源](https://www.oneops.co/2017/10/19/centos7-elasticstack.html)
 参考:
 
 [docker-elk](https://github.com/twtrubiks/docker-elk-tutorial)

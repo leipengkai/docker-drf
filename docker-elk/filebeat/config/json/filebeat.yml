@@ -44,5 +44,8 @@ processors:
   - add_docker_metadata:
       host: "unix:///host_docker/docker.sock"
 
+http.enabled: true
+http.port: 5066
+monitoring.enabled: false
 
 
