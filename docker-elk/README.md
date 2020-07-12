@@ -248,12 +248,12 @@ output到elasticsearch的index必须是以"logstash-"开头的，修改后问题
 
 - [kibana制作nginx平均响应时间](https://blog.csdn.net/u010603691/article/details/79310495)
 
-#### Metricbeat
+#### [Metricbeat](https://www.elastic.co/guide/en/beats/metricbeat/current/index.html)
 
-- 启动Metricbeat 监控
+- 启动Metricbeat 监控,也是basic免费版本的功能 😘😘
 
 ```
-# 好像要订阅,但我已经是用basic,没用trail啊,为什么给我也在kibana显示出来,过一个月再看吧
+# 之前还有疑问:好像要订阅,但我已经是用basic,没用trail啊,为什么给我也在kibana显示出来
 
 # 拷贝模板到主机上
 docker run -it --rm --name metricbeat1 docker.elastic.co/beats/metricbeat:7.8.0  bash
@@ -279,7 +279,7 @@ https://www.elastic.co/guide/en/elasticsearch/reference/7.8/configuring-metricbe
 # 其它的不需要,即可得到下图的效果
 
 ```
-<center>![elk-metricbeat监控](https://i.loli.net/2020/07/12/QMf5p9jg1u3WbwC.gif "elk-metricbeat监控")</center>
+<center>![elk-metricbeat监控](https://i.loli.net/2020/07/12/eJ3iNqcysAWwznC.gif "elk-metricbeat监控")</center>
 
 #### 整合到[docker-compose.yml](https://github.com/leipengkai/docker-drf/blob/master/Dockerfiles/docker-compose.yml)中
 
