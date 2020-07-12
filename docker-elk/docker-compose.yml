@@ -145,6 +145,32 @@ services:
       options:
         max-size: "10m"
         max-file: "50"
+
+  metricbeat:
+    container_name: metricbeat1
+    build:
+      context: metricbeat/
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      #- /var/run/docker.sock:/host_docker/docker.sock
+      #- /var/lib/docker:/host_docker/var/lib/docker
+      - ./metricbeat/config/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml
+      - ./metricbeat/modules.d:/usr/share/metricbeat/modules.d
+    stdin_open: true
+    tty: true
+    logging:
+      #driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "50"
+    networks:
+      - elk
+    depends_on:
+      - kibana
+      - elasticsearch
 networks:
 
   elk:

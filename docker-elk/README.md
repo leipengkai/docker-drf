@@ -8,7 +8,7 @@
 
 1. filebeat<strong>采集</strong>日志,并发送到logstash(可发送到消息队列中:redis,kafaka).
 2. logstash利用filter等工具<strong>过滤,修改,分析</strong>日志,处理后,再发送到elasticsearch.
-3. elasticsearch按不同的索引(index)来<strong>存储,索引</strong>日志.
+3. elasticsearch按不同的索引(index)来<strong>存储,索引</strong>日志,<strong>组成一个全文搜索服务</strong>
 4. kibana连接到ES日志内容,<strong>展示</strong>出来
 
 功能:
@@ -34,12 +34,26 @@ cd docker-elk
 # 创建images,第一次时执行
 docker-compose build
 
-# 服务器内存最好有3G
+# 服务器内存最好有3G以上
 # 启动项目,ELK日志系统
 docker-compose up
 
 # 确认是否正确启动服务
 docker-compose ps
+
+# 将一些nginx josn格式的日志放入到,下面这个文件中
+../Dockerfiles/nginx/log/access.log
+# Dockerfiles目录与docker-elk目录同级,eg:
+
+# 手动追加,多行为一行
+cat <<EOF >> ~/Downloads/github/docker-drf/Dockerfiles/nginx/log/access.log
+{ "time_local": "12/Jul/2020:11:29:01 +0800", "remote_addr": "172.27.0.1", "referer": "http://127.0.0.1/api/v1/goods/", \
+"request": "GET /api/v1/goods/echo_test?page=2 HTTP/1.1", "status": 200, "bytes": 6586, \
+"http_user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) \
+Chrome/83.0.4103.116 Safari/537.36", "x_forwarded": "", "up_addr": "unix:/code/app.sock","up_host": "",\
+"upstream_time": "1.206","request_time": "1.206","host":"172.27.0.6","http_host":"127.0.0.1","tcp_xff":""}
+EOF
+
 ```
 
 #### 正确启动后,开启的端口
@@ -47,10 +61,12 @@ docker-compose ps
 | :------: | :------: | 
 | 5044 | Logstash TCP input(6.1.0是5000) |
 | 9600 | Logstash UDP input(6.1.0是12201)|
-| 9200 | [Elasticsearch HTTP](http://localhost:9200/)|
+| 9200 |用[ es head chrome extension 插件](https://chrome.google.com/webstore/detail/elasticsearch-head/ffmkiejjmecolpfloofpjologoblkegm)连接: http://localhost:9200/|
 | 9300 | Elasticsearch TCP transport,没使用|
 | 5601 | [Kibana](http://localhost:5601/)|
 | 5601 | [Kibana status](http://localhost:5601/status)|
+| elk认证 | 用户名/密码: elastic/changeme |
+| elk版本 | 基础(默认)版本:7.8.0版本 |
 
 
 ## 说明
@@ -232,7 +248,38 @@ output到elasticsearch的index必须是以"logstash-"开头的，修改后问题
 
 - [kibana制作nginx平均响应时间](https://blog.csdn.net/u010603691/article/details/79310495)
 
+#### Metricbeat
 
+- 启动Metricbeat 监控
+
+```
+# 好像要订阅,但我已经是用basic,没用trail啊,为什么给我也在kibana显示出来,过一个月再看吧
+
+# 拷贝模板到主机上
+docker run -it --rm --name metricbeat1 docker.elastic.co/beats/metricbeat:7.8.0  bash
+
+docker images |grep metricbeat
+cd ~/Downloads/github/docker-drf/docker-elk/metricbeat 
+
+docker cp metricbeat1:/usr/share/metricbeat/modules.d ./
+
+退出 单个的metricbeat1容器
+
+# 启动项目
+docker-compose build
+docker-compose up
+
+# 启动插件
+docker exec metricbeat1 ./metricbeat modules enable elasticsearch-xpack
+docker exec metricbeat1 ./metricbeat modules list
+
+# Enable the collection of monitoring data:
+https://www.elastic.co/guide/en/elasticsearch/reference/7.8/configuring-metricbeat.html
+# 点击"View in Console",会进入到localhost:5601的命令行Console,直接运行命令即可
+# 其它的不需要,即可得到下图的效果
+
+```
+<center>![elk-metricbeat监控](https://i.loli.net/2020/07/12/QMf5p9jg1u3WbwC.gif "elk-metricbeat监控")</center>
 
 #### 整合到[docker-compose.yml](https://github.com/leipengkai/docker-drf/blob/master/Dockerfiles/docker-compose.yml)中
 
@@ -253,6 +300,8 @@ output到elasticsearch的index必须是以"logstash-"开头的，修改后问题
 
 [docker-elk](https://github.com/twtrubiks/docker-elk-tutorial)
 
+
+快速上手基础版本的elk日志系统,包括kibana的geoip,ES的认证功能
 
 
 ## 其它测试,可跳过
