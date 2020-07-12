@@ -32,10 +32,17 @@ metricbeat.modules:
   #password: "secret"
   xpack.enabled: true
 
-# elasticsearch-xpack
-- module: elasticsearch
-  xpack.enabled: true
-  period: 10s
-  hosts: ["http://elasticsearch:9200"]
-  username: "elastic"
-  password: "changeme"
+# elasticsearch-xpack: 不能解决metricbeat启动的问题,还是用modules.d/来做
+#- module: elasticsearch
+  #xpack.enabled: true
+  #period: 10s
+  #hosts: ["http://elasticsearch:9200"]
+  #username: "elastic"
+  #password: "changeme"
+
+# 和logstash一样,metricbeat也要以metricbeat-*来做默认索引
+# Connection marked as failed because the onConnect callback failed: resource 'metricbeat-7.8.0' exists, but it is not an alias
+#
+#output.elasticsearch.index: "logstash-nginx-test-%{+yyyy.MM} "
+#setup.template.name: "logstash"
+#setup.template.pattern: "logstash-*"

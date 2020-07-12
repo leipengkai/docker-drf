@@ -107,7 +107,8 @@ chmod +x auto_nginx_access_log.sh
 - filebeat只能有一个output,不管什么类型
 - 启动时,只会找默认目录(自己另外指定失败)下的,filebeat.yml文件
 - 日志文件,不用用ln过来的
-- 对日志文件,增量读取
+- 对日志文件,增量读取,但restart filebeat时会重读的
+
 
 
 #### logstash
