@@ -23,4 +23,4 @@ docker-elk/celery_test/advanced/flowerdb.db
 docker-elk/celery_test/advanced/celery.log
 docker-elk/elasticsearch/data
 docker-elk/elasticsearch/logs
-
+jenkins/jenkins_home

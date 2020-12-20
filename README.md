@@ -1,8 +1,8 @@
 ### 项目说明
 是一个慕学生鲜商城项目,旨在学习和运用python,django,DRF,docker,docker-compose
-- [简单认识django和DRF](mxshop/README.md)
-- [django的第三方工具包的简单使用说明](mxshop/mxshop/README.md)
-- [简单认识Dokcer](./Dockerfiles/README.md)
+- [简单认识django和DRF](mxshop)
+- [django的第三方工具包的简单使用说明](mxshop/mxshop)
+- [简单认识Dokcer](./Dockerfiles)
 - 如果没有接触Docker的同学,可以使用[没有Docker版本的安装步骤](mxshop/no_docker_install.md)
 
 ### 项目启动
@@ -16,7 +16,7 @@ docker-compose up
 
 ```
 
-[具体一点的操作说明](./docker-elk/README.md)
+[具体一点的操作说明](./docker-elk)
 
 #### 1.2:启动之后,打开[Kibana日志系统后台](http://127.0.0.1:5601/),如果没有出现下图画面
 ![kibana创建index.png](https://i.loli.net/2020/06/16/6seiAZYUgrTRE7c.png)

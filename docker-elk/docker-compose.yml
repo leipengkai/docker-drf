@@ -120,10 +120,14 @@ services:
     volumes:
       - /var/run/docker.sock:/host_docker/docker.sock
       - /var/lib/docker:/host_docker/var/lib/docker
+
       # 测试logs
       #- ./logs:/usr/share/filebeat/mylogs
       # 此项目的web,nginx日志
-      - ../Dockerfiles/nginx/log:/usr/share/filebeat/mylogs
+      #- ../Dockerfiles/nginx/log:/usr/share/filebeat/mylogs
+      # 另一个web项目的nginx日志
+      - ../../web/webDocker/nginx/log:/usr/share/filebeat/mylogs
+
       # 默认command时,要指定挂载一个filebeat.yml ok
       #- ./filebeat/config/modules/filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./filebeat/config/json/filebeat.yml:/usr/share/filebeat/filebeat.yml

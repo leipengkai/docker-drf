@@ -3,6 +3,7 @@ import datetime
 from celery.schedules import crontab
 from kombu import Exchange, Queue
 
+
 ####################################
 # Broker settings #
 ####################################
@@ -82,6 +83,11 @@ CELERYD_LOG_FILE="./celery.log"
 # EMAIL_USE_TLS = False
 # EMAIL_TIMEOUT = 2 # 2秒
 
+####################################
+# 其它配置 #
+####################################
+# celery worker的并发数，默认是服务器的内核数目,也是命令行-c参数指定的数目
+CELERYD_CONCURRENCY = 4 
 
 
 ####################################
@@ -109,6 +115,12 @@ CELERY_ROUTES = {
     'tasks3.add2': {'queue': 'queue_sum', 'routing_key': 'key2', 'delivery_mode': 1},
 }
 
+
+# 每分钟内允许执行的10个任务 
+# celery -A tasks control rate_limit tasks.add 10/m
+task_annotations = {
+            'tasks3.add': {'rate_limit': '10/m'}
+        }
 
 """
 注意设置celery的worker预取值“ CELERYD_PREFETCH_MULTIPLIER “，如果你的task是很耗时的任务，最好设置为1，避免造成队列拥堵。如果你的task是非耗时的任务，则可根据实际情况调大此值，提高吞吐量

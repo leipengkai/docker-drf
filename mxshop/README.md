@@ -35,14 +35,14 @@ python manage.py runserver 0.0.0.0:80
 - 返回Response
 
 #### 具体说明
-![django处理流程](https://ws1.sinaimg.cn/large/006tNbRwgy1fyooltssrcj30xj0kvgre.jpg)
+![django处理流程](https://i.loli.net/2020/08/14/M6qTmJKZxDnSzBh.png)
 
 ### Nginx在本项目中的作用
 - Nginx 比起 uWSGI 能更好地处理静态资源
 - Nginx 可以设定 Cache 机制
 - Nginx 可以设定 反向代理器
 - Nginx 可以更方便配置ssl
-- Nginx 可以进行多台机器的负载均衡( Load balance )
+- Nginx 可以进行多台机器的负载均衡(Load balance)
 
 ### [Django-rest-framework](http://www.django-rest-framework.org/):是一个开源的Django扩展,提供了便捷的REST API开发框架
 
@@ -61,7 +61,7 @@ python manage.py runserver 0.0.0.0:80
 - URL/版本信息/名词复数
 
 ##### view的关系图
-![view的关系图](https://ws2.sinaimg.cn/large/006tNbRwgy1fylripg5coj31pb0u0e81.jpg)
+![view的关系图](https://i.loli.net/2020/08/14/61uVxhNmqLJKrUc.png)
 结合[url.py的93行](mxshop/urls.py)和[goods.views.py的151行](./apps/goods/views.py)有助于理解上面的图
 
 
@@ -81,7 +81,7 @@ python manage.py runserver 0.0.0.0:80
 
 - [JWT官方文档](https://github.com/GetBlimp/django-rest-framework-jwt),[JWT认证](https://blog.leapoahead.com/2015/09/07/user-authentication-with-jwt/):用户信息保存在客户端,服务端只需要加解密和解编码就可以获取用户信息
 
-- [SKU模型简单设计](https://www.leipengkai.com/article/56/),包括model之间的关联,Serializer的便利性,熟悉ndm模型(明了模型之间的关系),复合主键,联合主键(多对多自定义关联)
+- [SKU模型简单设计](https://www.leipengkai.com/article/56),包括model之间的关联,Serializer的便利性,熟悉ndm模型(明了模型之间的关系),复合主键,联合主键(多对多自定义关联)
 
 
 
